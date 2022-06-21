@@ -1,7 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 
 const appHeader = (props) => (
-  <header>
+  <header className="border">
     <Container>
       <Row>
         <Col>This is a component called appHeader.</Col>

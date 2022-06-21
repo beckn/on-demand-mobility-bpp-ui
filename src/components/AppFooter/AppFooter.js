@@ -4,11 +4,13 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 const AppFooter = (props) => (
-  <Container>
-    <Row>
-      <Col>This is a component called appFooter.</Col>
-    </Row>
-  </Container>
+  <footer className="border">
+    <Container>
+      <Row>
+        <Col>This is a component called appFooter.</Col>
+      </Row>
+    </Container>
+  </footer>
 );
 
 // todo: Unless you need to use lifecycle methods or local state,
