@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow, render, mount } from 'enzyme';
-import Landing from './Landing';
+import Login from './Login';
 
-describe('Landing', () => {
+describe('Login', () => {
   let props;
   let shallowLanding;
   let renderedLanding;
@@ -10,21 +10,21 @@ describe('Landing', () => {
 
   const shallowTestComponent = () => {
     if (!shallowLanding) {
-      shallowLanding = shallow(<Landing {...props} />);
+      shallowLanding = shallow(<Login {...props} />);
     }
     return shallowLanding;
   };
 
   const renderTestComponent = () => {
     if (!renderedLanding) {
-      renderedLanding = render(<Landing {...props} />);
+      renderedLanding = render(<Login {...props} />);
     }
     return renderedLanding;
   };
 
   const mountTestComponent = () => {
     if (!mountedLanding) {
-      mountedLanding = mount(<Landing {...props} />);
+      mountedLanding = mount(<Login {...props} />);
     }
     return mountedLanding;
   };  

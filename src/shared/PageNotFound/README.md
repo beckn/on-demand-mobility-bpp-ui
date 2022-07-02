@@ -1,15 +1,15 @@
-# Landing
+# PageNotFound
 
 <!-- STORY -->
 
 ## Introduction
 
-Landing is an easy-to-use component.
+PageNotFound is an easy-to-use component.
 
 ## Usage
 
 ```javascript
-import { Landing } from 'some-package-name';
+import { PageNotFound } from 'some-package-name';
 ```
 
 ## Example use
@@ -18,7 +18,7 @@ import { Landing } from 'some-package-name';
 const myPage = props => {
   return (
     <main>
-      <Landing />
+      <PageNotFound />
     </main>
   );
 };

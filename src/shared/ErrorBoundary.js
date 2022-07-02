@@ -4,7 +4,7 @@ import { ErrorBlocks } from "./constant";
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { error: null, errorInfo: null };
+    this.state = { error: null, errorInfo: null }; 
   }
 
   componentDidCatch(error, errorInfo) {

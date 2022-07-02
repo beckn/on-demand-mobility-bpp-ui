@@ -12,7 +12,8 @@ const axiosInstance = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache',
+        "KeepAlive" :"Y"
     }
 });
 
@@ -58,3 +59,35 @@ axiosInstance.interceptors.response.use(
     response => successHandler(response),
     error => errorHandler(error) //will activate after invistigation of sign-in page
 );
+
+// Get data request
+export const getRequestData = (paths, fieldsList) => {
+    let data = {
+        data: {}
+    }
+    if (fieldsList) {
+        let encodedHeader = btoa(fieldsList);
+        data = {
+            ...data.data,
+            headers: {
+                IncludedModelFields: encodedHeader,
+            }
+        }
+    }
+    return axiosInstance.get(paths, data);
+}
+
+// Post data request
+export const postRequestData = (paths, data, fieldsList) => {
+    let headers = {};
+    if (fieldsList) {
+        let encodedHeader = btoa(fieldsList);
+        headers = {
+            headers: {
+                IncludedModelFields: encodedHeader,
+            }
+        }
+    }
+    return axiosInstance.post(paths, data, headers);
+}
+
