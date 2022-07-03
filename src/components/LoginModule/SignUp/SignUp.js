@@ -4,17 +4,44 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
+import { getCompanies } from "../Login.services";
 
-export const SignUp = (props) => {
+export const SignInPassword = ({ addChoreLog }) => {
   const [App, setApp] = useState(0);
+  // const [Associations, setAssociation] = useState(0);
+  // const [Associations, setAssociation] = useState(0);
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [Company, setCompany] = useState("");
+  const [Role, setRole] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [Name, setName] = useState("");
+  const [Password1, setPassword1] = useState("");
+  const [Password2, setPassword2] = useState("");
 
-  useEffect((prop) => {
-    document.title = `taxi BPP`;
+  useEffect(() => {
+    init();
+  });
+
+  const init = () => {
+    document.title = `taxi BPP Sing up`;
+    getAssociationsList();
     let appTitle = (window.location.pathname === "/" && "Driver") || (window.location.pathname === AppRoutes.admin && "Taxi Admin") || "Taxi Admin";
     setApp(appTitle);
-    console.log(props);
-    // spinnerService.show("mySpinner");
-  });
+  };
+
+  const getAssociationsList = () => {
+    let path = "companies";
+    getCompanies(path).then((res) => {
+      console.log("getCompanies = ", res);
+    });
+  };
+
+  const handleSubmit = (e) => {
+    const x = [FirstName, LastName, Company, Role, PhoneNumber, Name, Password1, Password2];
+    e.preventDefault();
+    console.log(x.reduce((a, v) => ({ ...a, [v]: v}), {}));
+  };
 
   return (
     <section>
@@ -33,50 +60,58 @@ export const SignUp = (props) => {
                   </h1>
                 </div>
               </div>
-              <div className="row w-100 justify-content-center">
-                <div className="col-5 mb-3">
-                  <input type="text" className="form-control" placeholder="First Name" />
+              <form
+                onSubmit={(e) => {
+                  handleSubmit(e);
+                }}
+              >
+                <div className="row w-100 justify-content-center">
+                  <div className="col-5 mb-3">
+                    <input type="text" name="FirstName" id="FirstName" value={FirstName} onChange={(e) => setFirstName(e.target.value)} className="form-control" placeholder="First Name" />
+                  </div>
+                  <div className="col-5  mb-3">
+                    <input type="text" name="LastName" id="LastName" value={LastName} onChange={(e) => setLastName(e.target.value)} className="form-control" placeholder="Last Name" />
+                  </div>
+                  <div className="col-5 mb-3">
+                    <select name="Company" id="Company" defaultValue={Company} onChange={(e) => setCompany(e.target.value)} className="form-select">
+                      <option value="" selected disabled>
+                        Select Association Name
+                      </option>
+                    </select>
+                  </div>
+                  <div className="col-5  mb-3">
+                    <select name="Role" id="Role" defaultValue={Role} onChange={(e) => setRole(e.target.value)} className="form-select">
+                      <option value="" selected disabled>
+                        Select your role
+                      </option>
+                    </select>
+                  </div>
+                  <div className="col-5 mb-3">
+                    <input type="text" name="PhoneNumber" id="PhoneNumber" value={PhoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="form-control" placeholder="Enter Mobile Number" />
+                  </div>
+                  <div className="col-5  mb-3">
+                    <input type="text" name="Name" id="Name" value={Name} onChange={(e) => setName(e.target.value)} className="form-control" placeholder="Enter Email ID" />
+                  </div>
+                  <div className="col-5 mb-3">
+                    <input type="password" name="Password1" id="Password1" value={Password1} onChange={(e) => setPassword1(e.target.value)} className="form-control" placeholder="Create New Password" />
+                  </div>
+                  <div className="col-5  mb-3">
+                    <input type="password" name="Password2" id="Password2" value={Password2} onChange={(e) => setPassword2(e.target.value)} className="form-control" placeholder="Confirm Password" />
+                  </div>
                 </div>
-                <div className="col-5  mb-3">
-                  <input type="text" className="form-control" placeholder="Last Name" />
+                <div className="row w-100 justify-content-center">
+                  <div className="col-5 d-grid">
+                    <a href={AppRoutes.admin} role="button" type="reset" className="btn btn-secondary">
+                      cancel
+                    </a>
+                  </div>
+                  <div className="col-5 d-grid">
+                    <button className="btn btn-primary" type="submit">
+                      submit
+                    </button>
+                  </div>
                 </div>
-                <div className="col-5 mb-3">
-                  <select name="" id="" className="form-select">
-                    <option value="" selected disabled>
-                      Select Association Name
-                    </option>
-                  </select>
-                </div>
-                <div className="col-5  mb-3">
-                  <select name="" id="" className="form-select">
-                    <option value="" selected disabled>
-                      Select your role
-                    </option>
-                  </select>
-                </div>
-                <div className="col-5 mb-3">
-                  <input type="text" className="form-control" placeholder="Enter Mobile Number" />
-                </div>
-                <div className="col-5  mb-3">
-                  <input type="text" className="form-control" placeholder="Enter Email ID" />
-                </div>
-                <div className="col-5 mb-3">
-                  <input type="text" className="form-control" placeholder="Create New Password" />
-                </div>
-                <div className="col-5  mb-3">
-                  <input type="text" className="form-control" placeholder="Confirm Password" />
-                </div>
-              </div>
-              <div className="row w-100 justify-content-center">
-                <div className="col-5 d-grid">
-                  <a href={AppRoutes.admin} className="btn btn-secondary">
-                    cancel
-                  </a>
-                </div>
-                <div className="col-5 d-grid">
-                  <button className="btn btn-primary">submit</button>
-                </div>
-              </div>
+              </form>
               <div className="row w-100 justify-content-center">
                 <div className="col-10">
                   <p className="mt-5">
@@ -92,4 +127,4 @@ export const SignUp = (props) => {
   );
 };
 
-export default SignUp;
+export default SignInPassword;

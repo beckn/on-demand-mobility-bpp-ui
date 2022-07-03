@@ -5,12 +5,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
-import { AppRoutes, NoHeader } from "./core/constant";
+import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
 import ErrorBoundary from "./shared/ErrorBoundary";
 const AppFooter = React.lazy(() => import("./components/AppFooter"));
 const AppHeader = React.lazy(() => import("./components/AppHeader"));
 const Login = React.lazy(() => import("./components/LoginModule/Login"));
 const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));
+const SignInPassword = React.lazy(() => import("./components/LoginModule/SignInPassword/SignInPassword"));
+const SignInPhone = React.lazy(() => import("./components/LoginModule/SignInPhone"));
 const PageNotFound = React.lazy(() => import("./shared/PageNotFound/PageNotFound"));
 let isLogin = !NoHeader.includes(window.location.pathname);
 
@@ -18,7 +20,7 @@ function App() {
   return (
     <>
       <ToastContainer position="top-center" hideProgressBar="false" />
-      <Spinner name="mySpinner">
+      <Spinner name={LocalKey.spinnerKey}>
         <div className="modal d-block">
           <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content text-center p-3">
@@ -39,6 +41,8 @@ function App() {
               <Route path="/" element={<Login />}></Route>
               <Route path={AppRoutes.admin} element={<Login />}></Route>
               <Route path={AppRoutes.signUp} element={<SignUp />}></Route>
+              <Route path={AppRoutes.signInPassword} element={<SignInPassword />}></Route>
+              <Route path={AppRoutes.signInOtp} element={<SignInPhone />}></Route>
               <Route path="/*" element={<PageNotFound />}></Route>
             </Routes>
             {isLogin && <AppFooter />}

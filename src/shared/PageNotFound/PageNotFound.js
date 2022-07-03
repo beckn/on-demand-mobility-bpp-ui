@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import styles from "./PageNotFound.scss";
+import { useState } from "react";
 import { ErrorBlocks404 } from "../constant";
 
 const PageNotFound = (props) => {
@@ -9,7 +7,7 @@ const PageNotFound = (props) => {
     return ErrorBlocks404[Math.round(number)];
   };
 
-  const [errorBlock, setErrorBlock] = useState(getRandomBlock(ErrorBlocks404));
+  const [errorBlock] = useState(getRandomBlock(ErrorBlocks404));
 
   return (
     <div className="error-boundary">
