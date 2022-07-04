@@ -43,6 +43,7 @@ function App() {
               <Route path={AppRoutes.signUp} element={<SignUp />}></Route>
               <Route path={AppRoutes.signInPassword} element={<SignInPassword />}></Route>
               <Route path={AppRoutes.signInOtp} element={<SignInPhone />}></Route>
+              <Route path={AppRoutes.adminDashboard} element={<SignInPhone />}></Route>
               <Route path="/*" element={<PageNotFound />}></Route>
             </Routes>
             {isLogin && <AppFooter />}

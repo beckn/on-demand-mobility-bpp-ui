@@ -68,7 +68,7 @@ export const getRequestData = (paths, fieldsList) => {
       ...data.data,
       headers: {
         IncludedModelFields: encodedHeader,
-      },
+      }
     };
   }
   return axiosInstance.get(paths, data);

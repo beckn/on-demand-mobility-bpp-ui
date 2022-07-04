@@ -4,12 +4,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
-import { getCompanies } from "../Login.services";
+import { getCompanies, getRoles } from "../Login.services";
 
 export const SignInPassword = ({ addChoreLog }) => {
-  const [App, setApp] = useState(0);
   // const [Associations, setAssociation] = useState(0);
-  // const [Associations, setAssociation] = useState(0);
+  // const [Roles, setRoles] = useState(0);
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [Company, setCompany] = useState("");
@@ -25,22 +24,23 @@ export const SignInPassword = ({ addChoreLog }) => {
 
   const init = () => {
     document.title = `taxi BPP Sing up`;
-    getAssociationsList();
-    let appTitle = (window.location.pathname === "/" && "Driver") || (window.location.pathname === AppRoutes.admin && "Taxi Admin") || "Taxi Admin";
-    setApp(appTitle);
+    getRequiredList();
   };
 
-  const getAssociationsList = () => {
-    let path = "companies";
-    getCompanies(path).then((res) => {
-      console.log("getCompanies = ", res);
+  const getRequiredList = () => {
+    let initData = [getCompanies("companies"), getRoles("roles")];
+    Promise.all(initData).then((allData) => {
+      console.log("All Predata", allData);
     });
   };
 
   const handleSubmit = (e) => {
     const x = [FirstName, LastName, Company, Role, PhoneNumber, Name, Password1, Password2];
     e.preventDefault();
-    console.log(x.reduce((a, v) => ({ ...a, [v]: v}), {}));
+    console.log(
+      "formData = ",
+      x.reduce((a, v) => ({ ...a, [v]: v }), {})
+    );
   };
 
   return (
@@ -56,7 +56,7 @@ export const SignInPassword = ({ addChoreLog }) => {
               <div className="row w-100 justify-content-center">
                 <div className="col-10">
                   <h1 className="mb-4">
-                    Welcome <br /> to the {App} App
+                    Welcome <br /> to the Taxi Admin App
                   </h1>
                 </div>
               </div>
