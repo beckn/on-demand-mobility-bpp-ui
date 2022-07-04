@@ -13,7 +13,7 @@ export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     "Cache-Control": "no-cache",
-    KeepAlive: "Y",
+    "KeepAlive": "Y",
   },
 });
 
