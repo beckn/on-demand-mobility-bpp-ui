@@ -1,7 +1,7 @@
 import axios from "axios";
 import { config } from "../config/config.js";
 import { spinnerService } from "@simply007org/react-spinners";
-// import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 // import { getErrorMessage } from 'utils/functionUtils/commonFunctions';
 import { LocalKey } from "./constant.js";
 const apiBaseURL = config.API_BASE_URL;
@@ -17,6 +17,11 @@ export const axiosInstance = axios.create({
   },
 });
 
+const getErrorMessage = function getErrorMessage(error) {
+  const errorTxt = error && error.response && error.response.data ? error.response.data.SWFHttpResponse.Error : "Oops! Something Went Wrong, Please Try Again Later.";
+  return errorTxt;
+};
+
 // 'Accept-Encoding': 'gzip'
 const isHandlerEnabled = (config = {}) => {
   return config.hasOwnProperty("handlerEnabled") && !config.handlerEnabled ? false : true;
@@ -25,10 +30,10 @@ const isHandlerEnabled = (config = {}) => {
 const errorHandler = (error) => {
   if (isHandlerEnabled(error.config)) {
     // Handle errors
-    spinnerService.hide("wiggleSpinner");
-    // toast.error(getErrorMessage(error), {
-    //     toastId: 1
-    // })
+    spinnerService.hide(LocalKey.spinnerKey);
+    toast.error(getErrorMessage(error), {
+      toastId: 1,
+    });
   }
   return Promise.reject({ ...error });
 };
@@ -36,12 +41,14 @@ const errorHandler = (error) => {
 const successHandler = (response) => {
   if (isHandlerEnabled(response.config)) {
     // Handle responses
+    spinnerService.hide(LocalKey.spinnerKey);
   }
   return response;
 };
 
 const requestHandler = (request) => {
   if (isHandlerEnabled(request)) {
+    spinnerService.show(LocalKey.spinnerKey);
     // Modify request here
     if (window.localStorage.getItem(LocalKey.saveApi) && request.url !== "login") {
       request.headers["ApiKey"] = JSON.parse(window.localStorage.getItem(LocalKey.saveApi)).ApiKey;
@@ -68,7 +75,7 @@ export const getRequestData = (paths, fieldsList) => {
       ...data.data,
       headers: {
         IncludedModelFields: encodedHeader,
-      }
+      },
     };
   }
   return axiosInstance.get(paths, data);

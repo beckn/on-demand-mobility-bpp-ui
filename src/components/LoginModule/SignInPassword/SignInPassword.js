@@ -5,6 +5,8 @@ import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
 
 export const Login = (props) => {
+  const [Name, setName] = useState("");
+  const [Password1, setPassword1] = useState("");
 
   useEffect(() => {
     document.title = `taxi BPP`;
@@ -57,6 +59,11 @@ export const Login = (props) => {
                     </div>
                     <div className="col-6 d-grid">
                       <button className="btn btn-primary">Sign In</button>
+                    </div>
+                  </div>
+                  <div className="row mt-5">
+                    <div className="col">
+                      New User? <a href={AppRoutes.signUp}>Sign Up</a>
                     </div>
                   </div>
                 </div>

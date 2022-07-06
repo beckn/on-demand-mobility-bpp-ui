@@ -1,10 +1,14 @@
 import { Col, Container, Row } from "react-bootstrap";
+import "./AppHeader.scss";
 
 const appHeader = (props) => (
-  <header className="border">
-    <Container>
+  <header className="bg-dark header-round">
+    <Container fluid>
       <Row>
-        <Col>This is a component called appHeader.</Col>
+        <Col className="position-relative">
+          <div className="round-1"></div>
+          <h2 className="text-white ps-lg-5 py-lg-2">Taxi Admin</h2>
+        </Col>
       </Row>
     </Container>
   </header>
