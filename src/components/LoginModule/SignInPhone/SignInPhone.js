@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
-import { AppRoutes } from "../../../core/constant";
+import { AppRoutes, LocalKey } from "../../../core/constant";
 import "../Login.scss";
 
 export const SignInPhone = (props) => {
 
   useEffect(() => {
+    if (sessionStorage.getItem(LocalKey.saveApi)) window.location.href = AppRoutes.adminDashboard;
     document.title = `taxi BPP`;
     console.log(props);
     // spinnerService.show("mySpinner");

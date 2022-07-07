@@ -1,13 +1,14 @@
-import { spinnerService } from "@simply007org/react-spinners";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppRoutes, LocalKey } from "../../../core/constant";
 import "../Login.scss";
-import { getCompanies, getRoles, userRegister } from "../Login.services";
+import { getCompanies, getRoles, userAction } from "../Login.services";
 
 export const SignInPassword = () => {
+  const navigate = useNavigate();
   const [Associations, setAssociation] = useState(null);
   const [Roles, setRoles] = useState(0);
   const [FirstName, setFirstName] = useState("");
@@ -20,10 +21,8 @@ export const SignInPassword = () => {
   const [Password2, setPassword2] = useState("");
 
   useEffect(() => {
-    if (Associations === null) {
-      init();
-    }
-    console.log("useEffect");
+    if (sessionStorage.getItem(LocalKey.saveApi)) window.location.href = AppRoutes.adminDashboard;
+    init();
   }, []);
 
   const init = () => {
@@ -31,6 +30,8 @@ export const SignInPassword = () => {
     !Associations && getRequiredList();
     // spinnerService.show(LocalKey.spinnerKey);
   };
+
+  const navigateTo = (key) => navigate(key);
 
   const getRequiredList = () => {
     let initData = [getCompanies("companies"), getRoles("roles")];
@@ -66,9 +67,8 @@ export const SignInPassword = () => {
       x.reduce((a, v) => ({ ...a, [v]: v }), {}),
       data
     );
-    userRegister(path, data).then((res) => {
-      console.log("alksdfjlkasdf", res.data);
-      // window.location.href = AppRoutes.adminDashboard;
+    userAction(path, data).then((res) => {
+      navigateTo(AppRoutes.adminDashboard);
     });
   };
 
@@ -106,7 +106,12 @@ export const SignInPassword = () => {
                       <option value="" selected disabled>
                         Select Association Name
                       </option>
-                      {Associations && Associations.map((x) => <option value={x.Id}>{x.Name}</option>)}
+                      {Associations &&
+                        Associations.map((x) => (
+                          <option value={x.Id} key={x.Id}>
+                            {x.Name}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="col-5  mb-3">
@@ -114,7 +119,12 @@ export const SignInPassword = () => {
                       <option value="" selected disabled>
                         Select your role
                       </option>
-                      {Roles && Roles.map((x) => <option value={x.Id}>{x.Name}</option>)}
+                      {Roles &&
+                        Roles.map((x) => (
+                          <option value={x.Id} key={x.Id}>
+                            {x.Name}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="col-5 mb-3">

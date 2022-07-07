@@ -20,7 +20,7 @@ export const Dashboard = () => {
             <div className="round-1"></div>
             <div className="round-2"></div>
           </Col>
-          <Col xxl="9" className="d-flex align-items-center">
+          <Col xxl="9" className="mt-2">
             dashboard will come here!
           </Col>
         </Row>

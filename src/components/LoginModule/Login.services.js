@@ -3,6 +3,9 @@ import { LocalKey } from "../../core/constant";
 const setApiKey = (key) => {
   sessionStorage.setItem(LocalKey.saveApi, JSON.stringify(key));
 };
+const setUser = (user) => {
+  sessionStorage.setItem(LocalKey.saveUser, JSON.stringify(user));
+};
 export const getCompanies = (path, fields) => {
   return getRequestData(path, fields);
 };
@@ -11,18 +14,25 @@ export const getRoles = (path, fields) => {
   return getRequestData(path, fields);
 };
 
-export const userRegister = (path, data, fields) => {
-  return postRequestData(path, data, fields).then((res) => {
-    setApiKey(res.data.User);
-    let url = "user_roles/save";
+export const userAction = async (path, data, fields) => {
+  const logRes = await postRequestData(path, data, fields);
+  let userUrl = `users/show/${logRes.data.User.Id}`;
+  const getUser = await postRequestData(userUrl, data, fields);
+  console.log("userAction", getUser, logRes);
+  setApiKey(logRes.data.User);
+  setUser(getUser.data.User);
+  if (data.User.UserRole) {
+    let roleUrl = "user_roles/save";
     let roleData = {
       UserRole: {
-        UserId: res.data.User.Id,
+        UserId: logRes.data.User.Id,
         Role: data.User.UserRole,
       },
     };
-    return postRequestData(url, roleData);
-  });
+    return await postRequestData(roleUrl, roleData);
+  } else {
+    return logRes.data.User;
+  }
 };
 
 export const userLogin = (path, data, fields) => {
