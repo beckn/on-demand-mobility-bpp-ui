@@ -12,8 +12,7 @@ export const axiosInstance = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
-    "Cache-Control": "no-cache",
-    KeepAlive: "Y",
+    "Cache-Control": "no-cache"
   },
 });
 
