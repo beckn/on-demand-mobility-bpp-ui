@@ -1,10 +1,13 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { AppRoutes } from "../../core/constant";
+import { AppRoutes, LocalKey } from "../../core/constant";
+import { removeCookie } from "../../core/CookiesHandler";
 import "./AppHeader.scss";
 const logout = () => {
-  sessionStorage.clear();
+  removeCookie(LocalKey.saveApi);
+  removeCookie(LocalKey.saveUser);
   window.location.href = AppRoutes.admin;
 };
+
 const appHeader = (props) => (
   <header className="bg-dark header-round">
     <Container fluid>

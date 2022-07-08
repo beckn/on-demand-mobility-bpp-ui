@@ -8,7 +8,6 @@ import "./App.scss";
 import { AuthGuard } from "./core/AuthGuard";
 import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
 import ErrorBoundary from "./shared/ErrorBoundary";
-// const AppFooter = React.lazy(() => import("./components/AppFooter"));
 const AppHeader = React.lazy(() => import("./components/AppHeader"));
 const Login = React.lazy(() => import("./components/LoginModule/Login"));
 const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));

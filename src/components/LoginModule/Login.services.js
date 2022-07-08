@@ -1,10 +1,12 @@
 import { getRequestData, postRequestData } from "../../core/apiClient";
 import { LocalKey } from "../../core/constant";
+import { setCookie } from "../../core/CookiesHandler";
+
 const setApiKey = (key) => {
-  sessionStorage.setItem(LocalKey.saveApi, JSON.stringify(key));
+  setCookie(LocalKey.saveApi, JSON.stringify(key), "/");
 };
 const setUser = (user) => {
-  sessionStorage.setItem(LocalKey.saveUser, JSON.stringify(user));
+  setCookie(LocalKey.saveUser, JSON.stringify(user), "/");
 };
 export const getCompanies = (path, fields) => {
   return getRequestData(path, fields);

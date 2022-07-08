@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { AppRoutes, LocalKey } from "../../../core/constant";
+import { isAuthenticated } from "../../../core/common.functions";
+import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
 
 export const Login = (props) => {
   const [App, setApp] = useState(0);
 
   useEffect(() => {
-    if (sessionStorage.getItem(LocalKey.saveApi)) window.location.href = AppRoutes.adminDashboard;
+    isAuthenticated();
     document.title = `taxi BPP`;
     let appTitle = (window.location.pathname === "/" && "Driver") || (window.location.pathname === AppRoutes.admin && "Taxi Admin");
     setApp(appTitle);

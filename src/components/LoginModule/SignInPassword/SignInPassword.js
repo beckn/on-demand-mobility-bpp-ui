@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
-import { AppRoutes, LocalKey } from "../../../core/constant";
+import { isAuthenticated } from "../../../core/common.functions";
+import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
 import { userAction } from "../Login.services";
 
@@ -10,11 +11,11 @@ export const Login = (props) => {
   const [Password, setPassword] = useState("");
 
   useEffect(() => {
-    if (sessionStorage.getItem(LocalKey.saveApi)) window.location.href = AppRoutes.adminDashboard;
+    isAuthenticated();
     document.title = `taxi BPP`;
     console.log(props);
     // spinnerService.show("mySpinner");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = (e) => {
@@ -62,7 +63,7 @@ export const Login = (props) => {
                     </div>
                     <div className="row">
                       <div className="col mb-3">
-                        <input type="text" className="form-control" value={Password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password" />
+                        <input type="password" className="form-control" value={Password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password" />
                       </div>
                     </div>
                     <div className="row mb-3">

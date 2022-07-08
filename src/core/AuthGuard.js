@@ -1,11 +1,12 @@
 import { Navigate } from "react-router";
 import { LocalKey } from "./constant";
+import { getCookie } from "./CookiesHandler";
 import { history } from "./history";
 
 export { AuthGuard };
 
 function AuthGuard({ children }) {
-  if (!sessionStorage.getItem(LocalKey.saveApi)) {
+  if (!getCookie(LocalKey.saveApi)) {
     // not logged in so redirect to login page with the return url
     return <Navigate to="/login" state={{ from: history.location }} />;
   }

@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { AppRoutes, LocalKey } from "../../../core/constant";
+import { isAuthenticated } from "../../../core/common.functions";
+import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
 import { getCompanies, getRoles, userAction } from "../Login.services";
 
@@ -21,11 +22,11 @@ export const SignInPassword = () => {
   const [Password2, setPassword2] = useState("");
 
   useEffect(() => {
-    if (sessionStorage.getItem(LocalKey.saveApi)) window.location.href = AppRoutes.adminDashboard;
     init();
   }, []);
 
   const init = () => {
+    isAuthenticated();
     document.title = `taxi BPP Sing up`;
     !Associations && getRequiredList();
     // spinnerService.show(LocalKey.spinnerKey);
@@ -61,12 +62,6 @@ export const SignInPassword = () => {
         },
       },
     };
-    const x = [FirstName, LastName, Company, Role, PhoneNumber, Name, Password1, Password2];
-    console.log(
-      "formData = ",
-      x.reduce((a, v) => ({ ...a, [v]: v }), {}),
-      data
-    );
     userAction(path, data).then((res) => {
       navigateTo(AppRoutes.adminDashboard);
     });
