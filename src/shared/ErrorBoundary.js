@@ -4,7 +4,7 @@ import { ErrorBlocks } from "./constant";
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { error: null, errorInfo: null }; 
+    this.state = { error: null, errorInfo: null };
   }
 
   componentDidCatch(error, errorInfo) {
@@ -33,7 +33,7 @@ class ErrorBoundary extends React.Component {
                 <img src={this.state.errorBlock.ImgUrl} className="w-100" alt="" />
               </div>
               <div className="col-sm-5 d-flex align-items-center">
-                <div>
+                <div className="text-center text-lg-start">
                   <h1 className="mb-3">{this.state.errorBlock.Title}</h1>
                   <h5 className="mb-4">{this.state.errorBlock.SubTitle}</h5>
                   <p className="mb-1">in the meantime, you can...</p>
@@ -42,7 +42,7 @@ class ErrorBoundary extends React.Component {
                   <a href="/" className="btn btn-primary">
                     Take me home
                   </a>
-                  <details style={{ whiteSpace: "pre-wrap" }}>
+                  <details style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
                     {this.state.error && this.state.error.toString()}
                     <br />
                     {this.state.errorInfo.componentStack}

@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
-import { AppRoutes } from "../../../core/constant";
+import { isAuthenticated } from "../../../core/common.functions";
+import { AppRoutes, LocalKey } from "../../../core/constant";
 import "../Login.scss";
 
 export const SignInPhone = (props) => {
-
   useEffect(() => {
+    isAuthenticated();
     document.title = `taxi BPP`;
     console.log(props);
     // spinnerService.show("mySpinner");

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
 
@@ -9,12 +10,12 @@ export const Login = (props) => {
   const [App, setApp] = useState(0);
 
   useEffect(() => {
+    isAuthenticated();
     document.title = `taxi BPP`;
     let appTitle = (window.location.pathname === "/" && "Driver") || (window.location.pathname === AppRoutes.admin && "Taxi Admin");
     setApp(appTitle);
-    console.log(props);
     // spinnerService.show("mySpinner");
-  });
+  }, []);
 
   return (
     <section>
@@ -30,7 +31,7 @@ export const Login = (props) => {
                 <h1>
                   Welcome <br /> to the {App} App
                 </h1>
-                 <Link to={AppRoutes.signInPassword} className="btn btn-outline-primary w-100 d-block">
+                <Link to={AppRoutes.signInPassword} className="btn btn-outline-primary w-100 d-block">
                   Sign In with Email ID
                 </Link>
                 <Link to={AppRoutes.signInOtp} className="btn btn-outline-primary w-100 d-block mt-2">

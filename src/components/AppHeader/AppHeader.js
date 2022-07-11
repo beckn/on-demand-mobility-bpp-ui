@@ -1,10 +1,26 @@
 import { Col, Container, Row } from "react-bootstrap";
+import { AppRoutes, LocalKey } from "../../core/constant";
+import { removeCookie } from "../../core/CookiesHandler";
+import "./AppHeader.scss";
+const logout = () => {
+  removeCookie(LocalKey.saveApi);
+  removeCookie(LocalKey.saveUser);
+  window.location.href = AppRoutes.admin;
+};
 
 const appHeader = (props) => (
-  <header className="border">
-    <Container>
+  <header className="bg-dark header-round">
+    <Container fluid>
       <Row>
-        <Col>This is a component called appHeader.</Col>
+        <Col className="position-relative">
+          <div className="round-1"></div>
+          <h2 className="text-white ps-lg-5 py-lg-2">Taxi Admin</h2>
+        </Col>
+        <Col className="d-flex align-items-center justify-content-end">
+          <button className="btn btn-primary" onClick={() => logout()}>
+            Logout
+          </button>
+        </Col>
       </Row>
     </Container>
   </header>

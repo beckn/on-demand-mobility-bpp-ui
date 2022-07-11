@@ -1,15 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
-import { getCompanies, getRoles } from "../Login.services";
+import { getCompanies, getRoles, userAction } from "../Login.services";
 
-export const SignInPassword = ({ addChoreLog }) => {
-  const [App, setApp] = useState(0);
-  // const [Associations, setAssociation] = useState(0);
-  // const [Roles, setRoles] = useState(0);
+export const SignInPassword = () => {
+  const navigate = useNavigate();
+  const [Associations, setAssociation] = useState(null);
+  const [Roles, setRoles] = useState(0);
   const [FirstName, setFirstName] = useState("");
   const [LastName, setLastName] = useState("");
   const [Company, setCompany] = useState("");
@@ -21,24 +23,48 @@ export const SignInPassword = ({ addChoreLog }) => {
 
   useEffect(() => {
     init();
-  });
+  }, []);
 
   const init = () => {
+    isAuthenticated();
     document.title = `taxi BPP Sing up`;
-    getRequiredList();
+    !Associations && getRequiredList();
+    // spinnerService.show(LocalKey.spinnerKey);
   };
 
+  const navigateTo = (key) => navigate(key);
+
   const getRequiredList = () => {
-    let initData =[getCompanies("companies"),getRoles('roles')]
-    Promise.all(initData).then(allData=>{
-      console.log("All Predata",allData);
-    })
+    let initData = [getCompanies("companies"), getRoles("roles")];
+    Promise.all(initData).then((allData) => {
+      console.log("All Predata", allData);
+      setAssociation(allData[0].data.Companies);
+      setRoles(allData[1].data.Roles);
+    });
   };
 
   const handleSubmit = (e) => {
-    const x = [FirstName, LastName, Company, Role, PhoneNumber, Name, Password1, Password2];
     e.preventDefault();
-    console.log("formData = ",x.reduce((a, v) => ({ ...a, [v]: v}), {}));
+    // window.location.href = AppRoutes.adminDashboard;
+    let path = "login";
+    let data = {
+      User: {
+        Name: Name,
+        Password: Password1,
+        Password2: Password2,
+        LongName: FirstName.concat(" ", LastName),
+        PhoneNumber: PhoneNumber,
+        Company: {
+          Id: Company,
+        },
+        UserRole: {
+          Id: Role,
+        },
+      },
+    };
+    userAction(path, data).then((res) => {
+      navigateTo(AppRoutes.adminDashboard);
+    });
   };
 
   return (
@@ -75,6 +101,12 @@ export const SignInPassword = ({ addChoreLog }) => {
                       <option value="" selected disabled>
                         Select Association Name
                       </option>
+                      {Associations &&
+                        Associations.map((x) => (
+                          <option value={x.Id} key={x.Id}>
+                            {x.Name}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="col-5  mb-3">
@@ -82,6 +114,12 @@ export const SignInPassword = ({ addChoreLog }) => {
                       <option value="" selected disabled>
                         Select your role
                       </option>
+                      {Roles &&
+                        Roles.map((x) => (
+                          <option value={x.Id} key={x.Id}>
+                            {x.Name}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <div className="col-5 mb-3">

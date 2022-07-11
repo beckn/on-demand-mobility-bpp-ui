@@ -1,16 +1,36 @@
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
+import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
 import "../Login.scss";
+import { userAction } from "../Login.services";
 
 export const Login = (props) => {
+  const [Name, setName] = useState("");
+  const [Password, setPassword] = useState("");
 
   useEffect(() => {
+    isAuthenticated();
     document.title = `taxi BPP`;
     console.log(props);
     // spinnerService.show("mySpinner");
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let path = "login";
+    let data = {
+      User: {
+        Name: Name,
+        Password: Password,
+      },
+    };
+    userAction(path, data).then((res) => {
+      window.location.href = AppRoutes.adminDashboard;
+    });
+  };
 
   return (
     <section>
@@ -29,38 +49,51 @@ export const Login = (props) => {
                   </h1>
                 </div>
               </div>
-              <div className="row w-100 justify-content-center">
-                <div className="col-6">
-                  <div className="row">
-                    <div className="col mb-3">
-                      <input type="text" className="form-control" placeholder="Enter Email ID" />
+              <form
+                onSubmit={(e) => {
+                  handleSubmit(e);
+                }}
+              >
+                <div className="row w-100 justify-content-center">
+                  <div className="col-6">
+                    <div className="row">
+                      <div className="col mb-3">
+                        <input type="text" className="form-control" value={Name} onChange={(e) => setName(e.target.value)} placeholder="Enter Email ID" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col mb-3">
-                      <input type="text" className="form-control" placeholder="Enter Password" />
+                    <div className="row">
+                      <div className="col mb-3">
+                        <input type="password" className="form-control" value={Password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col">
-                      <a href="#.">Forgot Password</a>
+                    <div className="row mb-3">
+                      <div className="col">
+                        <a href="#.">Forgot Password</a>
+                      </div>
+                      <div className="col text-end">
+                        <a href={AppRoutes.signInOtp}>Sign in with Mobile</a>
+                      </div>
                     </div>
-                    <div className="col text-end">
-                      <a href={AppRoutes.signInOtp}>Sign in with Mobile</a>
+                    <div className="row">
+                      <div className="col-6">
+                        <a href={AppRoutes.admin} role="button" type="reset" className="btn d-block btn-secondary">
+                          cancel
+                        </a>
+                      </div>
+                      <div className="col-6 d-grid">
+                        <button type="submit" className="btn btn-primary">
+                          Sign In
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-6">
-                      <a href={AppRoutes.admin} className="btn d-block btn-secondary">
-                        cancel
-                      </a>
-                    </div>
-                    <div className="col-6 d-grid">
-                      <button className="btn btn-primary">Sign In</button>
+                    <div className="row mt-5">
+                      <div className="col">
+                        New User? <a href={AppRoutes.signUp}>Sign Up</a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </Col>
         </Row>
