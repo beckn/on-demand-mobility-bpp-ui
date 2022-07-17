@@ -1,13 +1,7 @@
 import { getRequestData, postRequestData } from "../../core/apiClient";
-import { LocalKey } from "../../core/constant";
-import { setCookie } from "../../core/CookiesHandler";
+import { setApiKey, setUser } from "../../core/common.functions";
+import { UserFields } from "../../core/fieldsSet";
 
-const setApiKey = (key) => {
-  setCookie(LocalKey.saveApi, JSON.stringify(key), "/");
-};
-const setUser = (user) => {
-  setCookie(LocalKey.saveUser, JSON.stringify(user), "/");
-};
 export const getCompanies = (path, fields) => {
   return getRequestData(path, fields);
 };
@@ -19,8 +13,9 @@ export const getRoles = (path, fields) => {
 export const userAction = async (path, data, fields) => {
   const logRes = await postRequestData(path, data, fields);
   let userUrl = `users/show/${logRes.data.User.Id}`;
-  const getUser = await postRequestData(userUrl, data, fields);
-  console.log("userAction", getUser, logRes);
+  let fieldset = `{"User":["Name","DateOfBirth","Id","AddressLine1","AddressLine2","AddressLine3","CityId","FirstName","LastName","PhoneNumber","PinCodeId","Verified"],"DriverDocument":["Id","Document","ImageUrl","DocumentNumber","Verified"]}`;
+  const getUser = await getRequestData(userUrl, UserFields);
+  // console.log("userAction", getUser, logRes);
   setApiKey(logRes.data.User);
   setUser(getUser.data.User);
   if (data.User.UserRole) {
@@ -39,4 +34,8 @@ export const userAction = async (path, data, fields) => {
 
 export const userLogin = (path, data, fields) => {
   return postRequestData(path, data, fields);
+};
+
+export const userLogout = (path, fields) => {
+  return getRequestData(path, fields);
 };

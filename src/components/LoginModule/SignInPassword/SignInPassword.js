@@ -13,7 +13,7 @@ export const Login = (props) => {
   useEffect(() => {
     isAuthenticated();
     document.title = `taxi BPP`;
-    console.log(props);
+    // console.log(props);
     // spinnerService.show("mySpinner");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

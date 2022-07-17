@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
+import { Vehicles } from "./components/Vechicles/Vehicles";
 import { AuthGuard } from "./core/AuthGuard";
 import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
 import ErrorBoundary from "./shared/ErrorBoundary";
@@ -48,6 +49,14 @@ function App() {
                 element={
                   <AuthGuard>
                     <Dashboard />
+                  </AuthGuard>
+                }
+              ></Route>
+              <Route
+                path={AppRoutes.addVehicle}
+                element={
+                  <AuthGuard>
+                    <Vehicles />
                   </AuthGuard>
                 }
               ></Route>

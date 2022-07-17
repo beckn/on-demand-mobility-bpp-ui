@@ -37,7 +37,7 @@ export const SignInPassword = () => {
   const getRequiredList = () => {
     let initData = [getCompanies("companies"), getRoles("roles")];
     Promise.all(initData).then((allData) => {
-      console.log("All Predata", allData);
+      // console.log("All Predata", allData);
       setAssociation(allData[0].data.Companies);
       setRoles(allData[1].data.Roles);
     });

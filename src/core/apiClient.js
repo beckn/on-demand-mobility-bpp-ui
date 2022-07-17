@@ -3,7 +3,10 @@ import { config } from "../config/config.js";
 import { spinnerService } from "@simply007org/react-spinners";
 import { toast } from "react-toastify";
 // import { getErrorMessage } from 'utils/functionUtils/commonFunctions';
-import { LocalKey } from "./constant.js";
+import { AppRoutes, LocalKey, NoLoader } from "./constant.js";
+import { removeCookie, setCookie } from "./CookiesHandler.js";
+import { setUser } from "./common.functions.js";
+import { UserFields } from "./fieldsSet.js";
 const apiBaseURL = config.API_BASE_URL;
 
 export const axiosInstance = axios.create({
@@ -12,7 +15,7 @@ export const axiosInstance = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
-    "Cache-Control": "no-cache"
+    "Cache-Control": "no-cache",
   },
 });
 
@@ -28,6 +31,12 @@ const isHandlerEnabled = (config = {}) => {
 
 const errorHandler = (error) => {
   if (isHandlerEnabled(error.config)) {
+    // console.log("requestHandler", error.response.status);
+    if (error.response.status === 401) {
+      removeCookie(LocalKey.saveApi);
+      removeCookie(LocalKey.saveUser);
+      window.location.href = AppRoutes.admin;
+    }
     // Handle errors
     spinnerService.hide(LocalKey.spinnerKey);
     toast.error(getErrorMessage(error), {
@@ -47,7 +56,7 @@ const successHandler = (response) => {
 
 const requestHandler = (request) => {
   if (isHandlerEnabled(request)) {
-    spinnerService.show(LocalKey.spinnerKey);
+    if (request.url && !NoLoader.includes(request.url.split("?")[0])) spinnerService.show(LocalKey.spinnerKey);
     // Modify request here
     if (window.localStorage.getItem(LocalKey.saveApi) && request.url !== "login") {
       request.headers["ApiKey"] = JSON.parse(window.localStorage.getItem(LocalKey.saveApi)).ApiKey;
@@ -92,4 +101,19 @@ export const postRequestData = (paths, data, fieldsList) => {
     };
   }
   return axiosInstance.post(paths, data, headers);
+};
+
+export const userSave = (path, data, fieldsList, IsStoreUpdate) => {
+  return postRequestData(path, data, fieldsList).then((res) => {
+    console.log("userUpdate", res.data.Users[0]);
+    IsStoreUpdate && getUser(res.data.Users[0].Id);
+    return res;
+  });
+};
+
+export const getUser = async (UserId) => {
+  let userUrl = `users/show/${UserId}`;
+  const getUser = await getRequestData(userUrl, UserFields);
+  setUser(getUser.data.User);
+  getUser && window.location.reload();
 };
