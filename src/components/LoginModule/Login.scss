@@ -61,3 +61,51 @@
     }
   }
 }
+
+.error {
+  color: #ff0000;
+  font-weight: 600;
+  font-size: 18px;
+  height: 30px;
+  padding: 5px;
+}
+
+.signup-form {
+  .form-control {
+    &:focus {
+      border: 2px solid #ffffff !important;
+      filter: drop-shadow(12px 12px 24px rgba(0, 0, 0, 0.25)) !important;
+      border-radius: 24px !important;
+    }
+  }
+  .anchor-button {
+    font-weight: 400;
+    font-size: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    height: 100px;
+    color: #ffffff;
+  }
+  button {
+    font-weight: 400;
+    font-size: 32px;
+    background: grey;
+    border-radius: 24px;
+    height: 100px;
+    color: white;
+    &:hover {
+      background: #abd4fa;
+      border: 2px solid #ffffff;
+      color: #000000;
+    }
+  }
+  input,
+  select {
+    border: 2px solid #ffffff;
+    filter: drop-shadow(12px 12px 24px rgba(0, 0, 0, 0.25));
+    border-radius: 24px;
+    height: 76px;
+  }
+}
