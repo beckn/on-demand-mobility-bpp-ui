@@ -9,7 +9,7 @@ export const SignInPhone = (props) => {
   useEffect(() => {
     isAuthenticated();
     document.title = `taxi BPP`;
-    console.log(props);
+    // console.log(props);
     // spinnerService.show("mySpinner");
   });
 

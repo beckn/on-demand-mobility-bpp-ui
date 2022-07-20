@@ -1,5 +1,5 @@
 import { AppRoutes, LocalKey } from "./constant";
-import { getCookie } from "./CookiesHandler";
+import { getCookie, setCookie } from "./CookiesHandler";
 
 export const setValue = (propertyPath, value, obj) => {
   let properties = Array.isArray(propertyPath) ? propertyPath : propertyPath.split(".");
@@ -40,4 +40,12 @@ export const getAddress = function getAddress(address) {
 
   let getAddress = userAddress.length ? userAddress.filter((add) => add).join(", ") : userAddress;
   return getAddress;
+};
+
+export const setApiKey = (key) => {
+  setCookie(LocalKey.saveApi, JSON.stringify(key), "/");
+};
+
+export const setUser = (user) => {
+  setCookie(LocalKey.saveUser, JSON.stringify(user), "/");
 };

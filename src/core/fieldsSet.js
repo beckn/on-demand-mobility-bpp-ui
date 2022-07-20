@@ -1,0 +1,1 @@
+export const UserFields = `{"User":["Name", "DateOfBirth","Id","AddressLine1","AddressLine2","AddressLine3","CityId","FirstName","LastName","PhoneNumber","PinCodeId","Verified","Staff","CompanyId","DateOfJoining"],"DriverDocument":["Id","Document","ImageUrl","DocumentNumber","Verified"]}`;
