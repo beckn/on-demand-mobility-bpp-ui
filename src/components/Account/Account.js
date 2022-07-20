@@ -14,9 +14,9 @@ import { getAutoCompleteValues, uploadFile } from "./Account.Services.js";
 import { UserFields } from "../../core/fieldsSet.js";
 
 export const Account = (prop) => {
-  const [NewUser, setNewUser] = useState("");
+  const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
   const User = prop.User ? JSON.parse(getCookie(LocalKey.saveUser)) : NewUser || null;
-  const IsStore = User && !prop.NewUser ? true : false;
+  const IsStore = User && !prop.NewUser && !prop.EditUser ? true : false;
   const [isUserEdit, setIsUserEdit] = useState(IsStore);
   const [isAddressEdit, setIsAddressEdit] = useState(User && isEmpty(getAddress(User)) ? false : IsStore);
   const [userAddress, setUserAddress] = useState({
@@ -107,8 +107,14 @@ export const Account = (prop) => {
     formData.append("DOCUMENT_NUMBER", number);
     type === DocumentType.Aadhar && formData.append("PASSWORD", eKycPassword);
 
-    uploadFile("driver_documents/save", formData).then((res) => {
-      console.log(`uploadData`, res.data);
+    uploadFile("driver_documents/save", formData, "", prop.NewUser ? false : true).then((res) => {
+      console.log(`uploadData`, res.data.DriverDocument);
+      if (prop.NewUser) {
+        setNewUser({
+          ...NewUser,
+          DriverDocuments: [...NewUser?.DriverDocuments, res.data.DriverDocument]
+        })
+      }
     });
   };
 
@@ -274,7 +280,7 @@ export const Account = (prop) => {
   return (
     <section>
       <div className={classNames({ "vh-100": true, "container-fluid": User })}>
-        <form onSubmit={(e) => {}}>
+        <form onSubmit={(e) => { }}>
           <div className="row">
             <div className="col">
               <h4 className="mb-0">Personal Information:</h4>
@@ -321,7 +327,7 @@ export const Account = (prop) => {
               <h4>Address Information:</h4>
             </div>
             <div className="col text-end">
-              {isAddressEdit || IsStore ? (
+              {isAddressEdit ? (
                 <button className="btn btn-primary btn-sm" onClick={(e) => enableEdit(e, setIsAddressEdit, false)}>
                   Edit
                 </button>
@@ -391,48 +397,53 @@ export const Account = (prop) => {
               />
             </div>
           </div>
-          {((User && User.Verified === "N") || !User) && (
-            <>
-              <div className="row">
-                <div className="col">
-                  <h4 className="mt-3 mb-0">Personal Documents:</h4>
-                </div>
+          <>
+            <div className="row">
+              <div className="col">
+                <h4 className="mt-3 mb-0">Personal Documents:</h4>
               </div>
-              <hr className="my-4" />
-              <div className="row w-100 justify-content-left">
-                <div className="col-3 mb-3">
-                  <input type="text" name="LicenseNumber" id="LicenseNumber" defaultValue={LicenseNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)} onChange={(e) => setLicenseNumber(e.target.value)} className="form-control" placeholder="Enter License Number" />
-                  <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence).Verified === "N" ? "Verification Pending" : User?.DriverDocuments && "Verified"}</p>
+            </div>
+            <hr className="my-4" />
+            <div className="row w-100 justify-content-left">
+              <div className="col-3 mb-3">
+                <input type="text" name="LicenseNumber" id="LicenseNumber" defaultValue={LicenseNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)} onChange={(e) => setLicenseNumber(e.target.value)} className="form-control" placeholder="Enter License Number" />
+                <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence).Verified === "N" ? "Verification Pending" : User?.DriverDocuments && "Verified"}</p>
+              </div>
+              {!User?.DriverDocuments?.find((x) => x.Document === "Licence") && (
+                <div className="col-1  mb-3">
+                  <input type="file" name="LicenseFile" id="LicenseFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Licence)} />
+                  <label htmlFor="LicenseFile" role={"button"}>
+                    <Upload />
+                  </label>
                 </div>
-                {!User?.DriverDocuments?.find((x) => x.Document === "Licence") && (
-                  <div className="col-1  mb-3">
-                    <input type="file" name="LicenseFile" id="LicenseFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Licence)} />
-                    <label htmlFor="LicenseFile" role={"button"}>
-                      <Upload />
-                    </label>
-                  </div>
-                )}
-                <div className="col-3  mb-3">
-                  {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) ? (
-                    <input type="password" name="eKycPassword" id="eKycPassword" value={eKycPassword} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
-                  ) : (
-                    <>
-                      <input type="text" name="eKycPassword" id="eKycPassword" disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar)} value={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar).Document} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
-                      <p className="mb-0">{User?.DriverDocuments.find((x) => x.Document === DocumentType.Aadhar).Verified === "N" ? "Verification Pending" : "Verified"}</p>
-                    </>
-                  )}
-                </div>
-                {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) && (
-                  <div className="col-1 mb-3">
-                    <input type="file" name="AadharFile" id="AadharFile" onChange={(e) => getUpload(e, DocumentType.Aadhar)} className="form-control d-none" />
-                    <label htmlFor="AadharFile" role={"button"}>
-                      <Upload />
-                    </label>
-                  </div>
+              )}
+              <div className="col-3  mb-3">
+                {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) ? (
+                  <input type="password" name="eKycPassword" id="eKycPassword" value={eKycPassword} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
+                ) : (
+                  <>
+                    <input type="text" name="eKycPassword" id="eKycPassword" disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar)} value={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar).Document} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
+                    <p className="mb-0">{User?.DriverDocuments.find((x) => x.Document === DocumentType.Aadhar).Verified === "N" ? "Verification Pending" : "Verified"}</p>
+                  </>
                 )}
               </div>
-            </>
-          )}
+              {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) && (
+                <div className="col-1 mb-3">
+                  <input type="file" name="AadharFile" id="AadharFile" onChange={(e) => getUpload(e, DocumentType.Aadhar)} className="form-control d-none" />
+                  <label htmlFor="AadharFile" role={"button"}>
+                    <Upload />
+                  </label>
+                </div>
+              )}
+            </div>
+            <div className="row">
+              <div className="col text-end">
+                <button className="btn btn-primary" onClick={(e) => prop.onChange(e, false)}>
+                  Update
+                </button>
+              </div>
+            </div>
+          </>
         </form>
       </div>
     </section>

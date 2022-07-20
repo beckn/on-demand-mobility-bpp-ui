@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { AppRoutes, commonMsg } from "../../core/constant";
 import Account from "../Account/Account";
+import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
 
 export const DriversVehicles = (prop) => {
@@ -11,6 +12,7 @@ export const DriversVehicles = (prop) => {
   const [driversVerified, setDriversVerified] = useState(0);
   const [driversPending, setDriversPending] = useState(0);
   const [isAddDriver, setIsAddDriver] = useState(false);
+  const [driverEdit, setDriverEdit] = useState("");
 
   useEffect(() => {
     init();
@@ -34,10 +36,23 @@ export const DriversVehicles = (prop) => {
     });
   };
 
+  const handleEdit = (e, driverDetails) => {
+    e.preventDefault();
+    setDriverEdit(driverDetails);
+    setIsAddDriver(true);
+    console.log(e, driverDetails)
+  }
+
   const toggleAddDriver = (e, k) => {
     e.preventDefault();
+    setDriverEdit(null);
     setIsAddDriver(k);
+    getUsers().then(res => {
+      setDriverList(res[1].data.Users);
+    })
   };
+
+
 
   return (
     <>
@@ -92,7 +107,7 @@ export const DriversVehicles = (prop) => {
                             <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
                             <td>{item.DateOfJoining || commonMsg.NoValue}</td>
                             <td>
-                              <button className="btn btn-sm btn-link">Edit</button>
+                              <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>Edit</button>
                             </td>
                           </tr>
                         );
@@ -101,7 +116,7 @@ export const DriversVehicles = (prop) => {
               ) : (
                 <>
                   {/* <Account NewUser={true} User={null} onChange={(e, k) => dispatchEvent(e, k)} /> */}
-                  <AddDriver onChange={(e, k) => toggleAddDriver(e, k)} />
+                  <AddDriver NewUser={false} EditUser={driverEdit || {}} onChange={(e, k) => toggleAddDriver(e, k)} />
                 </>
               )}
             </Tab>
