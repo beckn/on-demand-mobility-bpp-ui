@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { AppRoutes, commonMsg } from "../../core/constant";
-import Account from "../Account/Account";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
 
@@ -40,19 +39,17 @@ export const DriversVehicles = (prop) => {
     e.preventDefault();
     setDriverEdit(driverDetails);
     setIsAddDriver(true);
-    console.log(e, driverDetails)
-  }
+    console.log(e, driverDetails);
+  };
 
   const toggleAddDriver = (e, k) => {
     e.preventDefault();
     setDriverEdit(null);
     setIsAddDriver(k);
-    getUsers().then(res => {
+    getUsers().then((res) => {
       setDriverList(res.data.Users);
-    })
+    });
   };
-
-
 
   return (
     <>
@@ -84,35 +81,107 @@ export const DriversVehicles = (prop) => {
                 </div>
               </div>
               {!isAddDriver ? (
-                <table className="table table-striped mt-4">
-                  <tr>
-                    <th>Name of Driver</th>
-                    <th>Licence number</th>
-                    <th>Verification Status</th>
-                    <th>Location</th>
-                    <th>Documents Status</th>
-                    <th>Date of joining</th>
-                    <th>Action</th>
-                  </tr>
-                  {driverList &&
-                    driverList
-                      .filter((x) => x.Staff === "N")
-                      .map((item, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>{item.LongName}</td>
-                            <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
-                            <td>{item.Verified}</td>
-                            <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
-                            <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
-                            <td>{item.DateOfJoining || commonMsg.NoValue}</td>
-                            <td>
-                              <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>Edit</button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                </table>
+                <Tabs defaultActiveKey="allDriver" id="driver-filtered" className="mb-3">
+                  <Tab eventKey="allDriver" title="All">
+                    <table className="table table-striped mt-4">
+                      <tr>
+                        <th>Name of Driver</th>
+                        <th>Licence number</th>
+                        <th>Verification Status</th>
+                        <th>Location</th>
+                        <th>Documents Status</th>
+                        <th>Date of joining</th>
+                        <th>Action</th>
+                      </tr>
+                      {driverList &&
+                        driverList
+                          .filter((x) => x.Staff === "N")
+                          .map((item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{item.LongName}</td>
+                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
+                                <td>{item.Verified}</td>
+                                <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
+                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
+                                <td>{item.DateOfJoining || commonMsg.NoValue}</td>
+                                <td>
+                                  <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>
+                                    Edit
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                    </table>
+                  </Tab>
+                  <Tab eventKey="verifiedDriver" title="Verified">
+                    <table className="table table-striped mt-4">
+                      <tr>
+                        <th>Name of Driver</th>
+                        <th>Licence number</th>
+                        <th>Verification Status</th>
+                        <th>Location</th>
+                        <th>Documents Status</th>
+                        <th>Date of joining</th>
+                        <th>Action</th>
+                      </tr>
+                      {driverList &&
+                        driverList
+                          .filter((x) => x.Staff === "N")
+                          .map((item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{item.LongName}</td>
+                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
+                                <td>{item.Verified}</td>
+                                <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
+                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
+                                <td>{item.DateOfJoining || commonMsg.NoValue}</td>
+                                <td>
+                                  <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>
+                                    Edit
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                    </table>
+                  </Tab>
+                  <Tab eventKey="unVerifiedDriver" title="Verification Pending">
+                    <table className="table table-striped mt-4">
+                      <tr>
+                        <th>Name of Driver</th>
+                        <th>Licence number</th>
+                        <th>Verification Status</th>
+                        <th>Location</th>
+                        <th>Documents Status</th>
+                        <th>Date of joining</th>
+                        <th>Action</th>
+                      </tr>
+                      {driverList &&
+                        driverList
+                          .filter((x) => x.Staff === "N")
+                          .map((item, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{item.LongName}</td>
+                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
+                                <td>{item.Verified}</td>
+                                <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
+                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
+                                <td>{item.DateOfJoining || commonMsg.NoValue}</td>
+                                <td>
+                                  <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>
+                                    Edit
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                    </table>
+                  </Tab>
+                </Tabs>
               ) : (
                 <>
                   {/* <Account NewUser={true} User={null} onChange={(e, k) => dispatchEvent(e, k)} /> */}

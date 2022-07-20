@@ -31,7 +31,7 @@ export const Dashboard = () => {
   const getScreen = () => {
     // setActiveScreen("drivers");
     if (isEmpty(getAddress(user)) || user.Verified === "N") {
-      setActiveScreen("account");
+      setActiveScreen("profile");
       isEmpty(getAddress(user)) && setShow(true);
       !isEmpty(getAddress(user)) && user.Verified === "N" && setShow(true);
     } else {
@@ -92,8 +92,8 @@ export const Dashboard = () => {
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link role={"button"} eventKey="account">
-                        Account
+                      <Nav.Link role={"button"} eventKey="profile">
+                        User Profile
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -166,7 +166,7 @@ export const Dashboard = () => {
                     <Tab.Pane eventKey="agents">Agents</Tab.Pane>
                     <Tab.Pane eventKey="documents">Documents</Tab.Pane>
                     <Tab.Pane eventKey="verification">Verification</Tab.Pane>
-                    <Tab.Pane eventKey="account">
+                    <Tab.Pane eventKey="profile">
                       <Account User={user} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="support">Support</Tab.Pane>

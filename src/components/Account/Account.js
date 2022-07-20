@@ -279,7 +279,7 @@ export const Account = (prop) => {
 
   return (
     <section>
-      <div className={classNames({ "vh-100": true, "container-fluid": User })}>
+      <div className={classNames({ "vh-100": true, "container-fluid g-0": User })}>
         <form onSubmit={(e) => {}}>
           <div className="row">
             <div className="col">
@@ -436,13 +436,18 @@ export const Account = (prop) => {
                 </div>
               )}
             </div>
-            <div className="row">
-              <div className="col text-end">
-                <button className="btn btn-primary" onClick={(e) => prop.onChange(e, false)}>
-                  Update
-                </button>
+            {prop.NewUser && (
+              <div className="row">
+                <div className="col text-end">
+                  <button className="btn btn-secondary me-2" onClick={(e) => prop.onChange(e, false)}>
+                    Cancel
+                  </button>
+                  <button className="btn btn-primary" onClick={(e) => prop.onChange(e, false)}>
+                    Update
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </>
         </form>
       </div>
