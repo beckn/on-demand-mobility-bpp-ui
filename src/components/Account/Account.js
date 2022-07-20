@@ -98,7 +98,7 @@ export const Account = (prop) => {
       formData.append("ADDRESS_LINE_3", userAddress.AddressLine3);
       formData.append("EMAIL", User.Name);
       formData.append("PHONE_NUMBER", User.PhoneNumber);
-      formData.append("DATE_OF_BIRTH", User.DateOfBirth);
+      formData.append("DATE_OF_BIRTH", User.DateOfBirth || userInfo.DateOfBirth);
     }
 
     formData.append("DOCUMENT", type);
@@ -112,8 +112,8 @@ export const Account = (prop) => {
       if (prop.NewUser) {
         setNewUser({
           ...NewUser,
-          DriverDocuments: [...NewUser?.DriverDocuments, res.data.DriverDocument]
-        })
+          DriverDocuments: [...NewUser?.DriverDocuments, res.data.DriverDocument],
+        });
       }
     });
   };
@@ -280,7 +280,7 @@ export const Account = (prop) => {
   return (
     <section>
       <div className={classNames({ "vh-100": true, "container-fluid": User })}>
-        <form onSubmit={(e) => { }}>
+        <form onSubmit={(e) => {}}>
           <div className="row">
             <div className="col">
               <h4 className="mb-0">Personal Information:</h4>

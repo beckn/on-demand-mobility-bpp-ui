@@ -48,7 +48,7 @@ export const DriversVehicles = (prop) => {
     setDriverEdit(null);
     setIsAddDriver(k);
     getUsers().then(res => {
-      setDriverList(res[1].data.Users);
+      setDriverList(res.data.Users);
     })
   };
 
