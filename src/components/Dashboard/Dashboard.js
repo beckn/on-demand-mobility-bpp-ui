@@ -34,10 +34,9 @@ export const Dashboard = () => {
       isEmpty(getAddress(user)) && setShow(true);
       !isEmpty(getAddress(user)) && user.Verified === "N" && setShow(true);
     } else {
-      let data = [getUserSummaries(), getUsers()];
+      let data = [getUserSummaries()];
       Promise.all(data).then((res) => {
         setSummaries(res[0]);
-        setDriverList(res[1].data.Users);
         res[0].UserSummaries?.forEach((user) => {
           if (user.Role.Name.toLowerCase() === "driver") {
             setDrivers(+user.UserCount);
@@ -161,7 +160,7 @@ export const Dashboard = () => {
                         </div> */}
                       </div>
                     </Tab.Pane>
-                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} driverList={driverList} />}</Tab.Pane>
+                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} />}</Tab.Pane>
                     <Tab.Pane eventKey="agents">Agents</Tab.Pane>
                     <Tab.Pane eventKey="documents">Documents</Tab.Pane>
                     <Tab.Pane eventKey="verification">Verification</Tab.Pane>

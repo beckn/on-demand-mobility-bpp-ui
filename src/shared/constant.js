@@ -52,3 +52,16 @@ export const ErrorBlocks404 = [
     ImgUrl: "/assets/errorviews/img3.jpg",
   },
 ];
+
+export const DriverGrid = {
+  ColumnsHead: [
+    "Name of Driver",
+    "Licence number",
+    "Verification Status",
+    "Location",
+    "Documents Status",
+    "Date of joining",
+    "Action"
+  ],
+  ColumnsData:[]
+}

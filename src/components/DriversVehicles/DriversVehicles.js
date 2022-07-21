@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { AppRoutes, commonMsg } from "../../core/constant";
+import { DriverGrid } from "../../shared/constant";
+import TableGrid from "../../shared/TableGrid/TableGrid";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
 
@@ -18,9 +20,7 @@ export const DriversVehicles = (prop) => {
   }, []);
 
   const init = () => {
-    let DriverList = prop.driverList && prop.driverList.filter((x) => x.Staff === "N" && x.UserRoles && x.UserRoles[0].Role.Name.toLowerCase() === "driver" && x.Company);
-    setDriverList(DriverList);
-    console.log("Driver List", DriverList);
+    setDeriversList();
     prop.summaries.UserSummaries?.forEach((user) => {
       if (user.Role.Name.toLowerCase() === "driver") {
         setDrivers(+user.UserCount);
@@ -42,12 +42,34 @@ export const DriversVehicles = (prop) => {
     console.log(e, driverDetails);
   };
 
+  const setDeriversList = () => {
+    getUsers().then((res) => {
+      let TableData = DriverGrid;
+      let Data = DriverGrid.ColumnsData;
+      let UpDriverList = res.data.Users.filter((x) => x.Staff === "N" && x.UserRoles && x.UserRoles[0].Role.Name.toLowerCase() === "driver" && x.Company);
+      
+      setDriverList(UpDriverList);
+      driverList.forEach(v => {
+        Data.push({
+          LongName: v.LongName,
+          DocumentNumber: v.DriverDocuments && v.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber || commonMsg.NoValue,
+          Verified: v.Verified,
+          Location:(v.City && v.City.Name) || commonMsg.NoValue,
+          Status:(v.DriverDocuments && v.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue,
+          DOJ:v.DateOfJoining || commonMsg.NoValue,
+        })
+      })
+      console.log("Driver List", UpDriverList,TableData);
+    });
+  }
+
   const toggleAddDriver = (e, k) => {
     e.preventDefault();
     setDriverEdit(null);
     setIsAddDriver(k);
     getUsers().then((res) => {
       setDriverList(res.data.Users);
+
     });
   };
 
@@ -83,6 +105,7 @@ export const DriversVehicles = (prop) => {
               {!isAddDriver ? (
                 <Tabs defaultActiveKey="allDriver" id="driver-filtered" className="mb-3">
                   <Tab eventKey="allDriver" title="All">
+                    <TableGrid />
                     <table className="table table-striped mt-4">
                       <tr>
                         <th>Name of Driver</th>
