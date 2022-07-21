@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-import Autocomplete from "react-autocomplete";
 // import PropTypes from "prop-types";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
+import { useEffect, useState } from "react";
+import Autocomplete from "react-autocomplete";
 import "react-dates/initialize";
 import { Upload } from "react-feather";
 import { userSave } from "../../core/apiClient.js";
 import { getAddress, setValue } from "../../core/common.functions.js";
 import { DocumentType, GroupsCode, LocalKey, SearchGroupsCode } from "../../core/constant.js";
 import { getCookie } from "../../core/CookiesHandler.js";
-import { getAutoCompleteValues, uploadFile } from "./Account.Services.js";
 import { UserFields } from "../../core/fieldsSet.js";
+import { getAutoCompleteValues, uploadFile } from "./Account.Services.js";
 
 export const Account = (prop) => {
   const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
@@ -49,24 +49,24 @@ export const Account = (prop) => {
     PhoneNumber: User?.PhoneNumber,
     Company: JSON.parse(getCookie(LocalKey.saveUser)).Company,
   });
-  const [documentInfo, setDocumentInfo] = useState([]);
-  const [PanNumber, setPanNumber] = useState("");
+  // const [documentInfo, setDocumentInfo] = useState([]);
+  // const [PanNumber, setPanNumber] = useState("");
   const [LicenseNumber, setLicenseNumber] = useState("");
   const [eKycPassword, setEKycPassword] = useState(null);
 
   useEffect(() => {
     init();
   }, []);
-
-  const years = (startYear) => {
-    var currentYear = new Date().getFullYear(),
-      years = [];
-    startYear = startYear || 1980;
-    while (startYear <= currentYear) {
-      years.push(startYear++);
-    }
-    return years;
-  };
+  // need this when we implement custome date picker
+  // const years = (startYear) => {
+  //   var currentYear = new Date().getFullYear(),
+  //     years = [];
+  //   startYear = startYear || 1980;
+  //   while (startYear <= currentYear) {
+  //     years.push(startYear++);
+  //   }
+  //   return years;
+  // };
 
   const setUserValue = (e) => {
     e.preventDefault();
@@ -89,7 +89,7 @@ export const Account = (prop) => {
   const getUpload = (e, type) => {
     let file = e.target.files[0];
     let formData = new FormData();
-    let number = type === DocumentType.Licence ? LicenseNumber : PanNumber;
+    let number = type === DocumentType.Licence && LicenseNumber;
     let userId = prop.NewUser ? NewUser.Id : User.Id;
 
     if (type === DocumentType.Licence) {
@@ -118,28 +118,28 @@ export const Account = (prop) => {
     });
   };
 
-  const getSelect = (e) => {
-    e.preventDefault();
-    let type = {
-      AadharFile: "AADHAR",
-      PanFile: "PAN",
-      LicenseFile: "LICENSE",
-    };
-    let fieldMap = {
-      AadharFile: eKycPassword,
-      PanFile: PanNumber,
-      LicenseFile: LicenseNumber,
-    };
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let copy = documentInfo;
-    copy.push({
-      [name]: file,
-      type: type[name],
-      DocumentNumber: fieldMap[name],
-    });
-    setDocumentInfo(copy);
-  };
+  // const getSelect = (e) => {
+  //   e.preventDefault();
+  //   let type = {
+  //     AadharFile: "AADHAR",
+  //     PanFile: "PAN",
+  //     LicenseFile: "LICENSE",
+  //   };
+  //   let fieldMap = {
+  //     AadharFile: eKycPassword,
+  //     // PanFile: PanNumber,
+  //     LicenseFile: LicenseNumber,
+  //   };
+  //   let file = e.target.files[0];
+  //   let name = e.target.name;
+  //   let copy = documentInfo;
+  //   copy.push({
+  //     [name]: file,
+  //     type: type[name],
+  //     DocumentNumber: fieldMap[name],
+  //   });
+  //   setDocumentInfo(copy);
+  // };
 
   const enableEdit = (e, func, state) => {
     e.preventDefault();
@@ -280,7 +280,7 @@ export const Account = (prop) => {
   return (
     <section>
       <div className={classNames({ "vh-100": true, "container-fluid g-0": User })}>
-        <form onSubmit={(e) => {}}>
+        <form onSubmit={(e) => { }}>
           <div className="row">
             <div className="col">
               <h4 className="mb-0">Personal Information:</h4>

@@ -1,12 +1,11 @@
-import "./Dashboard.scss";
-import { spinnerService } from "@simply007org/react-spinners";
 import isEmpty from "lodash/isEmpty";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
-import { Col, Container, Modal, Nav, Row, Tab, Tabs } from "react-bootstrap";
+import { Col, Container, Modal, Nav, Row, Tab } from "react-bootstrap";
 import { getAddress } from "../../core/common.functions";
 import { LocalKey } from "../../core/constant";
 import { getCookie } from "../../core/CookiesHandler";
+import "./Dashboard.scss";
 import { getUsers, getUserSummaries } from "./Dashboard.Services";
 const DriversVehicles = React.lazy(() => import("../DriversVehicles/DriversVehicles"));
 const Account = React.lazy(() => import("../Account/Account"));
