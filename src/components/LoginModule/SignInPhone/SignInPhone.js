@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 // import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
+import styled from "styled-components";
 import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes, LocalKey } from "../../../core/constant";
+import { LeftSection } from "../../../shared/graphics/LeftSection";
+import { DarkLayout } from "../../../shared/layout/DarkLayout";
 import "../Login.scss";
 
 export const SignInPhone = (props) => {
@@ -14,55 +18,69 @@ export const SignInPhone = (props) => {
   });
 
   return (
-    <section>
-      <Container fluid className="vh-100">
-        <Row className="vh-100">
-          <Col xxl="3" className="position-relative bg-dark left-section">
-            <div className="round-1"></div>
-            <div className="round-2"></div>
-          </Col>
-          <Col xxl="9" className="d-flex align-items-center">
-            <div className="w-100">
-              <div className="row w-100 justify-content-center">
-                <div className="col-6 mb-5">
-                  <h1>
-                    Welcome <br /> to the Taxi Admin App
-                  </h1>
-                </div>
-              </div>
+    <DarkLayout>
+      <section>
+        <Container fluid className="vh-100">
+          <Row className="vh-100">
+            <Col lg="3" className="p-0">
+              <LeftSection />
+            </Col>
+            <Col lg="9" className="d-flex align-items-center">
               <div className="row w-100 justify-content-center">
                 <div className="col-6">
-                  <div className="row">
-                    <div className="col mb-3">
-                      <input type="text" className="form-control" placeholder="Enter your Mobile number" />
+                  <Title>
+                    Welcome <br /> to the Taxi Admin App
+                  </Title>
+                  <FormContainer>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter your Mobile number"
+                    />
+
+                    <button className="btn btn-primary">Send OTP</button>
+                  </FormContainer>
+
+                  <SignUpTextContainer>
+                    <div>
+                      New User? <Link to={AppRoutes.signUp} className="link-primary">Sign Up</Link>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col">
-                      <a href={AppRoutes.admin} className="btn d-block btn-secondary">
-                        cancel
-                      </a>
+
+                    <div style={{ textAlign: "right" }}>
+                      <Link to={AppRoutes.signInPassword} className="link-primary">
+                        Sign in with Email
+                      </Link>
                     </div>
-                    <div className="col d-grid">
-                      <button className="btn btn-primary">Send Otp</button>
-                    </div>
-                  </div>
-                  <div className="row mt-5">
-                    <div className="col">
-                      New User? <a href={AppRoutes.signUp}>Sign Up</a>
-                    </div>
-                    <div className="col text-end">
-                      <a href={AppRoutes.signInPassword}>Sign in with Email</a>
-                    </div>
-                  </div>
+                  </SignUpTextContainer>
                 </div>
               </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </DarkLayout>
   );
 };
+
+const Title = styled.h1`
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1.5;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 4.5rem 0;
+`;
+
+const SignUpTextContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 1rem;
+`;
 
 export default SignInPhone;

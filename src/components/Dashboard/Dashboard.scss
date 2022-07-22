@@ -94,3 +94,16 @@
       }
   }
 }
+
+.dashboard {
+  .nav-pills .nav-link {
+    border-radius: 0;
+    color: #fff;
+  }
+  
+  .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #000;
+    background-color: #fff;
+    font-weight: 600;
+  }
+}

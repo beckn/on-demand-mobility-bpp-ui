@@ -5,6 +5,7 @@ import { Col, Container, Modal, Nav, Row, Tab } from "react-bootstrap";
 import { getAddress } from "../../core/common.functions";
 import { LocalKey } from "../../core/constant";
 import { getCookie } from "../../core/CookiesHandler";
+import { DriverIcon, VehicleIcon } from "../../shared/icons";
 import "./Dashboard.scss";
 import { getUsers, getUserSummaries } from "./Dashboard.Services";
 const DriversVehicles = React.lazy(() => import("../DriversVehicles/DriversVehicles"));
@@ -53,7 +54,7 @@ export const Dashboard = () => {
   // const handleShow = () => setShow(true);
 
   return (
-    <section>
+    <section className="dashboard">
       <Container fluid className="vh-100">
         <Row>
           <Col>
@@ -106,7 +107,7 @@ export const Dashboard = () => {
                         <div className="col-3 mb-3">
                           <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("drivers")}>
                             <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
+                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center"><DriverIcon className="w-50"/></div>
                               <div className="col-md-8">
                                 <div className="card-body">
                                   <h5 className="card-title">Total Drivers</h5>
@@ -119,7 +120,7 @@ export const Dashboard = () => {
                         <div className="col-3 mb-3">
                           <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("drivers")}>
                             <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
+                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center"><VehicleIcon className="w-50"/></div>
                               <div className="col-md-8">
                                 <div className="card-body">
                                   <h5 className="card-title">Total Vehicles</h5>
@@ -159,7 +160,7 @@ export const Dashboard = () => {
               <p className="text-muted">in order to continue!</p>
             </>
           )}
-          <button className="btn btn-primary w-50" onClick={handleClose}>
+          <button className="btn btn-dark w-50" onClick={handleClose}>
             Account
           </button>
         </Modal.Body>
