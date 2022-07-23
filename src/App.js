@@ -52,14 +52,6 @@ function App() {
                   </AuthGuard>
                 }
               ></Route>
-              <Route
-                path={AppRoutes.addVehicle}
-                element={
-                  <AuthGuard>
-                    <Vehicles />
-                  </AuthGuard>
-                }
-              ></Route>
               <Route path="/*" element={<PageNotFound />}></Route>
             </Routes>
             {/* {isLogin && <AppFooter />} */}

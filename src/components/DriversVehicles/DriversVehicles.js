@@ -114,6 +114,7 @@ export const DriversVehicles = (prop) => {
         }
       });
       toast.success("Document Verified Successfully!");
+      setSelectedDriver("");
       handleModalClose();
       setDeriversList();
     });
