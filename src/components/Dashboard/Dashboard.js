@@ -37,7 +37,6 @@ export const Dashboard = () => {
       let data = [getUserSummaries()];
       Promise.all(data).then((res) => {
         setSummaries(res[0]);
-        setDriverList(res[1])
         res[0].UserSummaries?.forEach((user) => {
           if (user.Role?.Name?.toLowerCase() === "driver") {
             setDrivers(+user.UserCount);
@@ -133,32 +132,6 @@ export const Dashboard = () => {
                             </div>
                           </div>
                         </div>
-                        {/* <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("agents")}>
-                            <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
-                              <div className="col-md-8">
-                                <div className="card-body">
-                                  <h5 className="card-title">Total Agents</h5>
-                                  <h6>21</h6>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("agents")}>
-                            <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
-                              <div className="col-md-8">
-                                <div className="card-body">
-                                  <h6 className="card-title">Agent Verification Pending</h6>
-                                  <h6 className="mb-0">21</h6>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
                     </Tab.Pane>
                     <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} />}</Tab.Pane>

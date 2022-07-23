@@ -114,7 +114,7 @@ export const Account = (prop) => {
       if (prop.NewUser) {
         setNewUser({
           ...NewUser,
-          DriverDocuments: [...NewUser?.DriverDocuments, res.data.DriverDocument],
+          DriverDocuments: NewUser.DriverDocuments ? [...NewUser?.DriverDocuments, res.data.DriverDocument] : [],
         });
       }
     });
@@ -367,8 +367,8 @@ export const Account = (prop) => {
                 value={userAddress.PinCode.PinCode}
                 onChange={(e) => onAutoChange(e, "PinCode")}
                 onSelect={(e) => onSelect(e, "PinCode.PinCode", "PinCode")}
-                wrapperProps={{ class: "autocomplete-box" }}
-                inputProps={{ type: "tel", class: `form-control`, name: "PinCode.PinCode", id: "PinCode", disabled: isAddressEdit, placeholder: "Enter pin code*" }}
+                wrapperProps={{ className: "autocomplete-box" }}
+                inputProps={{ type: "tel", className: `form-control`, name: "PinCode.PinCode", id: "PinCode", disabled: isAddressEdit, placeholder: "Enter pin code*" }}
               />
             </div>
             <div className="col-4  mb-3">
@@ -381,8 +381,8 @@ export const Account = (prop) => {
                 value={userAddress.City.Name}
                 onChange={(e) => onAutoChange(e, "City")}
                 onSelect={(e) => onSelect(e, "City.Name", "City")}
-                wrapperProps={{ class: "autocomplete-box" }}
-                inputProps={{ class: `form-control`, disabled: (!userAddress.City.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.Name", id: "City", placeholder: "Enter city name*" }}
+                wrapperProps={{ className: "autocomplete-box" }}
+                inputProps={{ className: `form-control`, disabled: (!userAddress.City.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.Name", id: "City", placeholder: "Enter city name*" }}
               />
             </div>
             <div className="col-4  mb-3">
@@ -394,8 +394,8 @@ export const Account = (prop) => {
                 value={userAddress.City.State.Name}
                 onChange={(e) => onAutoChange(e, "State")}
                 onSelect={(e) => onSelect(e, "City.State.Name", "State")}
-                wrapperProps={{ class: "autocomplete-box" }}
-                inputProps={{ class: `form-control`, disabled: (!userAddress.City.State.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.State.Name", id: "State", placeholder: "Enter state name*" }}
+                wrapperProps={{ className: "autocomplete-box" }}
+                inputProps={{ className: `form-control`, disabled: (!userAddress.City.State.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.State.Name", id: "State", placeholder: "Enter state name*" }}
               />
             </div>
           </div>

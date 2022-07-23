@@ -87,5 +87,12 @@ export const DriverGrid = {
       Key: "",
     },
   ],
-  ColumnsData: []
+  ColumnsData: [],
+};
+
+export const verificationKeys = {
+  verifyDriver: "verifyDriver",
+  editDriver: "editDriver",
+  verifyVehicle: "verifyVehicle",
+  editVehicle: "editVehicle",
 };

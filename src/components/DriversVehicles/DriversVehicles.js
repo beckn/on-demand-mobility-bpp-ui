@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Tab, Tabs, Modal, Table } from "react-bootstrap";
 import { getAddress } from "../../core/common.functions";
 import { AppRoutes, commonMsg } from "../../core/constant";
-import { DriverGrid } from "../../shared/constant";
+import { DriverGrid, verificationKeys } from "../../shared/constant";
 import TableGridDriver from "../../shared/TableGrid/TableGridDriver";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
 import { toast } from "react-toastify";
 import { verify } from "./DriversVehicles.Services";
+import DriverVerification from "./DriverVerification";
 
 export const DriversVehicles = (prop) => {
   const [driverList, setDriverList] = useState("");
@@ -19,6 +20,7 @@ export const DriversVehicles = (prop) => {
   const [isAddDriver, setIsAddDriver] = useState(false);
   const [driverEdit, setDriverEdit] = useState("");
   const [modalShow, setModalShow] = useState(false);
+  const [verifyKey, setVerifyKey] = useState("");
 
   const handleModalClose = () => {
     setModalShow(false);
@@ -53,8 +55,9 @@ export const DriversVehicles = (prop) => {
     const { name } = e.target;
     console.log("Verify Driver", name);
     switch (name) {
-      case "verify":
+      case verificationKeys.verifyDriver:
         setModalShow(true);
+        setVerifyKey(name);
         setSelectedDriver(driverDetails);
         console.log("verify", driverDetails);
         break;
@@ -73,7 +76,6 @@ export const DriversVehicles = (prop) => {
       let Data = DriverGrid.ColumnsData;
       let UpDriverList = res.data.Users.filter((x) => x.Staff === "N" || (x.UserRoles && x.UserRoles[0].Role.Id === "2") || x.Company);
       DriverGrid.ColumnsData = UpDriverList;
-
       UpDriverList.forEach((v) => {
         Data.push({
           LongName: v.LongName,
@@ -112,8 +114,19 @@ export const DriversVehicles = (prop) => {
         }
       });
       toast.success("Document Verified Successfully!");
+      handleModalClose();
       setDeriversList();
     });
+  };
+
+  const getModalComponent = (key) => {
+    switch (key) {
+      case verificationKeys.verifyDriver:
+        return <DriverVerification selectedDriver={selectedDriver} onUpdate={verifyDocument} />;
+
+      default:
+        break;
+    }
   };
 
   return (
@@ -192,65 +205,7 @@ export const DriversVehicles = (prop) => {
         </div>
       </div>
       <Modal show={modalShow} size="lg" onHide={handleModalClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Driver Verification</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="row">
-            <div className="col">
-              <h5>{selectedDriver.LongName}</h5>
-              <hr />
-              {getAddress(selectedDriver)}
-              <p>
-                Mobile: {selectedDriver.PhoneNumber}, DOB: {selectedDriver.DateOfBirth}
-              </p>
-              <hr />
-              <p>Date Of Joining: {selectedDriver.DateOfJoining}</p>
-              <hr />
-              <h5>Uploaded Documents</h5>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Document</th>
-                    <th>Document Number</th>
-                    <th>Username</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedDriver.DriverDocuments?.map((x) => {
-                    return (
-                      <tr>
-                        <td>{x.Document}</td>
-                        <td>
-                          <a href={x.ImageUrl} rel="noreferrer" target="_blank">
-                            {x.DocumentNumber}
-                          </a>
-                        </td>
-                        <td>
-                          {x.Verified === "Y" ? (
-                            "Verified"
-                          ) : (
-                            <button className="btn btn-primary btn-sm" onClick={() => verifyDocument(x.Id)}>
-                              Verify
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <button className="btn btn-secondary" onClick={handleModalClose}>
-            Close
-          </button>
-          <button className="btn btn-primary" onClick={handleVerifyDriver}>
-            Save Changes
-          </button>
-        </Modal.Footer>
+        {getModalComponent(verifyKey)}
       </Modal>
     </>
   );
