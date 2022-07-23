@@ -1,19 +1,32 @@
 import { useEffect, useState } from "react";
-import { Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs, Modal, Table } from "react-bootstrap";
+import { getAddress } from "../../core/common.functions";
 import { AppRoutes, commonMsg } from "../../core/constant";
 import { DriverGrid } from "../../shared/constant";
-import TableGrid from "../../shared/TableGrid/TableGrid";
+import TableGridDriver from "../../shared/TableGrid/TableGridDriver";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
+import { toast } from "react-toastify";
+import { verify } from "./DriversVehicles.Services";
 
 export const DriversVehicles = (prop) => {
-  const [driverList, setDriverList] = useState(prop.driverList);
+  const [driverList, setDriverList] = useState("");
+  const [selectedDriver, setSelectedDriver] = useState({});
   const [drivers, setDrivers] = useState(0);
   const [vehicles, setVehicles] = useState(0);
   const [driversVerified, setDriversVerified] = useState(0);
   const [driversPending, setDriversPending] = useState(0);
   const [isAddDriver, setIsAddDriver] = useState(false);
   const [driverEdit, setDriverEdit] = useState("");
+  const [modalShow, setModalShow] = useState(false);
+
+  const handleModalClose = () => {
+    setModalShow(false);
+    setDeriversList();
+  };
+  const handleModalShow = () => {
+    setModalShow(true);
+  };
 
   useEffect(() => {
     init();
@@ -22,54 +35,84 @@ export const DriversVehicles = (prop) => {
   const init = () => {
     setDeriversList();
     prop.summaries.UserSummaries?.forEach((user) => {
-      if (user.Role.Name.toLowerCase() === "driver") {
+      if (user.Role?.Name?.toLowerCase() === "driver") {
         setDrivers(+user.UserCount);
         setDriversVerified((+user.UserCount - +user.UnverifiedUserCount).toFixed("00"));
         setDriversPending(+user.UnverifiedUserCount);
       }
     });
     prop.summaries.VehicleSummaries?.forEach((user) => {
-      if (user.Role.Name.toLowerCase() === "driver") {
+      if (user.Role?.Name?.toLowerCase() === "driver") {
         setVehicles(user.UserCount);
       }
     });
   };
 
-  const handleEdit = (e, driverDetails) => {
+  const handleClick = (e, driverDetails) => {
     e.preventDefault();
-    setDriverEdit(driverDetails);
-    setIsAddDriver(true);
-    console.log(e, driverDetails);
+    const { name } = e.target;
+    console.log("Verify Driver", name);
+    switch (name) {
+      case "verify":
+        setModalShow(true);
+        setSelectedDriver(driverDetails);
+        console.log("verify", driverDetails);
+        break;
+
+      default:
+        setDriverEdit(driverDetails);
+        setIsAddDriver(true);
+        break;
+    }
+    // console.log("handleEdit = Parent =", e, driverDetails);
   };
 
   const setDeriversList = () => {
     getUsers().then((res) => {
       let TableData = DriverGrid;
       let Data = DriverGrid.ColumnsData;
-      let UpDriverList = res.data.Users.filter((x) => x.Staff === "N" && x.UserRoles && x.UserRoles[0].Role.Name.toLowerCase() === "driver" && x.Company);
-      
-      setDriverList(UpDriverList);
-      driverList.forEach(v => {
+      let UpDriverList = res.data.Users.filter((x) => x.Staff === "N" || (x.UserRoles && x.UserRoles[0].Role.Id === "2") || x.Company);
+      DriverGrid.ColumnsData = UpDriverList;
+
+      UpDriverList.forEach((v) => {
         Data.push({
           LongName: v.LongName,
-          DocumentNumber: v.DriverDocuments && v.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber || commonMsg.NoValue,
+          DocumentNumber: (v.DriverDocuments && v.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue,
           Verified: v.Verified,
-          Location:(v.City && v.City.Name) || commonMsg.NoValue,
-          Status:(v.DriverDocuments && v.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue,
-          DOJ:v.DateOfJoining || commonMsg.NoValue,
-        })
-      })
-      console.log("Driver List", UpDriverList,TableData);
+          Location: (v.City && v.City.Name) || commonMsg.NoValue,
+          Status: (v.DriverDocuments && v.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue,
+          DOJ: v.DateOfJoining || commonMsg.NoValue,
+          Item: v,
+        });
+      });
+      setDriverList(TableData);
+      console.log("Driver List", UpDriverList, TableData);
     });
-  }
+  };
 
   const toggleAddDriver = (e, k) => {
     e.preventDefault();
     setDriverEdit(null);
     setIsAddDriver(k);
-    getUsers().then((res) => {
-      setDriverList(res.data.Users);
+    setDeriversList();
+  };
 
+  const handleVerifyDriver = (e, k) => {
+    e.preventDefault();
+    setSelectedDriver(k);
+  };
+
+  const verifyDocument = (id) => {
+    verify(id).then((res) => {
+      console.log(res.data.DriverDocument);
+      let updateDocument = selectedDriver.DriverDocuments;
+      updateDocument.map((x) => {
+        if (x.Id === res.data.DriverDocument.Id) {
+          return res.data.DriverDocument;
+        }
+      });
+      toast.success("Document Verified Successfully!");
+      setDeriversList();
     });
   };
 
@@ -105,109 +148,17 @@ export const DriversVehicles = (prop) => {
               {!isAddDriver ? (
                 <Tabs defaultActiveKey="allDriver" id="driver-filtered" className="mb-3">
                   <Tab eventKey="allDriver" title="All">
-                    <TableGrid />
-                    <table className="table table-striped mt-4">
-                      <tr>
-                        <th>Name of Driver</th>
-                        <th>Licence number</th>
-                        <th>Verification Status</th>
-                        <th>Location</th>
-                        <th>Documents Status</th>
-                        <th>Date of joining</th>
-                        <th>Action</th>
-                      </tr>
-                      {driverList &&
-                        driverList
-                          .filter((x) => x.Staff === "N")
-                          .map((item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{item.LongName}</td>
-                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
-                                <td>{item.Verified}</td>
-                                <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
-                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
-                                <td>{item.DateOfJoining || commonMsg.NoValue}</td>
-                                <td>
-                                  <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>
-                                    Edit
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                    </table>
+                    <TableGridDriver GridData={driverList} onClick={(e, k) => handleClick(e, k)} />
                   </Tab>
                   <Tab eventKey="verifiedDriver" title="Verified">
-                    <table className="table table-striped mt-4">
-                      <tr>
-                        <th>Name of Driver</th>
-                        <th>Licence number</th>
-                        <th>Verification Status</th>
-                        <th>Location</th>
-                        <th>Documents Status</th>
-                        <th>Date of joining</th>
-                        <th>Action</th>
-                      </tr>
-                      {driverList &&
-                        driverList
-                          .filter((x) => x.Staff === "N")
-                          .map((item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{item.LongName}</td>
-                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
-                                <td>{item.Verified}</td>
-                                <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
-                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
-                                <td>{item.DateOfJoining || commonMsg.NoValue}</td>
-                                <td>
-                                  <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>
-                                    Edit
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                    </table>
+                    <TableGridDriver GridData={driverList} onClick={(e, k) => handleClick(e, k)} Status="Y" />
                   </Tab>
                   <Tab eventKey="unVerifiedDriver" title="Verification Pending">
-                    <table className="table table-striped mt-4">
-                      <tr>
-                        <th>Name of Driver</th>
-                        <th>Licence number</th>
-                        <th>Verification Status</th>
-                        <th>Location</th>
-                        <th>Documents Status</th>
-                        <th>Date of joining</th>
-                        <th>Action</th>
-                      </tr>
-                      {driverList &&
-                        driverList
-                          .filter((x) => x.Staff === "N")
-                          .map((item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td>{item.LongName}</td>
-                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").DocumentNumber) || commonMsg.NoValue}</td>
-                                <td>{item.Verified}</td>
-                                <td>{(item.City && item.City.Name) || commonMsg.NoValue}</td>
-                                <td>{(item.DriverDocuments && item.DriverDocuments.find((x) => x.Document === "Licence").Verified) || commonMsg.NoValue}</td>
-                                <td>{item.DateOfJoining || commonMsg.NoValue}</td>
-                                <td>
-                                  <button className="btn btn-sm btn-link" onClick={(e) => handleEdit(e, item)}>
-                                    Edit
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          })}
-                    </table>
+                    <TableGridDriver GridData={driverList} onClick={(e, k) => handleClick(e, k)} Status="N" />
                   </Tab>
                 </Tabs>
               ) : (
                 <>
-                  {/* <Account NewUser={true} User={null} onChange={(e, k) => dispatchEvent(e, k)} /> */}
                   <AddDriver NewUser={false} EditUser={driverEdit || {}} onChange={(e, k) => toggleAddDriver(e, k)} />
                 </>
               )}
@@ -240,6 +191,67 @@ export const DriversVehicles = (prop) => {
           </Tabs>
         </div>
       </div>
+      <Modal show={modalShow} size="lg" onHide={handleModalClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Driver Verification</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="col">
+              <h5>{selectedDriver.LongName}</h5>
+              <hr />
+              {getAddress(selectedDriver)}
+              <p>
+                Mobile: {selectedDriver.PhoneNumber}, DOB: {selectedDriver.DateOfBirth}
+              </p>
+              <hr />
+              <p>Date Of Joining: {selectedDriver.DateOfJoining}</p>
+              <hr />
+              <h5>Uploaded Documents</h5>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Document Number</th>
+                    <th>Username</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedDriver.DriverDocuments?.map((x) => {
+                    return (
+                      <tr>
+                        <td>{x.Document}</td>
+                        <td>
+                          <a href={x.ImageUrl} rel="noreferrer" target="_blank">
+                            {x.DocumentNumber}
+                          </a>
+                        </td>
+                        <td>
+                          {x.Verified === "Y" ? (
+                            "Verified"
+                          ) : (
+                            <button className="btn btn-primary btn-sm" onClick={() => verifyDocument(x.Id)}>
+                              Verify
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary" onClick={handleModalClose}>
+            Close
+          </button>
+          <button className="btn btn-primary" onClick={handleVerifyDriver}>
+            Save Changes
+          </button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

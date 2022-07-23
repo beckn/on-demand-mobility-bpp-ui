@@ -55,13 +55,37 @@ export const ErrorBlocks404 = [
 
 export const DriverGrid = {
   ColumnsHead: [
-    "Name of Driver",
-    "Licence number",
-    "Verification Status",
-    "Location",
-    "Documents Status",
-    "Date of joining",
-    "Action"
+    {
+      Name: "Name of Driver",
+      Key: "LongName",
+    },
+    {
+      Name: "Licence number",
+      Field: { Name: "Document", Value: "Licence", Key: "DocumentNumber" },
+      Key: "DriverDocuments",
+    },
+    {
+      Name: "Verification Status",
+      Key: "Verified",
+    },
+    {
+      Name: "Location",
+      Field: { Key: "Name" },
+      Key: "City",
+    },
+    {
+      Name: "Document Status",
+      Field: { Name: "Document", Value: "Licence", Key: "Verified" },
+      Key: "DriverDocuments",
+    },
+    {
+      Name: "Date of joining",
+      Key: "DateOfJoining",
+    },
+    {
+      Name: "Action",
+      Key: "",
+    },
   ],
-  ColumnsData:[]
-}
+  ColumnsData: []
+};

@@ -50,7 +50,7 @@ export const Account = (prop) => {
     Company: JSON.parse(getCookie(LocalKey.saveUser)).Company,
   });
   // const [documentInfo, setDocumentInfo] = useState([]);
-  // const [PanNumber, setPanNumber] = useState("");
+  const [PanNumber, setPanNumber] = useState("");
   const [LicenseNumber, setLicenseNumber] = useState("");
   const [eKycPassword, setEKycPassword] = useState(null);
 
@@ -81,18 +81,20 @@ export const Account = (prop) => {
   const init = () => {
     document.title = `taxi BPP Sing up`;
     if (User && User?.DriverDocuments) {
-      let LicenceNo = User?.DriverDocuments?.find((x) => x.Document === "Licence")?.DocumentNumber;
-      setLicenseNumber(LicenceNo);
+      let LicenceNo = User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)?.DocumentNumber;
+      let PanNo = User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)?.DocumentNumber;
+      setLicenseNumber(LicenceNo?.toUpperCase());
+      setPanNumber(PanNo?.toUpperCase());
     }
   };
 
   const getUpload = (e, type) => {
     let file = e.target.files[0];
     let formData = new FormData();
-    let number = type === DocumentType.Licence && LicenseNumber;
+    let number = type === DocumentType.Licence ? LicenseNumber : PanNumber;
     let userId = prop.NewUser ? NewUser.Id : User.Id;
 
-    if (type === DocumentType.Licence) {
+    if (type === DocumentType.Licence || type === DocumentType.Pan) {
       formData.append("ADDRESS_LINE_1", userAddress.AddressLine1);
       formData.append("ADDRESS_LINE_2", userAddress.AddressLine2);
       formData.append("ADDRESS_LINE_3", userAddress.AddressLine3);
@@ -241,7 +243,7 @@ export const Account = (prop) => {
         ...address,
       },
     };
-    userSave(UserSave, userData, "", IsStore).then((res) => {
+    userSave(UserSave, userData, UserFields, IsStore).then((res) => {
       console.log("Address Save");
       if (prop.NewUser) {
         setNewUser(res.data.Users[0]);
@@ -280,7 +282,7 @@ export const Account = (prop) => {
   return (
     <section>
       <div className={classNames({ "vh-100": true, "container-fluid g-0": User })}>
-        <form onSubmit={(e) => { }}>
+        <form onSubmit={(e) => {}}>
           <div className="row">
             <div className="col">
               <h4 className="mb-0">Personal Information:</h4>
@@ -413,6 +415,18 @@ export const Account = (prop) => {
                 <div className="col-1  mb-3">
                   <input type="file" name="LicenseFile" id="LicenseFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Licence)} />
                   <label htmlFor="LicenseFile" role={"button"}>
+                    <Upload />
+                  </label>
+                </div>
+              )}
+              <div className="col-3 mb-3">
+                <input type="text" name="PanNumber" id="PanNumber" defaultValue={PanNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)} onChange={(e) => setPanNumber(e.target.value.toLowerCase())} className="form-control" placeholder="Enter Pan Number" />
+                <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)?.Verified === "N" ? "Verification Pending" : User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan) && "Verified"}</p>
+              </div>
+              {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
+                <div className="col-1  mb-3">
+                  <input type="file" name="PanFile" id="PanFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Pan)} />
+                  <label htmlFor="PanFile" role={"button"}>
                     <Upload />
                   </label>
                 </div>

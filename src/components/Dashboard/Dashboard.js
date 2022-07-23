@@ -37,13 +37,14 @@ export const Dashboard = () => {
       let data = [getUserSummaries()];
       Promise.all(data).then((res) => {
         setSummaries(res[0]);
+        setDriverList(res[1])
         res[0].UserSummaries?.forEach((user) => {
-          if (user.Role.Name.toLowerCase() === "driver") {
+          if (user.Role?.Name?.toLowerCase() === "driver") {
             setDrivers(+user.UserCount);
           }
         });
         res[0].VehicleSummaries?.forEach((user) => {
-          if (user.Role.Name.toLowerCase() === "driver") {
+          if (user.Role?.Name?.toLowerCase() === "driver") {
             setDrivers(user.UserCount);
           }
         });
