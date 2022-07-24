@@ -89,6 +89,44 @@ export const DriverGrid = {
   ],
   ColumnsData: [],
 };
+export const VehicleGrid = {
+  ColumnsHead: [
+    {
+      Name: "Name of Model",
+      Key: "NameOfModel",
+    },
+    {
+      Name: "Vehicle Number",
+      Key: "VehicleNumber",
+    },
+    {
+      Name: "Make",
+      Key: "Make",
+    },
+    {
+      Name: "Fuel Type",
+      Key: "FuelType",
+    },
+    {
+      Name: "Vehicle Type",
+      Key: "VehicleType",
+    },
+    {
+      Name: "Verification Status",
+      Key: "Verified",
+    },
+    {
+      Name: "Date of Register",
+      Field: { Name: "Document", Value: "FITNESS", Key: "ValidFrom" },
+      Key: "VehicleDocuments",
+    },
+    {
+      Name: "Action",
+      Key: "",
+    },
+  ],
+  ColumnsData: [],
+};
 
 export const verificationKeys = {
   verifyDriver: "verifyDriver",
@@ -96,3 +134,7 @@ export const verificationKeys = {
   verifyVehicle: "verifyVehicle",
   editVehicle: "editVehicle",
 };
+
+export const VehicleTags = ["Make", "NameOfModel", "VehicleType", "FuelType"];
+export const VehicleType = ["SUV", "Mini SUV", "SEDAN", "MUV", "MICRO", "SEDAN", "CUV", "HATCHBACK", "MINIVAN", "COUPE"];
+export const VehicleFuelType = ["Petrol", "Diesel", "CNG", "Bio-Diesel", "LPG", "Ethanol or Methanol", "Electric"];

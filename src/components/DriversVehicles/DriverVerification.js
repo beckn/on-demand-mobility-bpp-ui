@@ -43,7 +43,7 @@ export const DriverVerification = (props) => {
                         {x.Verified === "Y" ? (
                           "Verified"
                         ) : (
-                          <button className="btn btn-primary btn-sm" onClick={() => props.onUpdate(x.Id)}>
+                          <button className="btn btn-primary btn-sm" onClick={() => props.onUpdate(x.Id, "driver_documents")}>
                             Verify
                           </button>
                         )}

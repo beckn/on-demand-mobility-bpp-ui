@@ -15,8 +15,8 @@ export const Dashboard = () => {
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
   const [drivers, setDrivers] = useState(0);
-  const [vehicles, setvehicles] = useState(0);
-  const [driverList, setDriverList] = useState(0);
+  const [vehicles, setVehicles] = useState(0);
+  // const [driverList, setDriverList] = useState(0);
 
   useEffect(() => {
     init();
@@ -34,18 +34,15 @@ export const Dashboard = () => {
       isEmpty(getAddress(user)) && setShow(true);
       !isEmpty(getAddress(user)) && user.Verified === "N" && setShow(true);
     } else {
-      let data = [getUserSummaries()];
-      Promise.all(data).then((res) => {
-        setSummaries(res[0]);
-        res[0].UserSummaries?.forEach((user) => {
+      getUserSummaries().then((res) => {
+        setSummaries(res);
+        res.UserSummaries.forEach((user) => {
           if (user.Role?.Name?.toLowerCase() === "driver") {
             setDrivers(+user.UserCount);
           }
         });
-        res[0].VehicleSummaries?.forEach((user) => {
-          if (user.Role?.Name?.toLowerCase() === "driver") {
-            setDrivers(user.UserCount);
-          }
+        res.VehicleSummaries?.forEach((vh) => {
+          setVehicles(vh.VehicleCount);
         });
       });
     }
@@ -126,7 +123,7 @@ export const Dashboard = () => {
                               <div className="col-md-8">
                                 <div className="card-body">
                                   <h5 className="card-title">Total Vehicles</h5>
-                                  <h6>{vehicles}</h6>
+                                  <h6>{+vehicles}</h6>
                                 </div>
                               </div>
                             </div>

@@ -1,3 +1,4 @@
+import { VehicleTags } from "../shared/constant";
 import { AppRoutes, LocalKey } from "./constant";
 import { getCookie, setCookie } from "./CookiesHandler";
 
@@ -48,4 +49,37 @@ export const setApiKey = (key) => {
 
 export const setUser = (user) => {
   setCookie(LocalKey.saveUser, JSON.stringify(user), "/");
+};
+
+export const getStingToObject = (String) => {
+  let splitSting = String.split(";");
+  let obj = {};
+  splitSting.forEach((ele) => {
+    let splitEle = ele.split(":");
+    obj = {
+      ...obj,
+      [splitEle[0]]: splitEle[1],
+    };
+  });
+  return obj;
+};
+
+export const getKeyValueFromString = (key, string) => {
+  let subArray = string?.split(",");
+  const match = subArray?.find((subKey) => {
+    if (subKey.includes(key)) {
+      return true;
+    }
+  });
+  return match?.split(":")[1];
+};
+
+export const setObjectToString = (obj) => {
+  let UpTags = [];
+  Object.keys(obj).forEach((v) => {
+    if (VehicleTags.includes(v)) {
+      UpTags.push(v + ":" + obj[v]);
+    }
+  });
+  return UpTags.join(",");
 };

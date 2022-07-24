@@ -19,6 +19,9 @@ export const DocumentType = {
   Aadhar: "Aadhar",
   Pan: "Pan",
   Licence: "Licence",
+  RC: "RC",
+  FITNESS: "FITNESS",
+  INSURANCE: "INSURANCE",
 };
 
 export const commonMsg = {

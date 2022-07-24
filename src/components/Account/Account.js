@@ -4,7 +4,8 @@ import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { useEffect, useState } from "react";
 import Autocomplete from "react-autocomplete";
-import "react-dates/initialize";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Upload } from "react-feather";
 import { userSave } from "../../core/apiClient.js";
 import { getAddress, setValue } from "../../core/common.functions.js";
@@ -68,14 +69,21 @@ export const Account = (prop) => {
   //   return years;
   // };
 
-  const setUserValue = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    let upValue = name === "PhoneNumber" ? value : value;
-    setUserInfo({
-      ...userInfo,
-      [name]: upValue,
-    });
+  const setUserValue = (e, type) => {
+    if (e.target) {
+      e.preventDefault();
+      const { name, value } = e.target;
+      let upValue = name === "PhoneNumber" ? value : value;
+      setUserInfo({
+        ...userInfo,
+        [name]: upValue,
+      });
+    } else {
+      setUserInfo({
+        ...userInfo,
+        [type]: e,
+      });
+    }
   };
 
   const init = () => {
@@ -321,7 +329,7 @@ export const Account = (prop) => {
               <input type="text" name="Name" id="Name" disabled={isUserEdit} defaultValue={userInfo.Name} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Email" />
             </div>
             <div className="col-4  mb-3">
-              <input type="date" name="DateOfBirth" id="DateOfBirth" disabled={isUserEdit} defaultValue={userInfo.DateOfBirth} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Date Of Birth (DD/MM/YYYY)" />
+              <ReactDatePicker showMonthDropdown showYearDropdown dropdownMode="select" placeholderText="Enter Date Of Birth" className="form-control" disabled={isUserEdit} selected={userInfo.DateOfBirth ? new Date(userInfo.DateOfBirth) : userInfo.DateOfBirth} name="DateOfBirth" id="DateOfBirth" onChange={(date) => setUserValue(date, "DateOfBirth")} />
             </div>
           </div>
           <div className="row mt-3">
