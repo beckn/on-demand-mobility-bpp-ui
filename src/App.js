@@ -26,9 +26,17 @@ function App() {
         <div className="modal d-block">
           <div className="modal-dialog modal-sm modal-dialog-centered">
             <div className="modal-content text-center p-3">
-              <img src="assets/images/Loading.svg" width={"60px"} height={"60px"} className="m-auto my-3" alt="" />
+              <img
+                src="assets/images/Loading.svg"
+                width={"60px"}
+                height={"60px"}
+                className="m-auto my-3"
+                alt=""
+              />
               <p className="mb-0">Please wait</p>
-              <p className="text-muted small mb-0">while processing your request!</p>
+              <p className="text-muted small mb-0">
+                while processing your request!
+              </p>
             </div>
           </div>
         </div>
@@ -42,8 +50,14 @@ function App() {
               <Route path="/" element={<Login />}></Route>
               <Route path={AppRoutes.admin} element={<Login />}></Route>
               <Route path={AppRoutes.signUp} element={<SignUp />}></Route>
-              <Route path={AppRoutes.signInPassword} element={<SignInPassword />}></Route>
-              <Route path={AppRoutes.signInOtp} element={<SignInPhone />}></Route>
+              <Route
+                path={AppRoutes.signInPassword}
+                element={<SignInPassword />}
+              ></Route>
+              <Route
+                path={AppRoutes.signInOtp}
+                element={<SignInPhone />}
+              ></Route>
               <Route
                 path={AppRoutes.adminDashboard}
                 element={

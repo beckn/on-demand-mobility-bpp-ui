@@ -20,7 +20,11 @@ export const AddDriver = (prop) => {
         <hr />
         <div className="row">
           <div className="col">
-            <Account NewUser={true} EditUser={prop?.EditUser} onChange={(e, k) => dispatchEvent(e, k)} />
+            <Account
+              NewUser={true}
+              EditUser={prop?.EditUser}
+              onChange={(e, k) => dispatchEvent(e, k)}
+            />
           </div>
         </div>
       </div>
