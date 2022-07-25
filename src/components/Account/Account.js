@@ -9,17 +9,217 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Upload } from "react-feather";
 import { userSave } from "../../core/apiClient.js";
 import { getAddress, setValue } from "../../core/common.functions.js";
-import { DocumentType, GroupsCode, LocalKey, SearchGroupsCode } from "../../core/constant.js";
+import {
+  DocumentType,
+  GroupsCode,
+  LocalKey,
+  SearchGroupsCode,
+} from "../../core/constant.js";
 import { getCookie } from "../../core/CookiesHandler.js";
 import { UserFields } from "../../core/fieldsSet.js";
 import { getAutoCompleteValues, uploadFile } from "./Account.Services.js";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { ErrorMessage } from "../../shared/ErrorMessage/ErrorMessage.js";
+
+const enableEdit = (e, func, state) => {
+  e.preventDefault();
+  func(state);
+};
+
+const dateBefore18yrs = new Date(
+  new Date().setFullYear(new Date().getFullYear() - 18)
+);
+
+const schema = yup
+  .object()
+  .shape({
+    DateOfBirth: yup
+      .date()
+      .max(dateBefore18yrs, "Age should be greater than 18")
+      .nullable(),
+    Name: yup.string().required().email(),
+    FirstName: yup.string().required().min(2).max(12),
+    LastName: yup.string().required().min(2).max(12),
+    PhoneNumber: yup
+      .string()
+      .required()
+      .matches(/^(\+)?\d+$/, "Phone number is not valid")
+      .min(10)
+      .max(15),
+  })
+  .required();
+
+const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
+  const [isUserEdit, setIsUserEdit] = useState(IsStore);
+  const {
+    handleSubmit,
+    register,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm({
+    mode: "all",
+    resolver: yupResolver(schema),
+    defaultValues: {
+      DateOfBirth: User?.DateOfBirth || null,
+      Name: User?.Name,
+      FirstName: User?.FirstName,
+      LastName: User?.LastName,
+      PhoneNumber: User?.PhoneNumber,
+      Company: JSON.parse(getCookie(LocalKey.saveUser)).Company,
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log("submitting");
+
+    const user = {
+      DateOfBirth: data.DateOfBirth,
+      Name: data.Name,
+      LongName: data.FirstName.concat(" ", data.LastName),
+      PhoneNumber: data.PhoneNumber,
+    };
+
+    const UserSave = "users/save";
+    const userData = {
+      Users: [{ ...user }],
+    };
+
+    userSave(UserSave, userData, UserFields, IsStore).then((res) => {
+      console.log("User data Save");
+      if (isNewUser) {
+        setNewUser(res.data.Users[0]);
+        setIsUserEdit(true);
+      } else {
+        setIsUserEdit(true);
+      }
+    });
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="row">
+          <div className="col">
+            <h4 className="mb-0">Personal Information:</h4>
+          </div>
+          <div className="col text-end">
+            {isUserEdit ? (
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={(e) => enableEdit(e, setIsUserEdit, false)}
+              >
+                Edit
+              </button>
+            ) : (
+              <>
+                <button
+                  className="btn btn-secondary btn-sm me-2"
+                  onClick={(e) => {
+                    console.log("resetting");
+                    reset();
+                    enableEdit(e, setIsUserEdit, true);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button className="btn btn-primary btn-sm" type="submit">
+                  Save
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
+        <hr className="mt-2 mb-3" />
+        <div className="row w-100 justify-content-left">
+          <div className="col-6 mb-3">
+            <input
+              type="text"
+              {...register("FirstName")}
+              id="FirstName"
+              disabled={isUserEdit}
+              className="form-control"
+              placeholder="First Name"
+            />
+            <ErrorMessage fieldError={errors?.FirstName} />
+          </div>
+          <div className="col-6 mb-3">
+            <input
+              type="text"
+              {...register("LastName")}
+              id="LastName"
+              disabled={isUserEdit}
+              className="form-control"
+              placeholder="Last Name"
+            />
+            <ErrorMessage fieldError={errors?.LastName} />
+          </div>
+        </div>
+        <div className="row w-100 justify-content-left">
+          <div className="col-4 mb-3">
+            <input
+              type="text"
+              {...register("PhoneNumber")}
+              id="PhoneNumber"
+              disabled={isUserEdit}
+              className="form-control"
+              placeholder="Mobile Number"
+            />
+            <ErrorMessage fieldError={errors?.PhoneNumber} />
+          </div>
+          <div className="col-4 mb-3">
+            <input
+              type="text"
+              {...register("Name")}
+              id="Name"
+              disabled={isUserEdit}
+              className="form-control"
+              placeholder="Email"
+            />
+            <ErrorMessage fieldError={errors?.Name} />
+          </div>
+          <div className="col-4  mb-3">
+            <Controller
+              control={control}
+              name="DateOfBirth"
+              render={({ field }) => (
+                <ReactDatePicker
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  placeholderText="Enter Date Of Birth"
+                  className="form-control"
+                  disabled={isUserEdit}
+                  name="DateOfBirth"
+                  id="DateOfBirth"
+                  onChange={(date) => field.onChange(date)}
+                  selected={field.value ? new Date(field.value) : field.value}
+                  minDate={new Date("1980/01/01")}
+                />
+              )}
+            />
+
+            <ErrorMessage fieldError={errors?.DateOfBirth} />
+          </div>
+        </div>
+      </form>
+    </>
+  );
+};
 
 export const Account = (prop) => {
   const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
-  const User = prop.User ? JSON.parse(getCookie(LocalKey.saveUser)) : NewUser || null;
+  const User = prop.User
+    ? JSON.parse(getCookie(LocalKey.saveUser))
+    : NewUser || null;
   const IsStore = User && !prop.NewUser && !prop.EditUser ? true : false;
-  const [isUserEdit, setIsUserEdit] = useState(IsStore);
-  const [isAddressEdit, setIsAddressEdit] = useState(User && isEmpty(getAddress(User)) ? false : IsStore);
+
+  const [isAddressEdit, setIsAddressEdit] = useState(
+    User && isEmpty(getAddress(User)) ? false : IsStore
+  );
   const [userAddress, setUserAddress] = useState({
     AddressLine1: User?.AddressLine1 || "",
     AddressLine2: User?.AddressLine2 || "",
@@ -42,14 +242,7 @@ export const Account = (prop) => {
       autocompletePinCodeData: [],
     },
   });
-  const [userInfo, setUserInfo] = useState({
-    DateOfBirth: User?.DateOfBirth || null,
-    Name: User?.Name,
-    FirstName: User?.FirstName,
-    LastName: User?.LastName,
-    PhoneNumber: User?.PhoneNumber,
-    Company: JSON.parse(getCookie(LocalKey.saveUser)).Company,
-  });
+
   // const [documentInfo, setDocumentInfo] = useState([]);
   const [PanNumber, setPanNumber] = useState("");
   const [LicenseNumber, setLicenseNumber] = useState("");
@@ -58,6 +251,7 @@ export const Account = (prop) => {
   useEffect(() => {
     init();
   }, []);
+
   // need this when we implement custome date picker
   // const years = (startYear) => {
   //   var currentYear = new Date().getFullYear(),
@@ -69,28 +263,15 @@ export const Account = (prop) => {
   //   return years;
   // };
 
-  const setUserValue = (e, type) => {
-    if (e.target) {
-      e.preventDefault();
-      const { name, value } = e.target;
-      let upValue = name === "PhoneNumber" ? value : value;
-      setUserInfo({
-        ...userInfo,
-        [name]: upValue,
-      });
-    } else {
-      setUserInfo({
-        ...userInfo,
-        [type]: e,
-      });
-    }
-  };
-
   const init = () => {
-    document.title = `taxi BPP Sing up`;
+    document.title = `taxi BPP - Account Information`;
     if (User && User?.DriverDocuments) {
-      let LicenceNo = User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)?.DocumentNumber;
-      let PanNo = User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)?.DocumentNumber;
+      let LicenceNo = User?.DriverDocuments?.find(
+        (x) => x.Document === DocumentType.Licence
+      )?.DocumentNumber;
+      let PanNo = User?.DriverDocuments?.find(
+        (x) => x.Document === DocumentType.Pan
+      )?.DocumentNumber;
       setLicenseNumber(LicenceNo?.toUpperCase());
       setPanNumber(PanNo?.toUpperCase());
     }
@@ -110,7 +291,7 @@ export const Account = (prop) => {
       formData.append("STATE_NAME", userAddress.City.State.Name);
       formData.append("EMAIL", User.Name);
       formData.append("PHONE_NUMBER", User.PhoneNumber);
-      formData.append("DATE_OF_BIRTH", User.DateOfBirth || userInfo.DateOfBirth);
+      formData.append("DATE_OF_BIRTH", User.DateOfBirth);
     }
 
     formData.append("DOCUMENT", type);
@@ -119,12 +300,19 @@ export const Account = (prop) => {
     formData.append("DOCUMENT_NUMBER", number);
     type === DocumentType.Aadhar && formData.append("PASSWORD", eKycPassword);
 
-    uploadFile("driver_documents/save", formData, "", prop.NewUser ? false : true).then((res) => {
+    uploadFile(
+      "driver_documents/save",
+      formData,
+      "",
+      prop.NewUser ? false : true
+    ).then((res) => {
       console.log(`uploadData`, res.data.DriverDocument);
       if (prop.NewUser) {
         setNewUser({
           ...NewUser,
-          DriverDocuments: NewUser.DriverDocuments ? [...NewUser?.DriverDocuments, res.data.DriverDocument] : [],
+          DriverDocuments: NewUser.DriverDocuments
+            ? [...NewUser?.DriverDocuments, res.data.DriverDocument]
+            : [],
         });
       }
     });
@@ -153,11 +341,6 @@ export const Account = (prop) => {
   //   setDocumentInfo(copy);
   // };
 
-  const enableEdit = (e, func, state) => {
-    e.preventDefault();
-    func(state);
-  };
-
   const addressValueChange = (e) => {
     let { name, value } = e.target;
     let copy = Object.assign({}, userAddress);
@@ -167,17 +350,19 @@ export const Account = (prop) => {
 
   const retrieveData = (searchField, type) => {
     var searchText = searchField.value;
-    getAutoCompleteValues(SearchGroupsCode[type], searchText).then((response) => {
-      if (searchField.value === searchText) {
-        setUserAddress({
-          ...userAddress,
-          otherFields: {
-            ...userAddress.otherFields,
-            [`autocomplete${type}Data`]: response.data[GroupsCode[type]],
-          },
-        });
+    getAutoCompleteValues(SearchGroupsCode[type], searchText).then(
+      (response) => {
+        if (searchField.value === searchText) {
+          setUserAddress({
+            ...userAddress,
+            otherFields: {
+              ...userAddress.otherFields,
+              [`autocomplete${type}Data`]: response.data[GroupsCode[type]],
+            },
+          });
+        }
       }
-    });
+    );
   };
 
   const onAutoChange = (e, type) => {
@@ -210,7 +395,9 @@ export const Account = (prop) => {
     };
 
     if (key === "PinCode") {
-      let getData = copy.otherFields[`autocomplete${key}Data`].find((x) => x.PinCode === val);
+      let getData = copy.otherFields[`autocomplete${key}Data`].find(
+        (x) => x.PinCode === val
+      );
       let getCity = getData.City.Name;
       let getState = getData.State.Name;
       setValue("City.Name", getCity, copy);
@@ -218,7 +405,9 @@ export const Account = (prop) => {
     }
 
     if (key === "City") {
-      let getData = copy.otherFields[`autocomplete${key}Data`].find((x) => x.Name === val);
+      let getData = copy.otherFields[`autocomplete${key}Data`].find(
+        (x) => x.Name === val
+      );
       let getState = getData.State.Name;
       setValue("City.State.Name", getState, copy);
     }
@@ -230,7 +419,13 @@ export const Account = (prop) => {
 
   const renderItem = (item, isHighlighted, styles, code) => {
     return (
-      <div id={item[code]} className={classNames({ active: isHighlighted, "autocomplete-item": true })}>
+      <div
+        id={item[code]}
+        className={classNames({
+          active: isHighlighted,
+          "autocomplete-item": true,
+        })}
+      >
         {item[code]}
       </div>
     );
@@ -264,91 +459,43 @@ export const Account = (prop) => {
     });
   };
 
-  const userUpdate = (e) => {
-    e.preventDefault();
-    let user = Object.assign({}, userInfo);
-    user.LongName = userInfo.FirstName.concat(" ", userInfo.LastName);
-    delete user.FirstName;
-    delete user.LastName;
-    let UserSave = "users/save";
-    let userData = {
-      Users: [
-        {
-          ...user,
-        },
-      ],
-    };
-    userSave(UserSave, userData, UserFields, IsStore).then((res) => {
-      console.log("User data Save");
-      if (prop.NewUser) {
-        setNewUser(res.data.Users[0]);
-        enableEdit(e, setIsUserEdit, true);
-      } else {
-        enableEdit(e, setIsUserEdit, true);
-      }
-    });
-  };
-
   return (
     <section>
-      <div className={classNames({ "vh-100": true, "container-fluid g-0": User })}>
+      <div
+        className={classNames({ "vh-100": true, "container-fluid g-0": User })}
+      >
+        <PersonalDetailsForm
+          IsStore={IsStore}
+          User={User}
+          isNewUser={prop.NewUser}
+          setNewUser={setNewUser}
+        />
+
         <form onSubmit={(e) => {}}>
-          <div className="row">
-            <div className="col">
-              <h4 className="mb-0">Personal Information:</h4>
-            </div>
-            <div className="col text-end">
-              {isUserEdit ? (
-                <button className="btn btn-primary btn-sm" onClick={(e) => enableEdit(e, setIsUserEdit, false)}>
-                  Edit
-                </button>
-              ) : (
-                <>
-                  <button className="btn btn-secondary btn-sm me-2" onClick={(e) => enableEdit(e, setIsUserEdit, true)}>
-                    Cancel
-                  </button>
-                  <button className="btn btn-primary btn-sm" onClick={(e) => userUpdate(e)}>
-                    Save
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-          <hr className="mt-2 mb-3" />
-          <div className="row w-100 justify-content-left">
-            <div className="col-6 mb-3">
-              <input type="text" name="FirstName" id="FirstName" disabled={isUserEdit} defaultValue={userInfo.FirstName} onChange={(e) => setUserValue(e)} className="form-control" placeholder="First Name" />
-            </div>
-            <div className="col-6  mb-3">
-              <input type="text" name="LastName" id="LastName" disabled={isUserEdit} defaultValue={userInfo.LastName} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Last Name" />
-            </div>
-          </div>
-          <div className="row w-100 justify-content-left">
-            <div className="col-4 mb-3">
-              <input type="text" name="PhoneNumber" id="PhoneNumber" disabled={isUserEdit} defaultValue={userInfo.PhoneNumber} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Mobile Number" />
-            </div>
-            <div className="col-4  mb-3">
-              <input type="text" name="Name" id="Name" disabled={isUserEdit} defaultValue={userInfo.Name} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Email" />
-            </div>
-            <div className="col-4  mb-3">
-              <ReactDatePicker showMonthDropdown showYearDropdown dropdownMode="select" placeholderText="Enter Date Of Birth" className="form-control" disabled={isUserEdit} selected={userInfo.DateOfBirth ? new Date(userInfo.DateOfBirth) : userInfo.DateOfBirth} name="DateOfBirth" id="DateOfBirth" onChange={(date) => setUserValue(date, "DateOfBirth")} />
-            </div>
-          </div>
           <div className="row mt-3">
             <div className="col">
               <h4>Address Information:</h4>
             </div>
             <div className="col text-end">
               {isAddressEdit ? (
-                <button className="btn btn-primary btn-sm" onClick={(e) => enableEdit(e, setIsAddressEdit, false)}>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={(e) => enableEdit(e, setIsAddressEdit, false)}
+                >
                   Edit
                 </button>
               ) : (
                 <>
-                  <button className="btn btn-secondary btn-sm me-2" onClick={(e) => enableEdit(e, setIsAddressEdit, true)}>
+                  <button
+                    className="btn btn-secondary btn-sm me-2"
+                    onClick={(e) => enableEdit(e, setIsAddressEdit, true)}
+                  >
                     Cancel
                   </button>
-                  <button className="btn btn-primary btn-sm" onClick={(e) => userAddressUpdate(e)}>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={(e) => userAddressUpdate(e)}
+                  >
                     Save
                   </button>
                 </>
@@ -358,13 +505,40 @@ export const Account = (prop) => {
           <hr className="mt-2 mb-3" />
           <div className="row w-100 justify-content-left">
             <div className="col-4 mb-3">
-              <input type="text" name="AddressLine1" id="AddressLine1" disabled={isAddressEdit} defaultValue={userAddress.AddressLine1} onChange={(e) => addressValueChange(e)} className="form-control" placeholder="Apartment, unit, suite, or floor #" />
+              <input
+                type="text"
+                name="AddressLine1"
+                id="AddressLine1"
+                disabled={isAddressEdit}
+                defaultValue={userAddress.AddressLine1}
+                onChange={(e) => addressValueChange(e)}
+                className="form-control"
+                placeholder="Apartment, unit, suite, or floor #"
+              />
             </div>
             <div className="col-4  mb-3">
-              <input type="text" name="AddressLine2" id="AddressLine2" disabled={isAddressEdit} defaultValue={userAddress.AddressLine2} onChange={(e) => addressValueChange(e)} className="form-control" placeholder="Locality, Area" />
+              <input
+                type="text"
+                name="AddressLine2"
+                id="AddressLine2"
+                disabled={isAddressEdit}
+                defaultValue={userAddress.AddressLine2}
+                onChange={(e) => addressValueChange(e)}
+                className="form-control"
+                placeholder="Locality, Area"
+              />
             </div>
             <div className="col-4  mb-3">
-              <input type="text" name="AddressLine3" id="AddressLine3" disabled={isAddressEdit} defaultValue={userAddress.AddressLine3} onChange={(e) => addressValueChange(e)} className="form-control" placeholder="Land Mark (if any)" />
+              <input
+                type="text"
+                name="AddressLine3"
+                id="AddressLine3"
+                disabled={isAddressEdit}
+                defaultValue={userAddress.AddressLine3}
+                onChange={(e) => addressValueChange(e)}
+                className="form-control"
+                placeholder="Land Mark (if any)"
+              />
             </div>
           </div>
           <div className="row w-100 justify-content-left">
@@ -373,12 +547,21 @@ export const Account = (prop) => {
                 className="btn btn-primary"
                 getItemValue={(e) => getItemValue(e, "PinCode")}
                 items={userAddress.otherFields.autocompletePinCodeData}
-                renderItem={(item, props, styles) => renderItem(item, props, styles, "PinCode")}
+                renderItem={(item, props, styles) =>
+                  renderItem(item, props, styles, "PinCode")
+                }
                 value={userAddress.PinCode.PinCode}
                 onChange={(e) => onAutoChange(e, "PinCode")}
                 onSelect={(e) => onSelect(e, "PinCode.PinCode", "PinCode")}
                 wrapperProps={{ className: "autocomplete-box" }}
-                inputProps={{ type: "tel", className: `form-control`, name: "PinCode.PinCode", id: "PinCode", disabled: isAddressEdit, placeholder: "Enter pin code*" }}
+                inputProps={{
+                  type: "tel",
+                  className: `form-control`,
+                  name: "PinCode.PinCode",
+                  id: "PinCode",
+                  disabled: isAddressEdit,
+                  placeholder: "Enter pin code*",
+                }}
               />
             </div>
             <div className="col-4  mb-3">
@@ -387,12 +570,22 @@ export const Account = (prop) => {
                 className="btn btn-primary"
                 getItemValue={(e) => getItemValue(e, "Name")}
                 items={userAddress.otherFields.autocompleteCityData}
-                renderItem={(item, props, styles) => renderItem(item, props, styles, "Name")}
+                renderItem={(item, props, styles) =>
+                  renderItem(item, props, styles, "Name")
+                }
                 value={userAddress.City.Name}
                 onChange={(e) => onAutoChange(e, "City")}
                 onSelect={(e) => onSelect(e, "City.Name", "City")}
                 wrapperProps={{ className: "autocomplete-box" }}
-                inputProps={{ className: `form-control`, disabled: (!userAddress.City.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.Name", id: "City", placeholder: "Enter city name*" }}
+                inputProps={{
+                  className: `form-control`,
+                  disabled:
+                    (!userAddress.City.Name && !userAddress.PinCode.PinCode) ||
+                    isAddressEdit,
+                  name: "City.Name",
+                  id: "City",
+                  placeholder: "Enter city name*",
+                }}
               />
             </div>
             <div className="col-4  mb-3">
@@ -400,12 +593,23 @@ export const Account = (prop) => {
                 className="btn btn-primary"
                 getItemValue={(e) => getItemValue(e, "Name")}
                 items={userAddress.otherFields.autocompleteStateData}
-                renderItem={(item, props, styles) => renderItem(item, props, styles, "Name")}
+                renderItem={(item, props, styles) =>
+                  renderItem(item, props, styles, "Name")
+                }
                 value={userAddress.City.State.Name}
                 onChange={(e) => onAutoChange(e, "State")}
                 onSelect={(e) => onSelect(e, "City.State.Name", "State")}
                 wrapperProps={{ className: "autocomplete-box" }}
-                inputProps={{ className: `form-control`, disabled: (!userAddress.City.State.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.State.Name", id: "State", placeholder: "Enter state name*" }}
+                inputProps={{
+                  className: `form-control`,
+                  disabled:
+                    (!userAddress.City.State.Name &&
+                      !userAddress.PinCode.PinCode) ||
+                    isAddressEdit,
+                  name: "City.State.Name",
+                  id: "State",
+                  placeholder: "Enter state name*",
+                }}
               />
             </div>
           </div>
@@ -418,42 +622,131 @@ export const Account = (prop) => {
             <hr className="my-4" />
             <div className="row w-100 justify-content-left">
               <div className="col-3 mb-3">
-                <input type="text" name="LicenseNumber" id="LicenseNumber" defaultValue={LicenseNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)} onChange={(e) => setLicenseNumber(e.target.value)} className="form-control" placeholder="Enter License Number" />
-                <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence).Verified === "N" ? "Verification Pending" : User?.DriverDocuments && "Verified"}</p>
+                <input
+                  type="text"
+                  name="LicenseNumber"
+                  id="LicenseNumber"
+                  defaultValue={LicenseNumber}
+                  disabled={User?.DriverDocuments?.find(
+                    (x) => x.Document === DocumentType.Licence
+                  )}
+                  onChange={(e) => setLicenseNumber(e.target.value)}
+                  className="form-control"
+                  placeholder="Enter License Number"
+                />
+                <p className="mb-0">
+                  {User?.DriverDocuments?.find(
+                    (x) => x.Document === DocumentType.Licence
+                  ).Verified === "N"
+                    ? "Verification Pending"
+                    : User?.DriverDocuments && "Verified"}
+                </p>
               </div>
-              {!User?.DriverDocuments?.find((x) => x.Document === "Licence") && (
+              {!User?.DriverDocuments?.find(
+                (x) => x.Document === "Licence"
+              ) && (
                 <div className="col-1  mb-3">
-                  <input type="file" name="LicenseFile" id="LicenseFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Licence)} />
+                  <input
+                    type="file"
+                    name="LicenseFile"
+                    id="LicenseFile"
+                    className="form-control d-none"
+                    onChange={(e) => getUpload(e, DocumentType.Licence)}
+                  />
                   <label htmlFor="LicenseFile" role={"button"}>
                     <Upload />
                   </label>
                 </div>
               )}
               <div className="col-3 mb-3">
-                <input type="text" name="PanNumber" id="PanNumber" defaultValue={PanNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)} onChange={(e) => setPanNumber(e.target.value.toLowerCase())} className="form-control" placeholder="Enter Pan Number" />
-                <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)?.Verified === "N" ? "Verification Pending" : User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan) && "Verified"}</p>
+                <input
+                  type="text"
+                  name="PanNumber"
+                  id="PanNumber"
+                  defaultValue={PanNumber}
+                  disabled={User?.DriverDocuments?.find(
+                    (x) => x.Document === DocumentType.Pan
+                  )}
+                  onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
+                  className="form-control"
+                  placeholder="Enter Pan Number"
+                />
+                <p className="mb-0">
+                  {User?.DriverDocuments?.find(
+                    (x) => x.Document === DocumentType.Pan
+                  )?.Verified === "N"
+                    ? "Verification Pending"
+                    : User?.DriverDocuments?.find(
+                        (x) => x.Document === DocumentType.Pan
+                      ) && "Verified"}
+                </p>
               </div>
               {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
                 <div className="col-1  mb-3">
-                  <input type="file" name="PanFile" id="PanFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Pan)} />
+                  <input
+                    type="file"
+                    name="PanFile"
+                    id="PanFile"
+                    className="form-control d-none"
+                    onChange={(e) => getUpload(e, DocumentType.Pan)}
+                  />
                   <label htmlFor="PanFile" role={"button"}>
                     <Upload />
                   </label>
                 </div>
               )}
               <div className="col-3  mb-3">
-                {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) ? (
-                  <input type="password" name="eKycPassword" id="eKycPassword" value={eKycPassword} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
+                {!User?.DriverDocuments?.find(
+                  (x) => x.Document === DocumentType.Aadhar
+                ) ? (
+                  <input
+                    type="password"
+                    name="eKycPassword"
+                    id="eKycPassword"
+                    value={eKycPassword}
+                    onChange={(e) => setEKycPassword(e.target.value)}
+                    className="form-control"
+                    placeholder="E-Kyc Aadhar File Password"
+                  />
                 ) : (
                   <>
-                    <input type="text" name="eKycPassword" id="eKycPassword" disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar)} value={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar).Document} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
-                    <p className="mb-0">{User?.DriverDocuments.find((x) => x.Document === DocumentType.Aadhar).Verified === "N" ? "Verification Pending" : "Verified"}</p>
+                    <input
+                      type="text"
+                      name="eKycPassword"
+                      id="eKycPassword"
+                      disabled={User?.DriverDocuments?.find(
+                        (x) => x.Document === DocumentType.Aadhar
+                      )}
+                      value={
+                        User?.DriverDocuments?.find(
+                          (x) => x.Document === DocumentType.Aadhar
+                        ).Document
+                      }
+                      onChange={(e) => setEKycPassword(e.target.value)}
+                      className="form-control"
+                      placeholder="E-Kyc Aadhar File Password"
+                    />
+                    <p className="mb-0">
+                      {User?.DriverDocuments.find(
+                        (x) => x.Document === DocumentType.Aadhar
+                      ).Verified === "N"
+                        ? "Verification Pending"
+                        : "Verified"}
+                    </p>
                   </>
                 )}
               </div>
-              {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) && (
+              {!User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Aadhar
+              ) && (
                 <div className="col-1 mb-3">
-                  <input type="file" name="AadharFile" id="AadharFile" onChange={(e) => getUpload(e, DocumentType.Aadhar)} className="form-control d-none" />
+                  <input
+                    type="file"
+                    name="AadharFile"
+                    id="AadharFile"
+                    onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+                    className="form-control d-none"
+                  />
                   <label htmlFor="AadharFile" role={"button"}>
                     <Upload />
                   </label>
@@ -463,10 +756,16 @@ export const Account = (prop) => {
             {prop.NewUser && (
               <div className="row">
                 <div className="col text-end">
-                  <button className="btn btn-secondary me-2" onClick={(e) => prop.onChange(e, false)}>
+                  <button
+                    className="btn btn-secondary me-2"
+                    onClick={(e) => prop.onChange(e, false)}
+                  >
                     Cancel
                   </button>
-                  <button className="btn btn-primary" onClick={(e) => prop.onChange(e, false)}>
+                  <button
+                    className="btn btn-primary"
+                    onClick={(e) => prop.onChange(e, false)}
+                  >
                     Update
                   </button>
                 </div>
