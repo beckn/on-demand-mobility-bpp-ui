@@ -28,11 +28,11 @@ const TableGridVehicle = (props) => {
                 })}
                 <td>
                   {props.Status === "N" && (
-                    <button className="btn btn-sm btn-link" name={verificationKeys.verifyDriver} onClick={(e) => props.onClick(e, c)}>
+                    <button className="btn btn-sm btn-link" name={verificationKeys.verifyVehicle} onClick={(e) => props.onClick(e, c)}>
                       Verify
                     </button>
                   )}
-                  <button className="btn btn-sm btn-link" name={verificationKeys.editDriver} onClick={(e) => props.onClick(e, c)}>
+                  <button className="btn btn-sm btn-link" name={verificationKeys.editVehicle} onClick={(e) => props.onClick(e, c)}>
                     Edit
                   </button>
                 </td>

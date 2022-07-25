@@ -7,12 +7,13 @@ import { LocalKey } from "../../core/constant";
 import { getCookie } from "../../core/CookiesHandler";
 import { DriverIcon, VehicleIcon } from "../../shared/icons";
 import "./Dashboard.scss";
-import { getUsers, getUserSummaries } from "./Dashboard.Services";
+import { getUserSummaries } from "./Dashboard.Services";
 const DriversVehicles = React.lazy(() => import("../DriversVehicles/DriversVehicles"));
 const Account = React.lazy(() => import("../Account/Account"));
 
 export const Dashboard = () => {
   const [activeScreen, setActiveScreen] = useState("home");
+  const [screenId, setScreenId] = useState();
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
   const [drivers, setDrivers] = useState(0);
@@ -29,7 +30,6 @@ export const Dashboard = () => {
   };
 
   const getScreen = () => {
-    // setActiveScreen("drivers");
     if (isEmpty(getAddress(user)) || user.Verified === "N") {
       setActiveScreen("profile");
       isEmpty(getAddress(user)) && setShow(true);
@@ -48,6 +48,12 @@ export const Dashboard = () => {
       });
     }
   };
+
+  const navigateToScreen = (tabId, screenId) => {
+    setActiveScreen(tabId);
+    setScreenId(screenId);
+  }
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -105,7 +111,7 @@ export const Dashboard = () => {
                     <Tab.Pane eventKey="home">
                       <div className="row w-100 justify-content-left">
                         <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("drivers")}>
+                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => navigateToScreen("drivers","Tdrvier")}>
                             <div className="row g-0">
                               <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center"><DriverIcon className="w-50"/></div>
                               <div className="col-md-8">
@@ -118,7 +124,7 @@ export const Dashboard = () => {
                           </div>
                         </div>
                         <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("drivers")}>
+                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => navigateToScreen("drivers", "Tvehicle")}>
                             <div className="row g-0">
                               <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center"><VehicleIcon className="w-50"/></div>
                               <div className="col-md-8">
@@ -132,7 +138,7 @@ export const Dashboard = () => {
                         </div>
                       </div>
                     </Tab.Pane>
-                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} />}</Tab.Pane>
+                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} activeScreenId={screenId} />}</Tab.Pane>
                     <Tab.Pane eventKey="agents">Agents</Tab.Pane>
                     <Tab.Pane eventKey="documents">Documents</Tab.Pane>
                     <Tab.Pane eventKey="verification">Verification</Tab.Pane>

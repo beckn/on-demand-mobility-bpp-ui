@@ -1,8 +1,9 @@
 import isEmpty from "lodash/isEmpty";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { Upload } from "react-feather";
-import { setObjectToString } from "../../../core/common.functions";
+import { toast } from "react-toastify";
+import { getKeyValueFromString, setObjectToString } from "../../../core/common.functions";
 import { DocumentType } from "../../../core/constant";
 import { VehicleFuelType, VehicleTags, VehicleType } from "../../../shared/constant";
 import { uploadFile } from "../../Account/Account.Services";
@@ -27,12 +28,42 @@ export const AddVehicle = (props) => {
   });
 
   const [newVehicleInfo, setNewVehicleInfo] = useState({});
+  const [isDisabled, setIsDisabled] = useState(!isEmpty(newVehicleInfo) || !props.vehicleEdit);
 
   const dispatchEvent = (e) => {
     props.onChange(e);
   };
 
-  const setStages = () => {};
+  useEffect(() => {
+    initial();
+    setNewVehicleInfo(props.vehicleEdit);
+  }, [props.vehicleEdit]);
+
+  const initial = () => {
+    setNewVehicleInfo(props.vehicleEdit);
+    let upInfo = vehicleInfo;
+    let tags = props.vehicleEdit.Tags;
+    Object.keys(upInfo).forEach(v => {
+      if (VehicleTags.includes(v)) {
+        console.log(v, getKeyValueFromString(v, tags));
+        upInfo = {
+          ...upInfo,
+          [v]: getKeyValueFromString(v, tags)
+        }
+      }
+    });
+
+    setVehicleInfo({
+      ...upInfo,
+      VehicleNumber: props.vehicleEdit.VehicleNumber,
+      ValidFrom: props.vehicleEdit.VehicleDocuments?.find(x => x.Document === DocumentType.RC).ValidFrom,
+      ValidTo: props.vehicleEdit.VehicleDocuments?.find(x => x.Document === DocumentType.RC).ValidTo,
+      RcNumber: props.vehicleEdit.VehicleDocuments?.find(x => x.Document === DocumentType.RC).DocumentNumber,
+      InsuranceNumber: props.vehicleEdit.VehicleDocuments?.find(x => x.Document === DocumentType.INSURANCE).DocumentNumber,
+      FitnessNumber: props.vehicleEdit.VehicleDocuments?.find(x => x.Document === DocumentType.FITNESS).DocumentNumber
+    })
+    console.log("up info", upInfo, vehicleInfo);
+  }
 
   const setInputValue = (e, type) => {
     if (e.target) {
@@ -58,8 +89,11 @@ export const AddVehicle = (props) => {
         Tags: setObjectToString(vehicleInfo),
       },
     };
+    if(newVehicleInfo && props.vehicleEdit){
+      addVehicleInfo.Vehicle.Id = newVehicleInfo.Id;
+    }
     saveVehicle(addVehicleInfo).then((res) => {
-      console.log("saveVehicle", res.data.Vehicles[0]);
+      // console.log("saveVehicle", res.data.Vehicles[0]);
       setNewVehicleInfo(res.data.Vehicles[0]);
     });
   };
@@ -90,6 +124,7 @@ export const AddVehicle = (props) => {
     formData.append("DOCUMENT_NUMBER", number);
 
     uploadFile("vehicle_documents/save", formData, "", false).then((res) => {
+      toast.success("File uploaded successfully!");
       console.log(`uploadData`, res.data.DriverDocument);
     });
   };
@@ -101,7 +136,7 @@ export const AddVehicle = (props) => {
           <h3 className="mb-0">Add/Edit Vehicle:</h3>
         </div>
         <div className="col text-end">
-          {isEmpty(newVehicleInfo) && (
+          {!isDisabled && (
             <>
               <button className="btn btn-secondary me-3" type="button" onClick={(e) => dispatchEvent(e)}>
                 cancel
@@ -116,19 +151,19 @@ export const AddVehicle = (props) => {
       <hr />
       <div className="row">
         <div className="col-6 mb-3">
-          <input type="text" className="form-control" name="VehicleNumber" disabled={!isEmpty(newVehicleInfo)} id="VehicleNumber" onChange={(e) => setInputValue(e)} placeholder="Enter Vehicle Number" />
+          <input type="text" className="form-control" name="VehicleNumber" disabled={isDisabled} defaultValue={vehicleInfo.VehicleNumber} id="VehicleNumber" onChange={(e) => setInputValue(e)} placeholder="Enter Vehicle Number" />
         </div>
         <div className="col-6 mb-3">
-          <input type="text" className="form-control" name="Make" id="Make" disabled={!isEmpty(newVehicleInfo)} onChange={(e) => setInputValue(e)} placeholder="Enter Vehicle Make" />
+          <input type="text" className="form-control" name="Make" id="Make" disabled={isDisabled} defaultValue={vehicleInfo.Make} onChange={(e) => setInputValue(e)} placeholder="Enter Vehicle Make" />
         </div>
       </div>
       <div className="row">
         <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
-            <input type="text" className="form-control" name="NameOfModel" disabled={!isEmpty(newVehicleInfo)} id="NameOfModel" onChange={(e) => setInputValue(e)} placeholder="Enter Vehicle Model" />
+            <input type="text" className="form-control" name="NameOfModel" disabled={isDisabled} defaultValue={vehicleInfo.NameOfModel} id="NameOfModel" onChange={(e) => setInputValue(e)} placeholder="Enter Vehicle Model" />
           </div>
           <div className="col-4 mb-3">
-            <select name="VehicleType" disabled={!isEmpty(newVehicleInfo)} id="VehicleType" className="form-select" onChange={(e) => setInputValue(e)}>
+            <select name="VehicleType" disabled={isDisabled} id="VehicleType" defaultValue={vehicleInfo.VehicleType} selectedValue={vehicleInfo.VehicleType} className="form-select" onChange={(e) => setInputValue(e)}>
               <option value="">Select Vehicle Type</option>
               {VehicleType.map((t, i) => (
                 <option key={i} value={t}>
@@ -138,7 +173,7 @@ export const AddVehicle = (props) => {
             </select>
           </div>
           <div className="col-4 mb-3">
-            <select name="FuelType" id="FuelType" disabled={!isEmpty(newVehicleInfo)} className="form-select" onChange={(e) => setInputValue(e)}>
+            <select name="FuelType" id="FuelType" defaultValue={vehicleInfo.FuelType} selectedValue={vehicleInfo.FuelType} disabled={isDisabled} className="form-select" onChange={(e) => setInputValue(e)}>
               <option value="">Select Vehicle Fuel Type</option>
               {VehicleFuelType.map((t, i) => (
                 <option key={i} value={t}>
@@ -149,7 +184,7 @@ export const AddVehicle = (props) => {
           </div>
         </div>
       </div>
-      {!isEmpty(newVehicleInfo) && (
+      {!isDisabled && (
         <>
           <div className="row mt-3">
             <div className="col">
@@ -170,7 +205,7 @@ export const AddVehicle = (props) => {
             </div>
             <div className="row w-100 justify-content-left">
               <div className="col-3 mb-3">
-                <input type="text" name="RcNumber" id="RcNumber" onChange={(e) => setInputValue(e)} className="form-control" placeholder="Enter Vehicle R.C. Number" />
+                <input type="text" name="RcNumber" id="RcNumber" defaultValue={vehicleInfo.RcNumber} onChange={(e) => setInputValue(e)} className="form-control" placeholder="Enter Vehicle R.C. Number" />
               </div>
               <div className="col-1  mb-3">
                 <input type="file" name="RcFile" id="RcFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.RC)} />
@@ -179,7 +214,7 @@ export const AddVehicle = (props) => {
                 </label>
               </div>
               <div className="col-3 mb-3">
-                <input type="text" name="InsuranceNumber" id="InsuranceNumber" onChange={(e) => setInputValue(e)} className="form-control" placeholder="Enter Vehicle Insurance Number" />
+                <input type="text" name="InsuranceNumber" defaultValue={vehicleInfo.InsuranceNumber} id="InsuranceNumber" onChange={(e) => setInputValue(e)} className="form-control" placeholder="Enter Vehicle Insurance Number" />
               </div>
               <div className="col-1  mb-3">
                 <input type="file" name="InsuranceFile" id="InsuranceFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.INSURANCE)} />
@@ -188,7 +223,7 @@ export const AddVehicle = (props) => {
                 </label>
               </div>
               <div className="col-3 mb-3">
-                <input type="text" name="FitnessNumber" id="FitnessNumber" onChange={(e) => setInputValue(e)} className="form-control" placeholder="Enter Vehicle Fitness Certificate Number" />
+                <input type="text" name="FitnessNumber" defaultValue={vehicleInfo.FitnessNumber} id="FitnessNumber" onChange={(e) => setInputValue(e)} className="form-control" placeholder="Enter Vehicle Fitness Certificate Number" />
               </div>
               <div className="col-1  mb-3">
                 <input type="file" name="FitnessFile" id="FitnessFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.FITNESS)} />
@@ -200,7 +235,7 @@ export const AddVehicle = (props) => {
           </div>
           <div className="row">
             <div className="col text-end">
-              <button className="btn btn-secondary" onClick={(e) => dispatchEvent(e)} type="button">
+              <button className="btn btn-secondary me-3" onClick={(e) => dispatchEvent(e)} type="button">
                 Cancel
               </button>
               <button className="btn btn-primary" onClick={(e) => dispatchEvent(e)} type="submit">

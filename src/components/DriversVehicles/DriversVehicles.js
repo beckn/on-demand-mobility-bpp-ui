@@ -27,7 +27,7 @@ export const DriversVehicles = (prop) => {
   const [isAddDriver, setIsAddDriver] = useState(false);
   const [isAddVehicle, setIsAddVehicle] = useState(false);
   const [driverEdit, setDriverEdit] = useState("");
-  const [vehicleEdit, setVehicleEdit] = useState(false);
+  const [vehicleEdit, setVehicleEdit] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [verifyKey, setVerifyKey] = useState("");
 
@@ -41,7 +41,8 @@ export const DriversVehicles = (prop) => {
 
   useEffect(() => {
     init();
-  }, []);
+    console.log("summary", prop.summaries);
+  }, [prop]);
 
   const init = () => {
     setDeriversList();
@@ -63,7 +64,7 @@ export const DriversVehicles = (prop) => {
     });
   };
 
-  const handleClick = (e, driverDetails) => {
+  const handleClick = (e, Details) => {
     e.preventDefault();
     const { name } = e.target;
     console.log("Verify Driver", name);
@@ -71,12 +72,23 @@ export const DriversVehicles = (prop) => {
       case verificationKeys.verifyDriver:
         setModalShow(true);
         setVerifyKey(name);
-        setSelectedDriver(driverDetails);
-        console.log("verify", driverDetails);
+        setSelectedDriver(Details);
+        console.log("verify", Details);
+        break;
+      case verificationKeys.verifyVehicle:
+        // setModalShow(true);
+        // setVerifyKey(name);
+        // setSelectedDriver(Details);
+        console.log("verify", Details);
+        break;
+      case verificationKeys.editVehicle:
+        setVehicleEdit(Details);
+        setIsAddVehicle(true);
+        console.log("verify", verificationKeys.editVehicle, Details, vehicleEdit);
         break;
 
       default:
-        setDriverEdit(driverDetails);
+        setDriverEdit(Details);
         setIsAddDriver(true);
         break;
     }
@@ -117,11 +129,6 @@ export const DriversVehicles = (prop) => {
     setVehiclesList();
   };
 
-  const handleVerifyDriver = (e, k) => {
-    e.preventDefault();
-    setSelectedDriver(k);
-  };
-
   const verifyDocument = (id, type) => {
     verify(id, type).then((res) => {
       console.log(res.data.DriverDocument);
@@ -152,8 +159,9 @@ export const DriversVehicles = (prop) => {
     <>
       <div className="row">
         <div className="col">
-          <Tabs defaultActiveKey="driver" id="uncontrolled-tab-example" className="mb-3">
-            <Tab eventKey="driver" title="Total Drivers">
+          {console.log("render", prop.activeScreenId)}
+          <Tabs defaultActiveKey={prop.activeScreenId} className="mb-3">
+            <Tab eventKey="Tdrvier" title="Total Drivers">
               <div className="row">
                 <div className="col">
                   <p>Total Drivers</p>
@@ -195,7 +203,7 @@ export const DriversVehicles = (prop) => {
                 </>
               )}
             </Tab>
-            <Tab eventKey="vehicle" title="Total Vehicles">
+            <Tab eventKey="Tvehicle" title="Total Vehicles">
               <div className="row">
                 <div className="col">
                   <p>Total Vehicles</p>
@@ -222,18 +230,18 @@ export const DriversVehicles = (prop) => {
               {!isAddVehicle ? (
                 <Tabs defaultActiveKey="allDriver" id="driver-filtered" className="mb-3">
                   <Tab eventKey="allDriver" title="All">
-                    <TableGridVehicle GridData={vehicleList} />
+                    <TableGridVehicle GridData={vehicleList} onClick={(e, k) => handleClick(e, k)} />
                   </Tab>
                   <Tab eventKey="verifiedDriver" title="Verified">
-                    <TableGridVehicle GridData={vehicleList} Status="Y" />
+                    <TableGridVehicle GridData={vehicleList} onClick={(e, k) => handleClick(e, k)} Status="Y" />
                   </Tab>
                   <Tab eventKey="unVerifiedDriver" title="Verification Pending">
-                    <TableGridVehicle GridData={vehicleList} Status="N" />
+                    <TableGridVehicle GridData={vehicleList} onClick={(e, k) => handleClick(e, k)} Status="N" />
                   </Tab>
                 </Tabs>
               ) : (
                 <>
-                  <AddVehicle onChange={(e, k) => toggleAddVehicle(e, k)} />
+                  <AddVehicle vehicleEdit={vehicleEdit || {}} onChange={(e, k) => toggleAddVehicle(e, k)} />
                 </>
               )}
             </Tab>
