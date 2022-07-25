@@ -106,6 +106,8 @@ export const Account = (prop) => {
       formData.append("ADDRESS_LINE_1", userAddress.AddressLine1);
       formData.append("ADDRESS_LINE_2", userAddress.AddressLine2);
       formData.append("ADDRESS_LINE_3", userAddress.AddressLine3);
+      formData.append("CITY_NAME", userAddress.City.Name);
+      formData.append("STATE_NAME", userAddress.City.State.Name);
       formData.append("EMAIL", User.Name);
       formData.append("PHONE_NUMBER", User.PhoneNumber);
       formData.append("DATE_OF_BIRTH", User.DateOfBirth || userInfo.DateOfBirth);

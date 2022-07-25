@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
-import { Tab, Tabs, Modal, Table } from "react-bootstrap";
-import { getAddress, getStingToObject } from "../../core/common.functions";
-import { AppRoutes, commonMsg, LocalKey } from "../../core/constant";
+import { Modal, Tab, Tabs } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { LocalKey } from "../../core/constant";
+import { getCookie } from "../../core/CookiesHandler";
 import { DriverGrid, VehicleGrid, verificationKeys } from "../../shared/constant";
 import TableGridDriver from "../../shared/TableGrid/TableGridDriver";
+import TableGridVehicle from "../../shared/TableGrid/TableGridVehicle";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
-import { toast } from "react-toastify";
-import { getVehicles, verify } from "./DriversVehicles.Services";
-import DriverVerification from "./DriverVerification";
-import { getCookie } from "../../core/CookiesHandler";
-import TableGridVehicle from "../../shared/TableGrid/TableGridVehicle";
 import AddVehicle from "./AddVehicle/AddVehicle";
+import { getVehicles, verify } from "./DriversVehicles.Services";
+import Verification from "./Verification";
 
 export const DriversVehicles = (prop) => {
   const [logUser] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [driverList, setDriverList] = useState("");
   const [vehicleList, setVehicleList] = useState("");
   const [selectedDriver, setSelectedDriver] = useState({});
+  const [selectedVehicle, setSelectedVehicle] = useState({});
   const [drivers, setDrivers] = useState(0);
   const [vehicles, setVehicles] = useState(0);
   const [vehiclesVerified, setVehiclesVerified] = useState(0);
@@ -35,14 +35,13 @@ export const DriversVehicles = (prop) => {
     setModalShow(false);
     setDeriversList();
   };
-  const handleModalShow = () => {
-    setModalShow(true);
-  };
+  // const handleModalShow = () => {
+  //   setModalShow(true);
+  // };
 
   useEffect(() => {
     init();
-    console.log("summary", prop.summaries);
-  }, [prop]);
+  }, []);
 
   const init = () => {
     setDeriversList();
@@ -76,9 +75,9 @@ export const DriversVehicles = (prop) => {
         console.log("verify", Details);
         break;
       case verificationKeys.verifyVehicle:
-        // setModalShow(true);
-        // setVerifyKey(name);
-        // setSelectedDriver(Details);
+        setModalShow(true);
+        setVerifyKey(name);
+        setSelectedVehicle(Details);
         console.log("verify", Details);
         break;
       case verificationKeys.editVehicle:
@@ -98,7 +97,6 @@ export const DriversVehicles = (prop) => {
   const setDeriversList = () => {
     getUsers().then((res) => {
       let TableData = DriverGrid;
-      let Data = DriverGrid.ColumnsData;
       let UpDriverList = res.data.Users.filter((x) => x.Staff === "N" || (x.UserRoles && x.UserRoles[0].Role.Id === "2") || x.Company);
       DriverGrid.ColumnsData = UpDriverList;
       setDriverList(TableData);
@@ -148,7 +146,8 @@ export const DriversVehicles = (prop) => {
   const getModalComponent = (key) => {
     switch (key) {
       case verificationKeys.verifyDriver:
-        return <DriverVerification selectedDriver={selectedDriver} onUpdate={verifyDocument} />;
+      case verificationKeys.verifyVehicle:
+        return <Verification verifyDocuments={key === verificationKeys.verifyDriver ? selectedDriver : selectedVehicle} verify={key} onUpdate={verifyDocument} />;
 
       default:
         break;

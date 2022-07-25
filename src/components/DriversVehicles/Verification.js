@@ -1,24 +1,25 @@
 import React from "react";
 import { Modal, Table } from "react-bootstrap";
 import { getAddress } from "../../core/common.functions";
+import { verificationKeys } from "../../shared/constant";
 
-export const DriverVerification = (props) => {
+export const Verification = (props) => {
   return (
     <>
       <Modal.Header closeButton>
-        <Modal.Title>Driver Verification</Modal.Title>
+        <Modal.Title>{props.verify === verificationKeys.verifyDriver ? "Driver" : "Vehicle"} Verification </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="row">
           <div className="col">
-            <h5>{props.selectedDriver.LongName}</h5>
+            <h5>{props.verifyDocuments.LongName}</h5>
             <hr />
-            {getAddress(props.selectedDriver)}
+            {getAddress(props.verifyDocuments)}
             <p>
-              Mobile: {props.selectedDriver.PhoneNumber}, DOB: {props.selectedDriver.DateOfBirth}
+              Mobile: {props.verifyDocuments.PhoneNumber}, DOB: {props.verifyDocuments.DateOfBirth}
             </p>
             <hr />
-            <p>Date Of Joining: {props.selectedDriver.DateOfJoining}</p>
+            <p>Date Of Joining: {props.verifyDocuments.DateOfJoining}</p>
             <hr />
             <h5>Uploaded Documents</h5>
             <Table striped bordered hover>
@@ -30,7 +31,7 @@ export const DriverVerification = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {props.selectedDriver.DriverDocuments?.map((x) => {
+                {props.verifyDocuments.DriverDocuments?.map((x) => {
                   return (
                     <tr>
                       <td>{x.Document}</td>
@@ -68,4 +69,4 @@ export const DriverVerification = (props) => {
   );
 };
 
-export default DriverVerification;
+export default Verification;
