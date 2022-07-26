@@ -1,11 +1,9 @@
-// color: red;
-// font-size: 0.75rem;
-// margin-top: 0.5rem;
-
 export const ErrorMessage = ({ fieldError }) => {
+  if (!fieldError) {
+    return null;
+  }
+
   return (
-    <div className="text-sm text-danger">
-      {fieldError && fieldError.message}
-    </div>
+    <div className="mt-1 ps-2 text-danger small">{fieldError.message}</div>
   );
 };
