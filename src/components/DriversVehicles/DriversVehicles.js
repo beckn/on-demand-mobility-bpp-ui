@@ -33,11 +33,7 @@ export const DriversVehicles = (prop) => {
 
   const handleModalClose = () => {
     setModalShow(false);
-    setDeriversList();
   };
-  // const handleModalShow = () => {
-  //   setModalShow(true);
-  // };
 
   useEffect(() => {
     init();
@@ -129,29 +125,11 @@ export const DriversVehicles = (prop) => {
 
   const verifyDocument = (id, type) => {
     verify(id, type).then((res) => {
-      console.log(res.data.DriverDocument);
-      let updateDocument = selectedDriver.DriverDocuments;
-      updateDocument.map((x) => {
-        if (x.Id === res.data.DriverDocument.Id) {
-          return res.data.DriverDocument;
-        }
-      });
       toast.success("Document Verified Successfully!");
       setSelectedDriver(null);
       handleModalClose();
-      setDeriversList();
+      type === "driver_documents" ? setDeriversList() : setVehicleList();
     });
-  };
-
-  const getModalComponent = (key) => {
-    switch (key) {
-      case verificationKeys.verifyDriver:
-      case verificationKeys.verifyVehicle:
-        return <Verification verifyDocuments={key === verificationKeys.verifyDriver ? selectedDriver : selectedVehicle} verify={key} onUpdate={verifyDocument} />;
-
-      default:
-        break;
-    }
   };
 
   return (
@@ -248,7 +226,7 @@ export const DriversVehicles = (prop) => {
         </div>
       </div>
       <Modal show={modalShow} size="lg" onHide={handleModalClose} centered>
-        {getModalComponent(verifyKey)}
+        <Verification verifyDocuments={verifyKey === verificationKeys.verifyDriver ? selectedDriver : selectedVehicle} verify={verifyKey} onUpdate={verifyDocument} />
       </Modal>
     </>
   );

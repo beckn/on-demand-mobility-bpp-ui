@@ -705,7 +705,7 @@ export const Account = (prop) => {
                 <p className="mb-0">
                   {User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Licence
-                  ).Verified === "N"
+                  )?.Verified === "N"
                     ? "Verification Pending"
                     : User?.DriverDocuments && "Verified"}
                 </p>
