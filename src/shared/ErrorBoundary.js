@@ -28,21 +28,29 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="error-boundary">
           <div className="container">
-            <div className="row justify-content-center">
+            <div className="row justify-content-center max-vh-100">
               <div className="col-sm-5">
-                <img src={this.state.errorBlock.ImgUrl} className="w-100" alt="" />
+                <img
+                  src={this.state.errorBlock.ImgUrl}
+                  className="w-100"
+                  alt=""
+                />
               </div>
               <div className="col-sm-5 d-flex align-items-center">
                 <div className="text-center text-lg-start">
                   <h1 className="mb-3">{this.state.errorBlock.Title}</h1>
                   <h5 className="mb-4">{this.state.errorBlock.SubTitle}</h5>
                   <p className="mb-1">in the meantime, you can...</p>
-                  <p>If you need immediate help from our team! please mail us.</p>
+                  <p>
+                    If you need immediate help from our team! please mail us.
+                  </p>
                   <h6 className="mb-4">Thanks for your patience!</h6>
                   <a href="/" className="btn btn-primary">
                     Take me home
                   </a>
-                  <details style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+                  <details
+                    style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}
+                  >
                     {this.state.error && this.state.error.toString()}
                     <br />
                     {this.state.errorInfo.componentStack}
