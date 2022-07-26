@@ -13,8 +13,7 @@ export const getUserSummaries = () => {
 
 export const getUsers = () => {
   let uPath = "users";
-  let fieldset = `{"User":["Name","DateOfJoining","CityId","Verified","LongName","Staff","CompanyId"],"DriverDocument":["DocumentNumber","Document","Verified"],"UserRole":["RoleId"]}`;
-  return getRequestData(uPath, fieldset);
+  return getRequestData(uPath, UserFields);
 };
 
 export const getUserShow = (id) => {

@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-import Autocomplete from "react-autocomplete";
 // import PropTypes from "prop-types";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
-import "react-dates/initialize";
+import { useEffect, useState } from "react";
+import Autocomplete from "react-autocomplete";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Upload } from "react-feather";
 import { userSave } from "../../core/apiClient.js";
 import { getAddress, setValue } from "../../core/common.functions.js";
 import { DocumentType, GroupsCode, LocalKey, SearchGroupsCode } from "../../core/constant.js";
 import { getCookie } from "../../core/CookiesHandler.js";
-import { getAutoCompleteValues, uploadFile } from "./Account.Services.js";
 import { UserFields } from "../../core/fieldsSet.js";
+import { getAutoCompleteValues, uploadFile } from "./Account.Services.js";
 
 export const Account = (prop) => {
-  const [NewUser, setNewUser] = useState("");
+  const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
   const User = prop.User ? JSON.parse(getCookie(LocalKey.saveUser)) : NewUser || null;
-  const IsStore = User && !prop.NewUser ? true : false;
+  const IsStore = User && !prop.NewUser && !prop.EditUser ? true : false;
   const [isUserEdit, setIsUserEdit] = useState(IsStore);
   const [isAddressEdit, setIsAddressEdit] = useState(User && isEmpty(getAddress(User)) ? false : IsStore);
   const [userAddress, setUserAddress] = useState({
@@ -49,7 +50,7 @@ export const Account = (prop) => {
     PhoneNumber: User?.PhoneNumber,
     Company: JSON.parse(getCookie(LocalKey.saveUser)).Company,
   });
-  const [documentInfo, setDocumentInfo] = useState([]);
+  // const [documentInfo, setDocumentInfo] = useState([]);
   const [PanNumber, setPanNumber] = useState("");
   const [LicenseNumber, setLicenseNumber] = useState("");
   const [eKycPassword, setEKycPassword] = useState(null);
@@ -57,32 +58,41 @@ export const Account = (prop) => {
   useEffect(() => {
     init();
   }, []);
+  // need this when we implement custome date picker
+  // const years = (startYear) => {
+  //   var currentYear = new Date().getFullYear(),
+  //     years = [];
+  //   startYear = startYear || 1980;
+  //   while (startYear <= currentYear) {
+  //     years.push(startYear++);
+  //   }
+  //   return years;
+  // };
 
-  const years = (startYear) => {
-    var currentYear = new Date().getFullYear(),
-      years = [];
-    startYear = startYear || 1980;
-    while (startYear <= currentYear) {
-      years.push(startYear++);
+  const setUserValue = (e, type) => {
+    if (e.target) {
+      e.preventDefault();
+      const { name, value } = e.target;
+      let upValue = name === "PhoneNumber" ? value : value;
+      setUserInfo({
+        ...userInfo,
+        [name]: upValue,
+      });
+    } else {
+      setUserInfo({
+        ...userInfo,
+        [type]: e,
+      });
     }
-    return years;
-  };
-
-  const setUserValue = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    let upValue = name === "PhoneNumber" ? value : value;
-    setUserInfo({
-      ...userInfo,
-      [name]: upValue,
-    });
   };
 
   const init = () => {
     document.title = `taxi BPP Sing up`;
     if (User && User?.DriverDocuments) {
-      let LicenceNo = User?.DriverDocuments?.find((x) => x.Document === "Licence")?.DocumentNumber;
-      setLicenseNumber(LicenceNo);
+      let LicenceNo = User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)?.DocumentNumber;
+      let PanNo = User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)?.DocumentNumber;
+      setLicenseNumber(LicenceNo?.toUpperCase());
+      setPanNumber(PanNo?.toUpperCase());
     }
   };
 
@@ -92,13 +102,15 @@ export const Account = (prop) => {
     let number = type === DocumentType.Licence ? LicenseNumber : PanNumber;
     let userId = prop.NewUser ? NewUser.Id : User.Id;
 
-    if (type === DocumentType.Licence) {
+    if (type === DocumentType.Licence || type === DocumentType.Pan) {
       formData.append("ADDRESS_LINE_1", userAddress.AddressLine1);
       formData.append("ADDRESS_LINE_2", userAddress.AddressLine2);
       formData.append("ADDRESS_LINE_3", userAddress.AddressLine3);
+      formData.append("CITY_NAME", userAddress.City.Name);
+      formData.append("STATE_NAME", userAddress.City.State.Name);
       formData.append("EMAIL", User.Name);
       formData.append("PHONE_NUMBER", User.PhoneNumber);
-      formData.append("DATE_OF_BIRTH", User.DateOfBirth);
+      formData.append("DATE_OF_BIRTH", User.DateOfBirth || userInfo.DateOfBirth);
     }
 
     formData.append("DOCUMENT", type);
@@ -107,33 +119,39 @@ export const Account = (prop) => {
     formData.append("DOCUMENT_NUMBER", number);
     type === DocumentType.Aadhar && formData.append("PASSWORD", eKycPassword);
 
-    uploadFile("driver_documents/save", formData).then((res) => {
-      console.log(`uploadData`, res.data);
+    uploadFile("driver_documents/save", formData, "", prop.NewUser ? false : true).then((res) => {
+      console.log(`uploadData`, res.data.DriverDocument);
+      if (prop.NewUser) {
+        setNewUser({
+          ...NewUser,
+          DriverDocuments: NewUser.DriverDocuments ? [...NewUser?.DriverDocuments, res.data.DriverDocument] : [],
+        });
+      }
     });
   };
 
-  const getSelect = (e) => {
-    e.preventDefault();
-    let type = {
-      AadharFile: "AADHAR",
-      PanFile: "PAN",
-      LicenseFile: "LICENSE",
-    };
-    let fieldMap = {
-      AadharFile: eKycPassword,
-      PanFile: PanNumber,
-      LicenseFile: LicenseNumber,
-    };
-    let file = e.target.files[0];
-    let name = e.target.name;
-    let copy = documentInfo;
-    copy.push({
-      [name]: file,
-      type: type[name],
-      DocumentNumber: fieldMap[name],
-    });
-    setDocumentInfo(copy);
-  };
+  // const getSelect = (e) => {
+  //   e.preventDefault();
+  //   let type = {
+  //     AadharFile: "AADHAR",
+  //     PanFile: "PAN",
+  //     LicenseFile: "LICENSE",
+  //   };
+  //   let fieldMap = {
+  //     AadharFile: eKycPassword,
+  //     // PanFile: PanNumber,
+  //     LicenseFile: LicenseNumber,
+  //   };
+  //   let file = e.target.files[0];
+  //   let name = e.target.name;
+  //   let copy = documentInfo;
+  //   copy.push({
+  //     [name]: file,
+  //     type: type[name],
+  //     DocumentNumber: fieldMap[name],
+  //   });
+  //   setDocumentInfo(copy);
+  // };
 
   const enableEdit = (e, func, state) => {
     e.preventDefault();
@@ -235,7 +253,7 @@ export const Account = (prop) => {
         ...address,
       },
     };
-    userSave(UserSave, userData, "", IsStore).then((res) => {
+    userSave(UserSave, userData, UserFields, IsStore).then((res) => {
       console.log("Address Save");
       if (prop.NewUser) {
         setNewUser(res.data.Users[0]);
@@ -273,7 +291,7 @@ export const Account = (prop) => {
 
   return (
     <section>
-      <div className={classNames({ "vh-100": true, "container-fluid": User })}>
+      <div className={classNames({ "vh-100": true, "container-fluid g-0": User })}>
         <form onSubmit={(e) => {}}>
           <div className="row">
             <div className="col">
@@ -313,7 +331,7 @@ export const Account = (prop) => {
               <input type="text" name="Name" id="Name" disabled={isUserEdit} defaultValue={userInfo.Name} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Email" />
             </div>
             <div className="col-4  mb-3">
-              <input type="date" name="DateOfBirth" id="DateOfBirth" disabled={isUserEdit} defaultValue={userInfo.DateOfBirth} onChange={(e) => setUserValue(e)} className="form-control" placeholder="Date Of Birth (DD/MM/YYYY)" />
+              <ReactDatePicker showMonthDropdown showYearDropdown dropdownMode="select" placeholderText="Enter Date Of Birth" className="form-control" disabled={isUserEdit} selected={userInfo.DateOfBirth ? new Date(userInfo.DateOfBirth) : userInfo.DateOfBirth} name="DateOfBirth" id="DateOfBirth" onChange={(date) => setUserValue(date, "DateOfBirth")} />
             </div>
           </div>
           <div className="row mt-3">
@@ -321,7 +339,7 @@ export const Account = (prop) => {
               <h4>Address Information:</h4>
             </div>
             <div className="col text-end">
-              {isAddressEdit || IsStore ? (
+              {isAddressEdit ? (
                 <button className="btn btn-primary btn-sm" onClick={(e) => enableEdit(e, setIsAddressEdit, false)}>
                   Edit
                 </button>
@@ -359,8 +377,8 @@ export const Account = (prop) => {
                 value={userAddress.PinCode.PinCode}
                 onChange={(e) => onAutoChange(e, "PinCode")}
                 onSelect={(e) => onSelect(e, "PinCode.PinCode", "PinCode")}
-                wrapperProps={{ class: "autocomplete-box" }}
-                inputProps={{ type: "tel", class: `form-control`, name: "PinCode.PinCode", id: "PinCode", disabled: isAddressEdit, placeholder: "Enter pin code*" }}
+                wrapperProps={{ className: "autocomplete-box" }}
+                inputProps={{ type: "tel", className: `form-control`, name: "PinCode.PinCode", id: "PinCode", disabled: isAddressEdit, placeholder: "Enter pin code*" }}
               />
             </div>
             <div className="col-4  mb-3">
@@ -373,8 +391,8 @@ export const Account = (prop) => {
                 value={userAddress.City.Name}
                 onChange={(e) => onAutoChange(e, "City")}
                 onSelect={(e) => onSelect(e, "City.Name", "City")}
-                wrapperProps={{ class: "autocomplete-box" }}
-                inputProps={{ class: `form-control`, disabled: (!userAddress.City.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.Name", id: "City", placeholder: "Enter city name*" }}
+                wrapperProps={{ className: "autocomplete-box" }}
+                inputProps={{ className: `form-control`, disabled: (!userAddress.City.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.Name", id: "City", placeholder: "Enter city name*" }}
               />
             </div>
             <div className="col-4  mb-3">
@@ -386,53 +404,75 @@ export const Account = (prop) => {
                 value={userAddress.City.State.Name}
                 onChange={(e) => onAutoChange(e, "State")}
                 onSelect={(e) => onSelect(e, "City.State.Name", "State")}
-                wrapperProps={{ class: "autocomplete-box" }}
-                inputProps={{ class: `form-control`, disabled: (!userAddress.City.State.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.State.Name", id: "State", placeholder: "Enter state name*" }}
+                wrapperProps={{ className: "autocomplete-box" }}
+                inputProps={{ className: `form-control`, disabled: (!userAddress.City.State.Name && !userAddress.PinCode.PinCode) || isAddressEdit, name: "City.State.Name", id: "State", placeholder: "Enter state name*" }}
               />
             </div>
           </div>
-          {((User && User.Verified === "N") || !User) && (
-            <>
+          <>
+            <div className="row">
+              <div className="col">
+                <h4 className="mt-3 mb-0">Personal Documents:</h4>
+              </div>
+            </div>
+            <hr className="my-4" />
+            <div className="row w-100 justify-content-left">
+              <div className="col-3 mb-3">
+                <input type="text" name="LicenseNumber" id="LicenseNumber" defaultValue={LicenseNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)} onChange={(e) => setLicenseNumber(e.target.value)} className="form-control" placeholder="Enter License Number" />
+                <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence).Verified === "N" ? "Verification Pending" : User?.DriverDocuments && "Verified"}</p>
+              </div>
+              {!User?.DriverDocuments?.find((x) => x.Document === "Licence") && (
+                <div className="col-1  mb-3">
+                  <input type="file" name="LicenseFile" id="LicenseFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Licence)} />
+                  <label htmlFor="LicenseFile" role={"button"}>
+                    <Upload />
+                  </label>
+                </div>
+              )}
+              <div className="col-3 mb-3">
+                <input type="text" name="PanNumber" id="PanNumber" defaultValue={PanNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)} onChange={(e) => setPanNumber(e.target.value.toLowerCase())} className="form-control" placeholder="Enter Pan Number" />
+                <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)?.Verified === "N" ? "Verification Pending" : User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan) && "Verified"}</p>
+              </div>
+              {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
+                <div className="col-1  mb-3">
+                  <input type="file" name="PanFile" id="PanFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Pan)} />
+                  <label htmlFor="PanFile" role={"button"}>
+                    <Upload />
+                  </label>
+                </div>
+              )}
+              <div className="col-3  mb-3">
+                {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) ? (
+                  <input type="password" name="eKycPassword" id="eKycPassword" value={eKycPassword} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
+                ) : (
+                  <>
+                    <input type="text" name="eKycPassword" id="eKycPassword" disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar)} value={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar).Document} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
+                    <p className="mb-0">{User?.DriverDocuments.find((x) => x.Document === DocumentType.Aadhar).Verified === "N" ? "Verification Pending" : "Verified"}</p>
+                  </>
+                )}
+              </div>
+              {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) && (
+                <div className="col-1 mb-3">
+                  <input type="file" name="AadharFile" id="AadharFile" onChange={(e) => getUpload(e, DocumentType.Aadhar)} className="form-control d-none" />
+                  <label htmlFor="AadharFile" role={"button"}>
+                    <Upload />
+                  </label>
+                </div>
+              )}
+            </div>
+            {prop.NewUser && (
               <div className="row">
-                <div className="col">
-                  <h4 className="mt-3 mb-0">Personal Documents:</h4>
+                <div className="col text-end">
+                  <button className="btn btn-secondary me-2" onClick={(e) => prop.onChange(e, false)}>
+                    Cancel
+                  </button>
+                  <button className="btn btn-primary" onClick={(e) => prop.onChange(e, false)}>
+                    Update
+                  </button>
                 </div>
               </div>
-              <hr className="my-4" />
-              <div className="row w-100 justify-content-left">
-                <div className="col-3 mb-3">
-                  <input type="text" name="LicenseNumber" id="LicenseNumber" defaultValue={LicenseNumber} disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence)} onChange={(e) => setLicenseNumber(e.target.value)} className="form-control" placeholder="Enter License Number" />
-                  <p className="mb-0">{User?.DriverDocuments?.find((x) => x.Document === DocumentType.Licence).Verified === "N" ? "Verification Pending" : User?.DriverDocuments && "Verified"}</p>
-                </div>
-                {!User?.DriverDocuments?.find((x) => x.Document === "Licence") && (
-                  <div className="col-1  mb-3">
-                    <input type="file" name="LicenseFile" id="LicenseFile" className="form-control d-none" onChange={(e) => getUpload(e, DocumentType.Licence)} />
-                    <label htmlFor="LicenseFile" role={"button"}>
-                      <Upload />
-                    </label>
-                  </div>
-                )}
-                <div className="col-3  mb-3">
-                  {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) ? (
-                    <input type="password" name="eKycPassword" id="eKycPassword" value={eKycPassword} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
-                  ) : (
-                    <>
-                      <input type="text" name="eKycPassword" id="eKycPassword" disabled={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar)} value={User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar).Document} onChange={(e) => setEKycPassword(e.target.value)} className="form-control" placeholder="E-Kyc Aadhar File Password" />
-                      <p className="mb-0">{User?.DriverDocuments.find((x) => x.Document === DocumentType.Aadhar).Verified === "N" ? "Verification Pending" : "Verified"}</p>
-                    </>
-                  )}
-                </div>
-                {!User?.DriverDocuments?.find((x) => x.Document === DocumentType.Aadhar) && (
-                  <div className="col-1 mb-3">
-                    <input type="file" name="AadharFile" id="AadharFile" onChange={(e) => getUpload(e, DocumentType.Aadhar)} className="form-control d-none" />
-                    <label htmlFor="AadharFile" role={"button"}>
-                      <Upload />
-                    </label>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
+            )}
+          </>
         </form>
       </div>
     </section>

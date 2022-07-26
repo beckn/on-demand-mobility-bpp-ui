@@ -1,23 +1,24 @@
-import "./Dashboard.scss";
-import { spinnerService } from "@simply007org/react-spinners";
 import isEmpty from "lodash/isEmpty";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
-import { Col, Container, Modal, Nav, Row, Tab, Tabs } from "react-bootstrap";
+import { Col, Container, Modal, Nav, Row, Tab } from "react-bootstrap";
 import { getAddress } from "../../core/common.functions";
 import { LocalKey } from "../../core/constant";
 import { getCookie } from "../../core/CookiesHandler";
-import { getUsers, getUserSummaries } from "./Dashboard.Services";
+import { DriverIcon, VehicleIcon } from "../../shared/icons";
+import "./Dashboard.scss";
+import { getUserSummaries } from "./Dashboard.Services";
 const DriversVehicles = React.lazy(() => import("../DriversVehicles/DriversVehicles"));
 const Account = React.lazy(() => import("../Account/Account"));
 
 export const Dashboard = () => {
   const [activeScreen, setActiveScreen] = useState("home");
+  const [screenId, setScreenId] = useState();
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
   const [drivers, setDrivers] = useState(0);
-  const [vehicles, setvehicles] = useState(0);
-  const [driverList, setDriverList] = useState(0);
+  const [vehicles, setVehicles] = useState(0);
+  // const [driverList, setDriverList] = useState(0);
 
   useEffect(() => {
     init();
@@ -29,36 +30,37 @@ export const Dashboard = () => {
   };
 
   const getScreen = () => {
-    // setActiveScreen("drivers");
     if (isEmpty(getAddress(user)) || user.Verified === "N") {
-      setActiveScreen("account");
+      setActiveScreen("profile");
       isEmpty(getAddress(user)) && setShow(true);
       !isEmpty(getAddress(user)) && user.Verified === "N" && setShow(true);
     } else {
-      let data = [getUserSummaries(), getUsers()];
-      Promise.all(data).then((res) => {
-        setSummaries(res[0]);
-        setDriverList(res[1].data.Users);
-        res[0].UserSummaries?.forEach((user) => {
-          if (user.Role.Name.toLowerCase() === "driver") {
+      getUserSummaries().then((res) => {
+        setSummaries(res);
+        res.UserSummaries.forEach((user) => {
+          if (user.Role?.Name?.toLowerCase() === "driver") {
             setDrivers(+user.UserCount);
           }
         });
-        res[0].VehicleSummaries?.forEach((user) => {
-          if (user.Role.Name.toLowerCase() === "driver") {
-            setDrivers(user.UserCount);
-          }
+        res.VehicleSummaries?.forEach((vh) => {
+          setVehicles(vh.VehicleCount);
         });
       });
     }
   };
+
+  const navigateToScreen = (tabId, screenId) => {
+    setActiveScreen(tabId);
+    setScreenId(screenId);
+  }
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   // const handleShow = () => setShow(true);
 
   return (
-    <section>
+    <section className="dashboard">
       <Container fluid className="vh-100">
         <Row>
           <Col>
@@ -92,8 +94,8 @@ export const Dashboard = () => {
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link role={"button"} eventKey="account">
-                        Account
+                      <Nav.Link role={"button"} eventKey="profile">
+                        User Profile
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -109,9 +111,9 @@ export const Dashboard = () => {
                     <Tab.Pane eventKey="home">
                       <div className="row w-100 justify-content-left">
                         <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("drivers")}>
+                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => navigateToScreen("drivers","Tdrvier")}>
                             <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
+                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center"><DriverIcon className="w-50"/></div>
                               <div className="col-md-8">
                                 <div className="card-body">
                                   <h5 className="card-title">Total Drivers</h5>
@@ -122,51 +124,25 @@ export const Dashboard = () => {
                           </div>
                         </div>
                         <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("drivers")}>
+                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => navigateToScreen("drivers", "Tvehicle")}>
                             <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
+                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center"><VehicleIcon className="w-50"/></div>
                               <div className="col-md-8">
                                 <div className="card-body">
                                   <h5 className="card-title">Total Vehicles</h5>
-                                  <h6>{vehicles}</h6>
+                                  <h6>{+vehicles}</h6>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        {/* <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("agents")}>
-                            <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
-                              <div className="col-md-8">
-                                <div className="card-body">
-                                  <h5 className="card-title">Total Agents</h5>
-                                  <h6>21</h6>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-3 mb-3">
-                          <div className="card text-white bg-dark" role={"button"} onClick={(e) => setActiveScreen("agents")}>
-                            <div className="row g-0">
-                              <div className="col-md-4 bg-white bg-opacity-10 d-flex justify-content-center align-items-center">Icon</div>
-                              <div className="col-md-8">
-                                <div className="card-body">
-                                  <h6 className="card-title">Agent Verification Pending</h6>
-                                  <h6 className="mb-0">21</h6>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div> */}
                       </div>
                     </Tab.Pane>
-                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} driverList={driverList} />}</Tab.Pane>
+                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles summaries={summaries} activeScreenId={screenId} />}</Tab.Pane>
                     <Tab.Pane eventKey="agents">Agents</Tab.Pane>
                     <Tab.Pane eventKey="documents">Documents</Tab.Pane>
                     <Tab.Pane eventKey="verification">Verification</Tab.Pane>
-                    <Tab.Pane eventKey="account">
+                    <Tab.Pane eventKey="profile">
                       <Account User={user} />
                     </Tab.Pane>
                     <Tab.Pane eventKey="support">Support</Tab.Pane>
@@ -190,7 +166,7 @@ export const Dashboard = () => {
               <p className="text-muted">in order to continue!</p>
             </>
           )}
-          <button className="btn btn-primary w-50" onClick={handleClose}>
+          <button className="btn btn-dark w-50" onClick={handleClose}>
             Account
           </button>
         </Modal.Body>

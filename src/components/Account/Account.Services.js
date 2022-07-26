@@ -1,8 +1,9 @@
 import { getRequestData, getUser, postRequestData } from "../../core/apiClient";
 
-export const uploadFile = (path, data, fields) => {
+export const uploadFile = (path, data, fields,isUserUpdate) => {
   return postRequestData(path, data, fields).then((res) => {
-    getUser(res.data.DriverDocument.Driver.Id);
+    isUserUpdate && getUser(res.data.DriverDocument.Driver.Id);
+    return res;
   });
 };
 

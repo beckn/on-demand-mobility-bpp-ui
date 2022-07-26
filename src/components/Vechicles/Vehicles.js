@@ -1,22 +1,34 @@
 import { Col, Container, Row } from "react-bootstrap";
+import { LeftSection } from "../../shared/graphics/LeftSection";
 
 export const Vehicles = (prop) => {
   return (
     <section>
       <Container fluid className="vh-100">
         <Row className="vh-100">
-          <Col xxl="3" className="position-relative bg-dark left-section">
-            <div className="round-1"></div>
-            <div className="round-2"></div>
+          <Col lg="3" className="p-0">
+            <LeftSection />
           </Col>
-          <Col xxl="9" className="d-flex align-items-center">
+          <Col lg="9" className="d-flex align-items-center">
             <form>
               <div className="row w-100 justify-content-center">
                 <div className="col-5 mb-3">
-                  <input type="text" name="FirstName" id="FirstName" className="form-control" placeholder="First Name" />
+                  <input
+                    type="text"
+                    name="FirstName"
+                    id="FirstName"
+                    className="form-control"
+                    placeholder="First Name"
+                  />
                 </div>
                 <div className="col-5  mb-3">
-                  <input type="text" name="LastName" id="LastName" className="form-control" placeholder="Last Name" />
+                  <input
+                    type="text"
+                    name="LastName"
+                    id="LastName"
+                    className="form-control"
+                    placeholder="Last Name"
+                  />
                 </div>
                 <div className="col-5 mb-3">
                   <select name="Company" id="Company" className="form-select">
@@ -33,21 +45,45 @@ export const Vehicles = (prop) => {
                   </select>
                 </div>
                 <div className="col-5 mb-3">
-                  <input type="text" name="PhoneNumber" id="PhoneNumber" className="form-control" placeholder="Enter Mobile Number" />
+                  <input
+                    type="text"
+                    name="PhoneNumber"
+                    id="PhoneNumber"
+                    className="form-control"
+                    placeholder="Enter Mobile Number"
+                  />
                 </div>
                 <div className="col-5  mb-3">
-                  <input type="text" name="Name" id="Name" className="form-control" placeholder="Enter Email ID" />
+                  <input
+                    type="text"
+                    name="Name"
+                    id="Name"
+                    className="form-control"
+                    placeholder="Enter Email ID"
+                  />
                 </div>
                 <div className="col-5 mb-3">
-                  <input type="password" name="Password1" id="Password1" className="form-control" placeholder="Create New Password" />
+                  <input
+                    type="password"
+                    name="Password1"
+                    id="Password1"
+                    className="form-control"
+                    placeholder="Create New Password"
+                  />
                 </div>
                 <div className="col-5  mb-3">
-                  <input type="password" name="Password2" id="Password2" className="form-control" placeholder="Confirm Password" />
+                  <input
+                    type="password"
+                    name="Password2"
+                    id="Password2"
+                    className="form-control"
+                    placeholder="Confirm Password"
+                  />
                 </div>
               </div>
               <div className="row w-100 justify-content-center">
                 <div className="col-5 d-grid">
-                  <a role="button" type="reset" className="btn btn-secondary">
+                  <a role="button" type="reset" className="btn btn-dark">
                     cancel
                   </a>
                 </div>

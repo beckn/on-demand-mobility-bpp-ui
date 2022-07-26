@@ -1,28 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
-import { useForm } from "react-hook-form";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
+import { LeftSection } from "../../../shared/graphics/LeftSection";
+import { DarkLayout } from "../../../shared/layout/DarkLayout";
 import "../Login.scss";
 import { getCompanies, getRoles, userAction } from "../Login.services";
 
-export function Error({ errors }) {
-  return <div className="error">{errors ? errors.message : " "}</div>;
-}
-
 export const SignInPassword = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    watch,
-  } = useForm();
   const navigate = useNavigate();
   const [Associations, setAssociation] = useState(null);
   const [Roles, setRoles] = useState(0);
+  const [FirstName, setFirstName] = useState("");
+  const [LastName, setLastName] = useState("");
+  const [Company, setCompany] = useState("");
+  const [Role, setRole] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [Name, setName] = useState("");
+  const [Password1, setPassword1] = useState("");
+  const [Password2, setPassword2] = useState("");
 
   useEffect(() => {
     init();
@@ -30,7 +29,7 @@ export const SignInPassword = () => {
 
   const init = () => {
     isAuthenticated();
-    document.title = `taxi BPP Sing up`;
+    document.title = `taxi BPP - Sign up`;
     !Associations && getRequiredList();
     // spinnerService.show(LocalKey.spinnerKey);
   };
@@ -46,24 +45,13 @@ export const SignInPassword = () => {
     });
   };
 
-  const handleSubmitForm = (formData) => {
-    const {
-      Email,
-      Password1,
-      Password2,
-      FirstName,
-      LastName,
-      PhoneNumber,
-      Company,
-      Role,
-    } = formData;
-
-    //e.preventDefault();
-    window.location.href = AppRoutes.adminDashboard;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // window.location.href = AppRoutes.adminDashboard;
     let path = "login";
     let data = {
       User: {
-        Name: Email,
+        Name: Name,
         Password: Password1,
         Password2: Password2,
         LongName: FirstName.concat(" ", LastName),
@@ -76,224 +64,170 @@ export const SignInPassword = () => {
         },
       },
     };
-    console.log("data1", data);
-
     userAction(path, data).then((res) => {
       navigateTo(AppRoutes.adminDashboard);
     });
   };
 
   return (
-    <section>
-      <Container fluid className="vh-100">
-        <Row className="vh-100">
-          <Col xxl="3" className="position-relative bg-dark left-section">
-            <div className="round-1"></div>
-            <div className="round-2"></div>
-          </Col>
-          <Col xxl="9" className="d-flex align-items-center">
-            <div className="w-100">
-              <div className="row w-100 justify-content-center">
-                <div className="col-10">
-                  <h1 className="mb-4">
-                    Welcome <br /> to the Taxi Admin App
-                  </h1>
+    <DarkLayout>
+      <section>
+        <Container fluid className="vh-100">
+          <Row className="vh-100">
+            <Col lg="3" className="p-0">
+              <LeftSection />
+            </Col>
+            <Col lg="9" className="d-flex align-items-center">
+              <div className="w-100">
+                <div className="row w-100 justify-content-center">
+                  <div className="col-10">
+                    <h1 className="mb-4">
+                      Welcome <br /> to the Taxi Admin App
+                    </h1>
+                  </div>
+                </div>
+                <form
+                  onSubmit={(e) => {
+                    handleSubmit(e);
+                  }}
+                >
+                  <div className="row w-100 justify-content-center">
+                    <div className="col-5 mb-3">
+                      <input
+                        type="text"
+                        name="FirstName"
+                        id="FirstName"
+                        value={FirstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="form-control"
+                        placeholder="First Name"
+                      />
+                    </div>
+                    <div className="col-5  mb-3">
+                      <input
+                        type="text"
+                        name="LastName"
+                        id="LastName"
+                        value={LastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="form-control"
+                        placeholder="Last Name"
+                      />
+                    </div>
+                    <div className="col-5 mb-3">
+                      <select
+                        name="Company"
+                        id="Company"
+                        defaultValue={Company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        className="form-select"
+                      >
+                        <option value="" selected disabled>
+                          Select Association Name
+                        </option>
+                        {Associations &&
+                          Associations.map((x) => (
+                            <option value={x.Id} key={x.Id}>
+                              {x.Name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                    <div className="col-5  mb-3">
+                      <select
+                        name="Role"
+                        id="Role"
+                        defaultValue={Role}
+                        onChange={(e) => setRole(e.target.value)}
+                        className="form-select"
+                      >
+                        <option value="" selected disabled>
+                          Select your role
+                        </option>
+                        {Roles &&
+                          Roles.map((x) => (
+                            <option value={x.Id} key={x.Id}>
+                              {x.Name}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                    <div className="col-5 mb-3">
+                      <input
+                        type="text"
+                        name="PhoneNumber"
+                        id="PhoneNumber"
+                        value={PhoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="form-control"
+                        placeholder="Enter Mobile Number"
+                      />
+                    </div>
+                    <div className="col-5  mb-3">
+                      <input
+                        type="text"
+                        name="Name"
+                        id="Name"
+                        value={Name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="form-control"
+                        placeholder="Enter Email ID"
+                      />
+                    </div>
+                    <div className="col-5 mb-3">
+                      <input
+                        type="password"
+                        name="Password1"
+                        id="Password1"
+                        value={Password1}
+                        onChange={(e) => setPassword1(e.target.value)}
+                        className="form-control"
+                        placeholder="Create New Password"
+                      />
+                    </div>
+                    <div className="col-5  mb-3">
+                      <input
+                        type="password"
+                        name="Password2"
+                        id="Password2"
+                        value={Password2}
+                        onChange={(e) => setPassword2(e.target.value)}
+                        className="form-control"
+                        placeholder="Confirm Password"
+                      />
+                    </div>
+                  </div>
+                  <div className="row w-100 justify-content-center">
+                    <div className="col-5 d-grid">
+                      <a
+                        href={AppRoutes.admin}
+                        role="button"
+                        type="reset"
+                        className="btn btn-dark"
+                      >
+                        cancel
+                      </a>
+                    </div>
+                    <div className="col-5 d-grid">
+                      <button className="btn btn-primary" type="submit">
+                        submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <div className="row w-100 justify-content-center">
+                  <div className="col-10">
+                    <p className="mt-5">
+                      Existing User? <Link to={AppRoutes.admin} className="link-primary">Sign In</Link>
+                    </p>
+                  </div>
                 </div>
               </div>
-              <form
-                onSubmit={handleSubmit((formData) =>
-                  handleSubmitForm(formData)
-                )}
-                className="signup-form"
-              >
-                <div className="row w-100 justify-content-center">
-                  <div className="col-5 mb-4">
-                    <input
-                      type="text"
-                      {...register("FirstName", {
-                        required: "First name is required",
-                        maxLength: {
-                          value: 20,
-                          message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
-                        },
-                      })}
-                      className={`form-control ${
-                        errors?.FirstName ? "is-invalid" : ""
-                      }`}
-                      placeholder="First Name*"
-                    />
-                    <Error errors={errors?.FirstName} />
-                  </div>
-                  <div className="col-5  mb-4">
-                    <input
-                      type="text"
-                      {...register("LastName", {
-                        required: "Last name is required",
-                        maxLength: {
-                          value: 20,
-                          message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
-                        },
-                      })}
-                      className={`form-control ${
-                        errors?.LastName ? "is-invalid" : ""
-                      }`}
-                      placeholder="Last Name*"
-                    />
-                    <Error errors={errors?.LastName} />
-                  </div>
-                  <div className="col-5 mb-4">
-                    <select
-                      name="Company"
-                      id="Company"
-                      {...register("Company", {
-                        required: "Select Company",
-                      })}
-                      //defaultValue={Company}
-                      className={`form-control ${
-                        errors?.Company ? "is-invalid" : ""
-                      }`}
-                    >
-                      <option value="" selected disabled>
-                        Select Association Name*
-                      </option>
-                      {Associations &&
-                        Associations.map((x) => (
-                          <option value={x.Id} key={x.Id}>
-                            {x.Name}
-                          </option>
-                        ))}
-                    </select>
-                    <Error errors={errors?.Company} />
-                  </div>
-                  <div className="col-5  mb-4">
-                    <select
-                      {...register("Role", {
-                        required: "Select Role",
-                      })}
-                      name="Role"
-                      id="Role"
-                      className="form-select"
-                    >
-                      <option value="" selected disabled>
-                        Select your role*
-                      </option>
-                      {Roles &&
-                        Roles.map((x) => (
-                          <option value={x.Id} key={x.Id}>
-                            {x.Name}
-                          </option>
-                        ))}
-                    </select>
-                    <Error errors={errors?.Role} />
-                  </div>
-                  <div className="col-5 mb-4">
-                    <input
-                      type="tel"
-                      name="PhoneNumber"
-                      id="PhoneNumber"
-                      {...register("PhoneNumber", {
-                        required: "Number is required",
-                        maxLength: {
-                          value: 10,
-                          message: "Please enter valid number", // JS only: <p>error message</p> TS only support string
-                        },
-                        minLength: {
-                          value: 10,
-                          message: "Please enter valid number", // JS only: <p>error message</p> TS only support string
-                        },
-                      })}
-                      //value={PhoneNumber}
-                      className={`form-control ${
-                        errors?.PhoneNumber ? "is-invalid" : ""
-                      }`}
-                      placeholder="Enter Mobile Number*"
-                    />
-                    <Error errors={errors?.PhoneNumber} />
-                  </div>
-                  <div className="col-5  mb-4">
-                    <input
-                      type="email"
-                      name="Email"
-                      {...register("Email", {
-                        required: "Email is required",
-                      })}
-                      id="Email"
-                      //value={Name}
-                      className={`form-control ${
-                        errors?.Email ? "is-invalid" : ""
-                      }`}
-                      placeholder="Enter Email ID*"
-                    />
-                    <Error errors={errors?.Email} />
-                  </div>
-                  <div className="col-5 mb-4">
-                    <input
-                      type="password"
-                      //name="Password1"
-                      {...register("Password1", {
-                        required: "Password is required",
-                        maxLength: {
-                          value: 20,
-                          message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
-                        },
-                      })}
-                      id="Password1"
-                      //value={Password1}
-                      className="form-control"
-                      placeholder="Create New Password*"
-                    />
-                    <Error errors={errors?.Password1} />
-                  </div>
-                  <div className="col-5  mb-4">
-                    <input
-                      type="password"
-                      //name="Password2"
-                      {...register("Password2", {
-                        required: "Password is required",
-                        validate: (val) => {
-                          if (watch("Password1") !== val) {
-                            return "Your passwords do no match";
-                          }
-                        },
-                      })}
-                      id="Password2"
-                      //value={Password2}
-                      className="form-control"
-                      placeholder="Confirm Password*"
-                    />
-                    <Error errors={errors?.Password2} />
-                  </div>
-                </div>
-                <div className="row w-100 justify-content-center">
-                  <div className="col-5 d-grid">
-                    <a
-                      href={AppRoutes.admin}
-                      role="button"
-                      type="reset"
-                      className="btn btn-secondary anchor-button"
-                    >
-                      Cancel
-                    </a>
-                  </div>
-                  <div className="col-5 d-grid">
-                    <button className="btn" type="submit">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </form>
-              <div className="row w-100 justify-content-center">
-                <div className="col-10">
-                  <p className="mt-5">
-                    Existing User? <Link to={AppRoutes.admin}>Sign In</Link>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </section>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+    </DarkLayout>
   );
 };
 

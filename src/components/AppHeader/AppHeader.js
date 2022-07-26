@@ -26,7 +26,7 @@ const appHeader = (props) => {
           </Col>
           <Col className="d-flex align-items-center justify-content-end text-white">
             Welcome : {user.FirstName}
-            <button className="btn btn-primary ms-2" onClick={() => logout()}>
+            <button className="btn btn-primary btn-sm ms-2" onClick={() => logout()}>
               Logout
             </button>
           </Col>
