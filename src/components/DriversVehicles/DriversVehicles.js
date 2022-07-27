@@ -13,6 +13,7 @@ import { getVehicles, verify } from "./DriversVehicles.Services";
 import Verification from "./Verification";
 
 export const DriversVehicles = (prop) => {
+  const [tabKey, setTabKey] = useState(prop.activeScreenId || 'Tdrvier');
   const [logUser] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [driverList, setDriverList] = useState("");
   const [vehicleList, setVehicleList] = useState("");
@@ -30,6 +31,10 @@ export const DriversVehicles = (prop) => {
   const [vehicleEdit, setVehicleEdit] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [verifyKey, setVerifyKey] = useState("");
+
+  useEffect(()=>{
+    setTabKey(prop.activeScreenId || 'Tdrvier')
+  },[prop.activeScreenId])
 
   const handleModalClose = () => {
     setModalShow(false);
@@ -136,8 +141,7 @@ export const DriversVehicles = (prop) => {
     <>
       <div className="row">
         <div className="col">
-          {console.log("render", prop.activeScreenId)}
-          <Tabs defaultActiveKey={prop.activeScreenId} className="mb-3">
+          <Tabs activeKey={tabKey} onSelect={(k) => setTabKey(k)} className="mb-3">
             <Tab eventKey="Tdrvier" title="Total Drivers">
               <div className="row">
                 <div className="col">
@@ -218,7 +222,7 @@ export const DriversVehicles = (prop) => {
                 </Tabs>
               ) : (
                 <>
-                  <AddVehicle vehicleEdit={vehicleEdit || {}} onChange={(e, k) => toggleAddVehicle(e, k)} />
+                  <AddVehicle vehicleEdit={vehicleEdit || {}} onChange={(e, k) => toggleAddVehicle(e, k)} onUpdateVehicle={()=>setVehiclesList()} />
                 </>
               )}
             </Tab>

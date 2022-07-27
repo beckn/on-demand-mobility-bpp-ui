@@ -59,7 +59,7 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
     register,
     reset,
     control,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm({
     mode: "all",
     resolver: yupResolver(personalInfoSchema),
@@ -126,7 +126,11 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
                 >
                   Cancel
                 </button>
-                <button className="btn btn-primary btn-sm" type="submit">
+                <button
+                  className="btn btn-primary btn-sm"
+                  type="submit"
+                  disabled={!isValid || !isDirty}
+                >
                   Save
                 </button>
               </>
@@ -142,7 +146,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("FirstName")}
               id="FirstName"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.FirstName,
+              })}
               placeholder="First Name"
             />
             <ErrorMessage fieldError={errors?.FirstName} />
@@ -153,7 +160,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("LastName")}
               id="LastName"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.LastName,
+              })}
               placeholder="Last Name"
             />
             <ErrorMessage fieldError={errors?.LastName} />
@@ -166,7 +176,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("PhoneNumber")}
               id="PhoneNumber"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.PhoneNumber,
+              })}
               placeholder="Mobile Number"
             />
             <ErrorMessage fieldError={errors?.PhoneNumber} />
@@ -177,7 +190,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("Name")}
               id="Name"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.Name,
+              })}
               placeholder="Email"
             />
             <ErrorMessage fieldError={errors?.Name} />
@@ -192,7 +208,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
                   showYearDropdown
                   dropdownMode="select"
                   placeholderText="Enter Date Of Birth"
-                  className="form-control"
+                  className={classNames({
+                    "form-control": true,
+                    error: errors?.DateOfBirth,
+                  })}
                   disabled={isUserEdit}
                   name="DateOfBirth"
                   id="DateOfBirth"
@@ -239,7 +258,7 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
     register,
     reset,
     control,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
     getValues,
     setValue,
     clearErrors,
@@ -372,7 +391,11 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
               >
                 Cancel
               </button>
-              <button className="btn btn-primary btn-sm" type="submit">
+              <button
+                className="btn btn-primary btn-sm"
+                type="submit"
+                disabled={!isValid || !isDirty}
+              >
                 Save
               </button>
             </>
