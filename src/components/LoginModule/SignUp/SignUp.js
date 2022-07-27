@@ -6,14 +6,11 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
+import { ErrorMessage } from "../../../shared/ErrorMessage/ErrorMessage";
 import { LeftSection } from "../../../shared/graphics/LeftSection";
 import { DarkLayout } from "../../../shared/layout/DarkLayout";
 import "../Login.scss";
 import { getCompanies, getRoles, userAction } from "../Login.services";
-
-export function Error({ errors }) {
-  return <div className="error">{errors ? errors.message : " "}</div>;
-}
 
 export const SignInPassword = () => {
   const {
@@ -60,7 +57,6 @@ export const SignInPassword = () => {
       Role,
     } = formData;
 
-    //e.preventDefault();
     let path = "login";
     let data = {
       User: {
@@ -77,7 +73,6 @@ export const SignInPassword = () => {
         },
       },
     };
-    console.log("data1", data);
 
     userAction(path, data).then((res) => {
       navigateTo(AppRoutes.adminDashboard);
@@ -114,7 +109,7 @@ export const SignInPassword = () => {
                           required: "First name is required",
                           maxLength: {
                             value: 20,
-                            message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
+                            message: "Character limit exceeded",
                           },
                         })}
                         className={`form-control ${
@@ -124,7 +119,7 @@ export const SignInPassword = () => {
                         id="FirstName"
                         placeholder="First Name*"
                       />
-                      <Error errors={errors?.FirstName} />
+                      <ErrorMessage fieldError={errors?.FirstName} />
                     </div>
                     <div className="col-5  mb-4">
                       <input
@@ -135,7 +130,7 @@ export const SignInPassword = () => {
                           required: "Last name is required",
                           maxLength: {
                             value: 20,
-                            message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
+                            message: "Character limit exceeded",
                           },
                         })}
                         className={`form-control ${
@@ -143,7 +138,7 @@ export const SignInPassword = () => {
                         }`}
                         placeholder="Last Name*"
                       />
-                      <Error errors={errors?.LastName} />
+                      <ErrorMessage fieldError={errors?.LastName} />
                     </div>
                     <div className="col-5 mb-4">
                       <select
@@ -167,7 +162,7 @@ export const SignInPassword = () => {
                             </option>
                           ))}
                       </select>
-                      <Error errors={errors?.Company} />
+                      <ErrorMessage fieldError={errors?.Company} />
                     </div>
                     <div className="col-5  mb-4">
                       <select
@@ -190,7 +185,7 @@ export const SignInPassword = () => {
                             </option>
                           ))}
                       </select>
-                      <Error errors={errors?.Role} />
+                      <ErrorMessage fieldError={errors?.Role} />
                     </div>
                     <div className="col-5 mb-4">
                       <input
@@ -201,11 +196,11 @@ export const SignInPassword = () => {
                           required: "Number is required",
                           maxLength: {
                             value: 10,
-                            message: "Please enter valid number", // JS only: <p>error message</p> TS only support string
+                            message: "Please enter valid number",
                           },
                           minLength: {
                             value: 10,
-                            message: "Please enter valid number", // JS only: <p>error message</p> TS only support string
+                            message: "Please enter valid number",
                           },
                         })}
                         //value={PhoneNumber}
@@ -214,7 +209,7 @@ export const SignInPassword = () => {
                         }`}
                         placeholder="Enter Mobile Number*"
                       />
-                      <Error errors={errors?.PhoneNumber} />
+                      <ErrorMessage fieldError={errors?.PhoneNumber} />
                     </div>
                     <div className="col-5  mb-4">
                       <input
@@ -229,7 +224,7 @@ export const SignInPassword = () => {
                         }`}
                         placeholder="Enter Email ID*"
                       />
-                      <Error errors={errors?.Email} />
+                      <ErrorMessage fieldError={errors?.Email} />
                     </div>
                     <div className="col-5 mb-4">
                       <input
@@ -244,7 +239,7 @@ export const SignInPassword = () => {
                         }`}
                         placeholder="Create New Password*"
                       />
-                      <Error errors={errors?.Password1} />
+                      <ErrorMessage fieldError={errors?.Password1} />
                     </div>
                     <div className="col-5  mb-4">
                       <input
@@ -264,7 +259,7 @@ export const SignInPassword = () => {
                         }`}
                         placeholder="Confirm Password*"
                       />
-                      <Error errors={errors?.Password2} />
+                      <ErrorMessage fieldError={errors?.Password2} />
                     </div>
                   </div>
                   <div className="row w-100 justify-content-center">
