@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-// import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
+// import PropTypes from "prop-types";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
@@ -10,18 +11,20 @@ import { DarkLayout } from "../../../shared/layout/DarkLayout";
 import "../Login.scss";
 import { getCompanies, getRoles, userAction } from "../Login.services";
 
+export function Error({ errors }) {
+  return <div className="error">{errors ? errors.message : " "}</div>;
+}
+
 export const SignInPassword = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    watch,
+  } = useForm();
   const navigate = useNavigate();
   const [Associations, setAssociation] = useState(null);
   const [Roles, setRoles] = useState(0);
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
-  const [Company, setCompany] = useState("");
-  const [Role, setRole] = useState("");
-  const [PhoneNumber, setPhoneNumber] = useState("");
-  const [Name, setName] = useState("");
-  const [Password1, setPassword1] = useState("");
-  const [Password2, setPassword2] = useState("");
 
   useEffect(() => {
     init();
@@ -29,7 +32,7 @@ export const SignInPassword = () => {
 
   const init = () => {
     isAuthenticated();
-    document.title = `taxi BPP - Sign up`;
+    document.title = `taxi BPP Sign up`;
     !Associations && getRequiredList();
     // spinnerService.show(LocalKey.spinnerKey);
   };
@@ -45,13 +48,23 @@ export const SignInPassword = () => {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // window.location.href = AppRoutes.adminDashboard;
+  const handleSubmitForm = (formData) => {
+    const {
+      Email,
+      Password1,
+      Password2,
+      FirstName,
+      LastName,
+      PhoneNumber,
+      Company,
+      Role,
+    } = formData;
+
+    //e.preventDefault();
     let path = "login";
     let data = {
       User: {
-        Name: Name,
+        Name: Email,
         Password: Password1,
         Password2: Password2,
         LongName: FirstName.concat(" ", LastName),
@@ -64,6 +77,8 @@ export const SignInPassword = () => {
         },
       },
     };
+    console.log("data1", data);
+
     userAction(path, data).then((res) => {
       navigateTo(AppRoutes.adminDashboard);
     });
@@ -87,43 +102,63 @@ export const SignInPassword = () => {
                   </div>
                 </div>
                 <form
-                  onSubmit={(e) => {
-                    handleSubmit(e);
-                  }}
+                  onSubmit={handleSubmit((formData) =>
+                    handleSubmitForm(formData)
+                  )}
                 >
                   <div className="row w-100 justify-content-center">
-                    <div className="col-5 mb-3">
+                    <div className="col-5 mb-4">
                       <input
                         type="text"
+                        {...register("FirstName", {
+                          required: "First name is required",
+                          maxLength: {
+                            value: 20,
+                            message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
+                          },
+                        })}
+                        className={`form-control ${
+                          errors?.FirstName ? "is-invalid" : ""
+                        }`}
                         name="FirstName"
                         id="FirstName"
-                        value={FirstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="form-control"
-                        placeholder="First Name"
+                        placeholder="First Name*"
                       />
+                      <Error errors={errors?.FirstName} />
                     </div>
-                    <div className="col-5  mb-3">
+                    <div className="col-5  mb-4">
                       <input
                         type="text"
                         name="LastName"
                         id="LastName"
-                        value={LastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="form-control"
-                        placeholder="Last Name"
+                        {...register("LastName", {
+                          required: "Last name is required",
+                          maxLength: {
+                            value: 20,
+                            message: "Character limit exceeded", // JS only: <p>error message</p> TS only support string
+                          },
+                        })}
+                        className={`form-control ${
+                          errors?.LastName ? "is-invalid" : ""
+                        }`}
+                        placeholder="Last Name*"
                       />
+                      <Error errors={errors?.LastName} />
                     </div>
-                    <div className="col-5 mb-3">
+                    <div className="col-5 mb-4">
                       <select
                         name="Company"
                         id="Company"
-                        defaultValue={Company}
-                        onChange={(e) => setCompany(e.target.value)}
-                        className="form-select"
+                        {...register("Company", {
+                          required: "Select Company",
+                        })}
+                        //defaultValue={Company}
+                        className={`form-control ${
+                          errors?.Company ? "is-invalid" : ""
+                        }`}
                       >
                         <option value="" selected disabled>
-                          Select Association Name
+                          Select Association Name*
                         </option>
                         {Associations &&
                           Associations.map((x) => (
@@ -132,17 +167,21 @@ export const SignInPassword = () => {
                             </option>
                           ))}
                       </select>
+                      <Error errors={errors?.Company} />
                     </div>
-                    <div className="col-5  mb-3">
+                    <div className="col-5  mb-4">
                       <select
                         name="Role"
                         id="Role"
-                        defaultValue={Role}
-                        onChange={(e) => setRole(e.target.value)}
-                        className="form-select"
+                        {...register("Role", {
+                          required: "Select Role",
+                        })}
+                        className={`form-control ${
+                          errors?.Company ? "is-invalid" : ""
+                        }`}
                       >
                         <option value="" selected disabled>
-                          Select your role
+                          Select your role*
                         </option>
                         {Roles &&
                           Roles.map((x) => (
@@ -151,50 +190,81 @@ export const SignInPassword = () => {
                             </option>
                           ))}
                       </select>
+                      <Error errors={errors?.Role} />
                     </div>
-                    <div className="col-5 mb-3">
+                    <div className="col-5 mb-4">
                       <input
                         type="text"
                         name="PhoneNumber"
                         id="PhoneNumber"
-                        value={PhoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        className="form-control"
-                        placeholder="Enter Mobile Number"
+                        {...register("PhoneNumber", {
+                          required: "Number is required",
+                          maxLength: {
+                            value: 10,
+                            message: "Please enter valid number", // JS only: <p>error message</p> TS only support string
+                          },
+                          minLength: {
+                            value: 10,
+                            message: "Please enter valid number", // JS only: <p>error message</p> TS only support string
+                          },
+                        })}
+                        //value={PhoneNumber}
+                        className={`form-control ${
+                          errors?.PhoneNumber ? "is-invalid" : ""
+                        }`}
+                        placeholder="Enter Mobile Number*"
                       />
+                      <Error errors={errors?.PhoneNumber} />
                     </div>
-                    <div className="col-5  mb-3">
+                    <div className="col-5  mb-4">
                       <input
-                        type="text"
-                        name="Name"
-                        id="Name"
-                        value={Name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="form-control"
-                        placeholder="Enter Email ID"
+                        type="email"
+                        {...register("Email", {
+                          required: "Email is required",
+                        })}
+                        id="Email"
+                        //value={Name}
+                        className={`form-control ${
+                          errors?.Email ? "is-invalid" : ""
+                        }`}
+                        placeholder="Enter Email ID*"
                       />
+                      <Error errors={errors?.Email} />
                     </div>
-                    <div className="col-5 mb-3">
+                    <div className="col-5 mb-4">
                       <input
                         type="password"
                         name="Password1"
                         id="Password1"
-                        value={Password1}
-                        onChange={(e) => setPassword1(e.target.value)}
-                        className="form-control"
-                        placeholder="Create New Password"
+                        {...register("Password1", {
+                          required: "Password is required",
+                        })}
+                        className={`form-control ${
+                          errors?.PhoneNumber ? "is-invalid" : ""
+                        }`}
+                        placeholder="Create New Password*"
                       />
+                      <Error errors={errors?.Password1} />
                     </div>
-                    <div className="col-5  mb-3">
+                    <div className="col-5  mb-4">
                       <input
                         type="password"
                         name="Password2"
                         id="Password2"
-                        value={Password2}
-                        onChange={(e) => setPassword2(e.target.value)}
-                        className="form-control"
-                        placeholder="Confirm Password"
+                        {...register("Password2", {
+                          required: "Password is required",
+                          validate: (val) => {
+                            if (watch("Password1") !== val) {
+                              return "Your passwords do no match";
+                            }
+                          },
+                        })}
+                        className={`form-control ${
+                          errors?.PhoneNumber ? "is-invalid" : ""
+                        }`}
+                        placeholder="Confirm Password*"
                       />
+                      <Error errors={errors?.Password2} />
                     </div>
                   </div>
                   <div className="row w-100 justify-content-center">
@@ -218,7 +288,10 @@ export const SignInPassword = () => {
                 <div className="row w-100 justify-content-center">
                   <div className="col-10">
                     <p className="mt-5">
-                      Existing User? <Link to={AppRoutes.admin} className="link-primary">Sign In</Link>
+                      Existing User?{" "}
+                      <Link to={AppRoutes.admin} className="link-primary">
+                        Sign In
+                      </Link>
                     </p>
                   </div>
                 </div>
