@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Table } from "react-bootstrap";
-import { getAddress } from "../../core/common.functions";
+import { getAddress, getKeyValueFromString } from "../../core/common.functions";
+import { DocumentType } from "../../core/constant";
 import { verificationKeys } from "../../shared/constant";
 
 export const Verification = (props) => {
+  useEffect(() => {
+    if (props.verify === verificationKeys.verifyVehicle) {
+      console.log("Verification", props);
+    }
+  }, [props]);
+
   return (
     <>
       <Modal.Header closeButton>
@@ -12,14 +19,28 @@ export const Verification = (props) => {
       <Modal.Body>
         <div className="row">
           <div className="col">
-            <h5>{props.verifyDocuments.LongName}</h5>
-            <hr />
-            {getAddress(props.verifyDocuments)}
-            <p>
-              Mobile: {props.verifyDocuments.PhoneNumber}, DOB: {props.verifyDocuments.DateOfBirth}
-            </p>
-            <hr />
-            <p>Date Of Joining: {props.verifyDocuments.DateOfJoining}</p>
+            {props.verify === verificationKeys.verifyDriver ? (
+              <>
+                <h5>{props.verifyDocuments.LongName}</h5>
+                <hr />
+                {getAddress(props.verifyDocuments)}
+                <p>
+                  Mobile: {props.verifyDocuments.PhoneNumber}, DOB: {props.verifyDocuments.DateOfBirth}
+                </p>
+                <hr />
+                <p>Date Of Joining: {props.verifyDocuments.DateOfJoining}</p>
+              </>
+            ) : (
+              <>
+                <h5>
+                  {props.verifyDocuments.VehicleNumber} | <span className="small text-muted">Date Of registration: {props.verifyDocuments.VehicleDocuments.find((x) => x.Document === DocumentType.RC).ValidFrom}</span>
+                </h5>
+                <hr />
+                <p>
+                  Make: <b>{getKeyValueFromString("Make", props.verifyDocuments.Tags)}</b> | Name of Model: <b>{getKeyValueFromString("NameOfModel", props.verifyDocuments.Tags)}</b> | Fuel Type: <b>{getKeyValueFromString("FuelType", props.verifyDocuments.Tags)}</b> | Vehicle Type: <b>{getKeyValueFromString("VehicleType", props.verifyDocuments.Tags)}</b>
+                </p>
+              </>
+            )}
             <hr />
             <h5>Uploaded Documents</h5>
             <Table striped bordered hover>
@@ -27,11 +48,11 @@ export const Verification = (props) => {
                 <tr>
                   <th>Document</th>
                   <th>Document Number</th>
-                  <th>Username</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {props.verifyDocuments.DriverDocuments?.map((x) => {
+                {props.verifyDocuments[props.verify === verificationKeys.verifyVehicle ? "VehicleDocuments" : "DriverDocuments"]?.map((x) => {
                   return (
                     <tr>
                       <td>{x.Document}</td>
@@ -44,7 +65,7 @@ export const Verification = (props) => {
                         {x.Verified === "Y" ? (
                           "Verified"
                         ) : (
-                          <button className="btn btn-primary btn-sm" onClick={() => props.onUpdate(x.Id, "driver_documents")}>
+                          <button className="btn btn-primary btn-sm" onClick={() => props.onUpdate(x.Id, props.verify === verificationKeys.verifyDriver ? "driver_documents" : "vehicle_documents")}>
                             Verify
                           </button>
                         )}

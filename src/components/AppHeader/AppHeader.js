@@ -15,7 +15,7 @@ const logout = () => {
 
 const appHeader = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const user = JSON.parse(getCookie(LocalKey.saveUser));
+  const user = getCookie(LocalKey.saveUser) && JSON.parse(getCookie(LocalKey.saveUser));
   return (
     <header className="bg-dark header-round">
       <Container fluid>
