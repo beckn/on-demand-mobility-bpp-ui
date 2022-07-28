@@ -10,7 +10,7 @@ const TableGridVehicle = (props) => {
   return (
     <>
       {props.GridData?.ColumnsData?.filter((x) => (props.Status ? x.Verified === props.Status : x)).length !== 0 ? (
-        <table className="table table-striped mt-4">
+        <table className="table mt-4">
           <thead>
             <tr>
               {props.GridData?.ColumnsHead?.map((x) => (

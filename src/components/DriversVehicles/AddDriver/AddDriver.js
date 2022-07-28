@@ -9,7 +9,7 @@ export const AddDriver = (prop) => {
       <div className="col">
         <div className="row">
           <div className="col">
-            <h2>Add/Edit Driver:</h2>
+            <h3 className="mb-0">Add/Edit Driver:</h3>
           </div>
           <div className="col text-end">
             <button className="btn btn-secondary btn-sm me-2" onClick={(e) => dispatchEvent(e)}>

@@ -100,7 +100,7 @@ const VehicleInfoForm = ({
           {!isDisabled ? (
             <>
               <button
-                className="btn btn-secondary me-3"
+                className="btn btn-sm btn-secondary me-3"
                 type="button"
                 onClick={(e) => {
                   console.log("resetting");
@@ -111,7 +111,7 @@ const VehicleInfoForm = ({
                 cancel
               </button>
               <button
-                className="btn btn-primary"
+                className="btn btn-sm btn-primary"
                 type="submit"
                 disabled={!isValid || !isDirty}
               >
@@ -120,7 +120,7 @@ const VehicleInfoForm = ({
             </>
           ) : (
             <button
-              className="btn btn-primary me-3"
+              className="btn btn-sm btn-primary me-3"
               type="button"
               onClick={(e) => setIsDisabled(false)}
             >
@@ -499,14 +499,14 @@ export const AddVehicle = (props) => {
           <div className="row">
             <div className="col text-end">
               <button
-                className="btn btn-secondary me-3"
+                className="btn btn-sm btn-secondary me-3"
                 onClick={(e) => dispatchEvent(e)}
                 type="button"
               >
                 Cancel
               </button>
               <button
-                className="btn btn-primary"
+                className="btn btn-sm btn-primary"
                 onClick={(e) => submitDocuments(e)}
                 type="submit"
               >

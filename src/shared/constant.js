@@ -6,12 +6,14 @@ export const ErrorBlocks = [
   },
   {
     Title: "This page is lost in space!",
-    SubTitle: "What you're looking for may have been misplaced in Long Term Memory.",
+    SubTitle:
+      "What you're looking for may have been misplaced in Long Term Memory.",
     ImgUrl: "/assets/errorviews/img2.jpg",
   },
   {
     Title: "Awww...Don't Cry.",
-    SubTitle: "An error has occurred and we're working to fix the problem! We'll be up and running shortly.",
+    SubTitle:
+      "An error has occurred and we're working to fix the problem! We'll be up and running shortly.",
     ImgUrl: "/assets/errorviews/img1.jpg",
   },
   {
@@ -33,12 +35,14 @@ export const ErrorBlocks404 = [
   },
   {
     Title: "This page is lost in space!",
-    SubTitle: "What you're looking for may have been misplaced in Long Term Memory.",
+    SubTitle:
+      "What you're looking for may have been misplaced in Long Term Memory.",
     ImgUrl: "/assets/errorviews/img2.jpg",
   },
   {
     Title: "Awww...Don't Cry.",
-    SubTitle: "It looks like your've reached a URL that doesn't exist. Please user the below button to back on track",
+    SubTitle:
+      "It looks like your've reached a URL that doesn't exist. Please user the below button to back on track",
     ImgUrl: "/assets/errorviews/img1.jpg",
   },
   {
@@ -136,5 +140,5 @@ export const verificationKeys = {
 };
 
 export const VehicleTags = ["Make", "NameOfModel", "VehicleType", "FuelType"];
-export const VehicleType = ["SUV", "Mini SUV", "SEDAN", "MUV", "MICRO", "SEDAN", "CUV", "HATCHBACK", "MINIVAN", "COUPE"];
-export const VehicleFuelType = ["Petrol", "Diesel", "CNG", "Bio-Diesel", "LPG", "Ethanol or Methanol", "Electric"];
+export const VehicleType = ["SUV", "SEDAN", "HATCHBACK"];
+export const VehicleFuelType = ["Petrol", "Diesel", "CNG", "Electric"];
