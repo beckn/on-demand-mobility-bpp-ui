@@ -23,22 +23,23 @@ export const Verification = (props) => {
               <>
                 <h5>{props.verifyDocuments.LongName}</h5>
                 <hr />
-                {getAddress(props.verifyDocuments)}
-                <p>
-                  Mobile: {props.verifyDocuments.PhoneNumber}, DOB: {props.verifyDocuments.DateOfBirth}
-                </p>
-                <hr />
-                <p>Date Of Joining: {props.verifyDocuments.DateOfJoining}</p>
+                <div><b>Address:</b> {getAddress(props.verifyDocuments)}</div>
+                <div><b>Mobile:</b> {props.verifyDocuments.PhoneNumber}</div>
+                <div><b>DOB:</b> {props.verifyDocuments.DateOfBirth}</div>
+                <div><b>Date Of Joining:</b> {props.verifyDocuments.DateOfJoining}</div>
               </>
             ) : (
               <>
                 <h5>
-                  {props.verifyDocuments.VehicleNumber} | <span className="small text-muted">Date Of registration: {props.verifyDocuments.VehicleDocuments.find((x) => x.Document === DocumentType.RC).ValidFrom}</span>
+                  {props.verifyDocuments.VehicleNumber} | <span className="small text-muted">Date of Registration: {props.verifyDocuments.VehicleDocuments.find((x) => x.Document === DocumentType.RC).ValidFrom}</span>
                 </h5>
                 <hr />
-                <p>
-                  Make: <b>{getKeyValueFromString("Make", props.verifyDocuments.Tags)}</b> | Name of Model: <b>{getKeyValueFromString("NameOfModel", props.verifyDocuments.Tags)}</b> | Fuel Type: <b>{getKeyValueFromString("FuelType", props.verifyDocuments.Tags)}</b> | Vehicle Type: <b>{getKeyValueFromString("VehicleType", props.verifyDocuments.Tags)}</b>
-                </p>
+
+                <div><b>Make:</b> {getKeyValueFromString("Make", props.verifyDocuments.Tags)}</div>
+                <div><b>Name of Model:</b> {getKeyValueFromString("NameOfModel", props.verifyDocuments.Tags)}</div>
+                <div><b>Fuel Type:</b> {getKeyValueFromString("FuelType", props.verifyDocuments.Tags)}</div>
+                <div><b>Vehicle Type:</b> {getKeyValueFromString("VehicleType", props.verifyDocuments.Tags)}</div>
+
               </>
             )}
             <hr />
