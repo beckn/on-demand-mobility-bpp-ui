@@ -68,42 +68,71 @@
   width: 100%;
   position: relative;
   & > div {
-      background: transparent !important;
-      z-index: 9;
-      position: absolute !important;
-      box-shadow: none !important;
-      border-radius: 0 !important;
-      max-height: 300px !important;
-      height: auto !important;
-      top: inherit !important;
-      left: 0 !important;
-      .autocomplete-item {
-          background-color: #fff;
-          padding: 3px 10px;
-          border: 1px solid #eaeaea;
-          border-top: 0;
-          text-align: left;
-          cursor: pointer;
-          &:hover {
-              background-color: #eaeaea;
-          }
-          &.active {
-              background-color: #04d4cd;
-              color: white;
-          }
+    background: transparent !important;
+    z-index: 9;
+    position: absolute !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-height: 300px !important;
+    height: auto !important;
+    top: inherit !important;
+    left: 0 !important;
+    .autocomplete-item {
+      background-color: #fff;
+      padding: 3px 10px;
+      border: 1px solid #eaeaea;
+      border-top: 0;
+      text-align: left;
+      cursor: pointer;
+      &:hover {
+        background-color: #eaeaea;
       }
+      &.active {
+        background-color: #04d4cd;
+        color: white;
+      }
+    }
   }
 }
 
 .dashboard {
+  .nav-item {
+    margin-bottom: 0.75rem;
+  }
+
   .nav-pills .nav-link {
     border-radius: 0;
     color: #fff;
+    background-color: #050505;
   }
-  
-  .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+
+  .nav-pills .nav-link.active,
+  .nav-pills .show > .nav-link {
     color: #000;
     background-color: #fff;
     font-weight: 600;
+  }
+
+  .dashboard-card {
+    height: 100%;
+    min-height: 8rem;
+    border: none;
+    border-radius: 0;
+    color: white;
+
+    .icon-col {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &:hover {
+      color: black;
+      .icon-col {
+        background-color: #96b7d5;
+      }
+
+      .icon-col + div {
+        background-color: #89aac8;
+      }
+    }
   }
 }

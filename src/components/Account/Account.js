@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Autocomplete from "react-autocomplete";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Upload } from "react-feather";
+import { Edit2, Upload } from "react-feather";
 import { userSave } from "../../core/apiClient.js";
 import { getAddress } from "../../core/common.functions.js";
 import {
@@ -59,7 +59,7 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
     register,
     reset,
     control,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm({
     mode: "all",
     resolver: yupResolver(personalInfoSchema),
@@ -102,17 +102,17 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="row">
+        <div className="row mt-2">
           <div className="col">
             <h4 className="mb-0">Personal Information:</h4>
           </div>
           <div className="col text-end">
             {isUserEdit ? (
               <button
-                className="btn btn-primary btn-sm"
+                className="btn btn-icon btn-sm"
                 onClick={(e) => enableEdit(e, setIsUserEdit, false)}
               >
-                Edit
+                <Edit2 />
               </button>
             ) : (
               <>
@@ -126,7 +126,11 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
                 >
                   Cancel
                 </button>
-                <button className="btn btn-primary btn-sm" type="submit">
+                <button
+                  className="btn btn-primary btn-sm"
+                  type="submit"
+                  disabled={!isValid || !isDirty}
+                >
                   Save
                 </button>
               </>
@@ -134,7 +138,7 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
           </div>
         </div>
 
-        <hr className="mt-2 mb-3" />
+        <hr className="mt-0 mb-3" />
         <div className="row w-100 justify-content-left">
           <div className="col-6 mb-3">
             <input
@@ -142,7 +146,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("FirstName")}
               id="FirstName"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.FirstName,
+              })}
               placeholder="First Name"
             />
             <ErrorMessage fieldError={errors?.FirstName} />
@@ -153,7 +160,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("LastName")}
               id="LastName"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.LastName,
+              })}
               placeholder="Last Name"
             />
             <ErrorMessage fieldError={errors?.LastName} />
@@ -166,7 +176,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("PhoneNumber")}
               id="PhoneNumber"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.PhoneNumber,
+              })}
               placeholder="Mobile Number"
             />
             <ErrorMessage fieldError={errors?.PhoneNumber} />
@@ -177,7 +190,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
               {...register("Name")}
               id="Name"
               disabled={isUserEdit}
-              className="form-control"
+              className={classNames({
+                "form-control": true,
+                error: errors?.Name,
+              })}
               placeholder="Email"
             />
             <ErrorMessage fieldError={errors?.Name} />
@@ -192,7 +208,10 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
                   showYearDropdown
                   dropdownMode="select"
                   placeholderText="Enter Date Of Birth"
-                  className="form-control"
+                  className={classNames({
+                    "form-control": true,
+                    error: errors?.DateOfBirth,
+                  })}
                   disabled={isUserEdit}
                   name="DateOfBirth"
                   id="DateOfBirth"
@@ -239,7 +258,7 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
     register,
     reset,
     control,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
     getValues,
     setValue,
     clearErrors,
@@ -348,17 +367,17 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="row mt-3">
+      <div className="row mt-4">
         <div className="col">
-          <h4>Address Information:</h4>
+          <h4 className="mb-0">Address Information:</h4>
         </div>
         <div className="col text-end">
           {isAddressEdit ? (
             <button
-              className="btn btn-primary btn-sm"
+              className="btn btn-icon btn-sm"
               onClick={(e) => enableEdit(e, setIsAddressEdit, false)}
             >
-              Edit
+              <Edit2 />
             </button>
           ) : (
             <>
@@ -372,14 +391,18 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
               >
                 Cancel
               </button>
-              <button className="btn btn-primary btn-sm" type="submit">
+              <button
+                className="btn btn-primary btn-sm"
+                type="submit"
+                disabled={!isValid || !isDirty}
+              >
                 Save
               </button>
             </>
           )}
         </div>
       </div>
-      <hr className="mt-2 mb-3" />
+      <hr className="mt-0 mb-3" />
       <div className="row w-100 justify-content-left">
         <div className="col-4 mb-3">
           <input
@@ -682,12 +705,12 @@ export const Account = (prop) => {
 
         <form onSubmit={(e) => {}}>
           <>
-            <div className="row">
+            <div className="row mt-4">
               <div className="col">
-                <h4 className="mt-3 mb-0">Personal Documents:</h4>
+                <h4 className="mb-0">Personal Documents:</h4>
               </div>
             </div>
-            <hr className="my-4" />
+            <hr className="mt-0 mb-3" />
             <div className="row w-100 justify-content-left">
               <div className="col-3 mb-3">
                 <input
@@ -702,7 +725,7 @@ export const Account = (prop) => {
                   className="form-control"
                   placeholder="Enter License Number"
                 />
-                <p className="mb-0">
+                <p className="mt-1 mb-0 small ps-2">
                   {User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Licence
                   )?.Verified === "N"
@@ -739,7 +762,7 @@ export const Account = (prop) => {
                   className="form-control"
                   placeholder="Enter Pan Number"
                 />
-                <p className="mb-0">
+                <p className="mt-1 mb-0 small ps-2">
                   {User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Pan
                   )?.Verified === "N"
@@ -794,7 +817,7 @@ export const Account = (prop) => {
                       className="form-control"
                       placeholder="E-Kyc Aadhar File Password"
                     />
-                    <p className="mb-0">
+                    <p className="mt-1 mb-0 small ps-2">
                       {User?.DriverDocuments.find(
                         (x) => x.Document === DocumentType.Aadhar
                       ).Verified === "N"

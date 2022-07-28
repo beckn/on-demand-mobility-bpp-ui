@@ -11,8 +11,11 @@ import AddDriver from "./AddDriver";
 import AddVehicle from "./AddVehicle/AddVehicle";
 import { getVehicles, verify } from "./DriversVehicles.Services";
 import Verification from "./Verification";
+import "./DriversVehicles.scss";
+import { ChevronRight, Plus } from "react-feather";
 
 export const DriversVehicles = (prop) => {
+  const [tabKey, setTabKey] = useState(prop.activeScreenId || 'Tdrvier');
   const [logUser] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [driverList, setDriverList] = useState("");
   const [vehicleList, setVehicleList] = useState("");
@@ -30,6 +33,10 @@ export const DriversVehicles = (prop) => {
   const [vehicleEdit, setVehicleEdit] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [verifyKey, setVerifyKey] = useState("");
+
+  useEffect(()=>{
+    setTabKey(prop.activeScreenId || 'Tdrvier')
+  },[prop.activeScreenId])
 
   const handleModalClose = () => {
     setModalShow(false);
@@ -134,35 +141,37 @@ export const DriversVehicles = (prop) => {
 
   return (
     <>
-      <div className="row">
+      <div className="row drivers-vehicles">
         <div className="col">
-          {console.log("render", prop.activeScreenId)}
-          <Tabs defaultActiveKey={prop.activeScreenId} className="mb-3">
-            <Tab eventKey="Tdrvier" title="Total Drivers">
-              <div className="row">
-                <div className="col">
-                  <p>Total Drivers</p>
-                  <h2>{drivers}</h2>
+          <Tabs activeKey={tabKey} onSelect={(k) => setTabKey(k)} className="mb-3">
+            <Tab eventKey="Tdrvier" title="Total Drivers" className="main-tab-content">
+              <div className="row mb-5">
+                <div className="col arrow-right">
+                  <div>
+                  <h4 className="fs-6 fw-normal">Total Drivers</h4>
+                  <p className="fs-2 fw-semibold">{drivers}</p>
+                  </div>
+                  <div className="icon"><ChevronRight size={64} /></div>
+                </div>
+                <div className="col line-right">
+                  <div>
+                  <h4 className="fs-6 fw-normal">Verified Drivers</h4>
+                  <p className="fs-2 fw-semibold">{driversVerified}</p>
+                  </div>
+                  <div className="icon"></div>
                 </div>
                 <div className="col">
-                  <p>Verified Drivers</p>
-                  <h2>{driversVerified}</h2>
-                </div>
-                <div className="col">
-                  <p>Driver Verification Pending</p>
-                  <h2>{driversPending}</h2>
+                  <h4 className="fs-6 fw-normal">Driver Verification Pending</h4>
+                  <p className="fs-2 fw-semibold">{driversPending}</p>
                 </div>
               </div>
-              <div className="row">
-                <div className="col text-end">
-                  {!isAddDriver && (
-                    <button className="btn btn-primary" onClick={(e) => toggleAddDriver(e, true)}>
-                      {!isAddDriver ? "Add New" : "Cancel"}
-                    </button>
-                  )}
-                </div>
-              </div>
+
               {!isAddDriver ? (
+              <div className="nested-tabs">
+                <button className="ms-auto btn btn-icon shift-down" onClick={(e) => toggleAddDriver(e, true)}>
+                  <Plus size={24}/>
+                  <span>New</span>
+                </button>
                 <Tabs defaultActiveKey="allDriver" id="driver-filtered" className="mb-3">
                   <Tab eventKey="allDriver" title="All">
                     <TableGridDriver GridData={driverList} onClick={(e, k) => handleClick(e, k)} />
@@ -174,37 +183,42 @@ export const DriversVehicles = (prop) => {
                     <TableGridDriver GridData={driverList} onClick={(e, k) => handleClick(e, k)} Status="N" />
                   </Tab>
                 </Tabs>
+              </div>
               ) : (
                 <>
                   <AddDriver NewUser={false} EditUser={driverEdit || {}} onChange={(e, k) => toggleAddDriver(e, k)} />
                 </>
               )}
             </Tab>
-            <Tab eventKey="Tvehicle" title="Total Vehicles">
-              <div className="row">
-                <div className="col">
-                  <p>Total Vehicles</p>
-                  <h2>{vehicles}</h2>
+
+            <Tab eventKey="Tvehicle" title="Total Vehicles" className="main-tab-content">
+              <div className="row mb-5">
+                <div className="col arrow-right">
+                  <div>
+                  <h4 className="fs-6 fw-normal">Total Vehicles</h4>
+                  <p className="fs-2 fw-semibold">{vehicles}</p>
+                  </div>
+                  <div className="icon"><ChevronRight size={64} /></div>
+                </div>
+                <div className="col line-right">
+                  <div>
+                  <h4 className="fs-6 fw-normal">Verified Vehicles</h4>
+                  <p className="fs-2 fw-semibold">{vehiclesVerified}</p>
+                  </div>
+                  <div className="icon"></div>
                 </div>
                 <div className="col">
-                  <p>Verified Vehicles</p>
-                  <h2>{vehiclesVerified}</h2>
-                </div>
-                <div className="col">
-                  <p>Vehicles Verification Pending</p>
-                  <h2>{vehiclesPending}</h2>
+                  <h4 className="fs-6 fw-normal">Vehicles Verification Pending</h4>
+                  <p className="fs-2 fw-semibold">{vehiclesPending}</p>
                 </div>
               </div>
-              <div className="row">
-                <div className="col text-end">
-                  {!isAddVehicle && (
-                    <button className="btn btn-primary" onClick={(e) => toggleAddVehicle(e, true)}>
-                      {!isAddVehicle ? "Add New" : "Cancel"}
-                    </button>
-                  )}
-                </div>
-              </div>
+
               {!isAddVehicle ? (
+              <div className="nested-tabs">
+                <button className="ms-auto btn btn-icon shift-down" onClick={(e) => toggleAddVehicle(e, true)}>
+                  <Plus size={24}/>
+                  <span>New</span>
+                </button>
                 <Tabs defaultActiveKey="allDriver" id="driver-filtered" className="mb-3">
                   <Tab eventKey="allDriver" title="All">
                     <TableGridVehicle GridData={vehicleList} onClick={(e, k) => handleClick(e, k)} />
@@ -216,9 +230,10 @@ export const DriversVehicles = (prop) => {
                     <TableGridVehicle GridData={vehicleList} onClick={(e, k) => handleClick(e, k)} Status="N" />
                   </Tab>
                 </Tabs>
+              </div>
               ) : (
                 <>
-                  <AddVehicle vehicleEdit={vehicleEdit || {}} onChange={(e, k) => toggleAddVehicle(e, k)} />
+                  <AddVehicle vehicleEdit={vehicleEdit || {}} onChange={(e, k) => toggleAddVehicle(e, k)} onUpdateVehicle={()=>setVehiclesList()} />
                 </>
               )}
             </Tab>

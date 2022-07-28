@@ -1,0 +1,64 @@
+.drivers-vehicles {
+  .nav-tabs {
+    border-color: #000000;
+  }
+
+  .nav-item {
+    margin-bottom: 0;
+  }
+
+  .nav-tabs .nav-link {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #000000;
+    padding-bottom: 6px;
+    border: none;
+    border-radius: none;
+    border-bottom: 3px solid transparent;
+
+    &.active {
+      border-color: #abd4fa;
+      font-weight: 600;
+    }
+
+    &:focus {
+      outline: none;
+      background: rgba(173, 213, 250, 0.15);
+    }
+  }
+
+  .main-tab-content .nested-tabs .nav-tabs .nav-link {
+    font-size: 0.9rem;
+  }
+
+  .btn-icon {
+    &.shift-down {
+      display: flex;
+      margin-bottom: -2.5rem;
+    }
+  }
+
+  .arrow-right {
+    display: flex;
+    align-items: center;
+
+    div.icon {
+      margin: 0 auto;
+    }
+
+    svg {
+      color: rgba(62, 64, 89, 0.1);
+    }
+  }
+
+  .line-right {
+    display: flex;
+    align-items: center;
+
+    div.icon {
+      height: 64px;
+      margin: 0 auto;
+      border: 2px solid rgba(62, 64, 89, 0.1);
+    }
+  }
+}
