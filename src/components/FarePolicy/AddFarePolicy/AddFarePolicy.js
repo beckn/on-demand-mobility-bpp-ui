@@ -69,9 +69,9 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
           Vehicle Type:{" "}
           <select onChange={setInputValue} defaultValue={FareStore.DeploymentPurpose.Name} className="form-select w-auto d-inline-block ms-3" name="DeploymentPurpose" id="DeploymentPurpose">
             <option value="">Select Vehicle Type</option>
-            {EditFare && (
-              <option value={EditFare.DeploymentPurpose.Name} selected>
-                {EditFare.DeploymentPurpose.Name}
+            {FareStore.DeploymentPurpose.Name && (
+              <option value={FareStore.DeploymentPurpose.Name} selected>
+                {FareStore.DeploymentPurpose.Name}
               </option>
             )}
             {FareStore.DeploymentPurposes.map((t, i) => {
