@@ -1,5 +1,5 @@
 import { getRequestData, postRequestData } from "../../core/apiClient";
-import { VehicleFields } from "../../core/fieldsSet";
+import { DeploymentPurposesFields, VehicleFields } from "../../core/fieldsSet";
 
 export const verify = (id, type) => {
   let path = `${type}/verify/${id}`;
@@ -19,4 +19,9 @@ export const getAutoCompleteVehicle = (type) => {
 export const saveVehicle = (data) => {
   let path = "vehicles/save/";
   return postRequestData(path, data);
+};
+
+export const getDeploymentPurposes = () => {
+  let path = `deployment_purposes`;
+  return getRequestData(path, DeploymentPurposesFields);
 };

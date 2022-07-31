@@ -172,7 +172,7 @@ export const DriversVehicles = (prop) => {
 
               {!isAddDriver ? (
                 <div className="nested-tabs">
-                  <button className="ms-auto btn btn-icon shift-down" onClick={(e) => toggleAddDriver(e, true)}>
+                  <button className="ms-auto btn btn-icon py-0" onClick={(e) => toggleAddDriver(e, true)}>
                     <Plus size={24} />
                     <span>New</span>
                   </button>
@@ -221,7 +221,7 @@ export const DriversVehicles = (prop) => {
 
               {!isAddVehicle ? (
                 <div className="nested-tabs">
-                  <button className="ms-auto btn btn-icon shift-down" onClick={(e) => toggleAddVehicle(e, true)}>
+                  <button className="ms-auto btn btn-icon py-0" onClick={(e) => toggleAddVehicle(e, true)}>
                     <Plus size={24} />
                     <span>New</span>
                   </button>
