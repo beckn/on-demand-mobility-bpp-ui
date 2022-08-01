@@ -3,7 +3,7 @@ import { Modal, Table } from "react-bootstrap";
 import { getAddress, getKeyValueFromString } from "../../core/common.functions";
 import { DocumentType } from "../../core/constant";
 import { verificationKeys } from "../../shared/constant";
-import { FcDocument } from "react-icons/fc";
+import { FileText } from "react-feather";
 
 export const Verification = (props) => {
   const [isValid, setIsValid] = useState({});
@@ -137,7 +137,7 @@ export const Verification = (props) => {
                               rel="noreferrer"
                               target="_blank"
                             >
-                              <FcDocument size="2em" />
+                              <FileText size="2em" />
                             </a>
                           </div>
                         </td>
