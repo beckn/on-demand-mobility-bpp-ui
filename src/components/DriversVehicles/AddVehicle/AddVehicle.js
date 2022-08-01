@@ -5,17 +5,33 @@ import ReactDatePicker from "react-datepicker";
 import { Upload } from "react-feather";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { getKeyValueFromString, setObjectToString, setValue } from "../../../core/common.functions";
+import {
+  getKeyValueFromString,
+  setObjectToString,
+  setValue,
+} from "../../../core/common.functions";
 import { DocumentType } from "../../../core/constant";
 import { VehicleFuelType, VehicleTags } from "../../../shared/constant";
 import { uploadFile } from "../../Account/Account.Services";
-import { getDeploymentPurposes, saveVehicle } from "../DriversVehicles.Services";
+import {
+  getDeploymentPurposes,
+  saveVehicle,
+} from "../DriversVehicles.Services";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getVehicleInfoSchema } from "./AddVehicle.schema";
 import { ErrorMessage } from "../../../shared/ErrorMessage/ErrorMessage";
 
-const VehicleInfoForm = ({ dispatchEvent, vehicleInfo, newVehicleInfo, vehicleEdit, setNewVehicleInfo, onUpdateVehicle }) => {
-  const [isDisabled, setIsDisabled] = useState(!isEmpty(newVehicleInfo) || !vehicleEdit);
+const VehicleInfoForm = ({
+  dispatchEvent,
+  vehicleInfo,
+  newVehicleInfo,
+  vehicleEdit,
+  setNewVehicleInfo,
+  onUpdateVehicle,
+}) => {
+  const [isDisabled, setIsDisabled] = useState(
+    !isEmpty(newVehicleInfo) || !vehicleEdit
+  );
 
   const {
     handleSubmit,
@@ -41,7 +57,14 @@ const VehicleInfoForm = ({ dispatchEvent, vehicleInfo, newVehicleInfo, vehicleEd
     setValue("NameOfModel", vehicleInfo.NameOfModel);
     setValue("VehicleType", vehicleInfo.VehicleType);
     setValue("FuelType", vehicleInfo.FuelType);
-  }, [setValue, vehicleInfo.FuelType, vehicleInfo.Make, vehicleInfo.NameOfModel, vehicleInfo.VehicleNumber, vehicleInfo.VehicleType]);
+  }, [
+    setValue,
+    vehicleInfo.FuelType,
+    vehicleInfo.Make,
+    vehicleInfo.NameOfModel,
+    vehicleInfo.VehicleNumber,
+    vehicleInfo.VehicleType,
+  ]);
 
   const onSubmit = (data) => {
     console.log("submitting");
@@ -86,12 +109,20 @@ const VehicleInfoForm = ({ dispatchEvent, vehicleInfo, newVehicleInfo, vehicleEd
               >
                 cancel
               </button>
-              <button className="btn btn-sm btn-primary" type="submit" disabled={!isValid || !isDirty}>
+              <button
+                className="btn btn-sm btn-primary"
+                type="submit"
+                disabled={!isValid || !isDirty}
+              >
                 Save
               </button>
             </>
           ) : (
-            <button className="btn btn-sm btn-primary me-3" type="button" onClick={(e) => setIsDisabled(false)}>
+            <button
+              className="btn btn-sm btn-primary me-3"
+              type="button"
+              onClick={(e) => setIsDisabled(false)}
+            >
               Edit
             </button>
           )}
@@ -261,11 +292,21 @@ export const AddVehicle = (props) => {
       return {
         ...upInfo,
         VehicleNumber: props.vehicleEdit.VehicleNumber,
-        ValidFrom: props.vehicleEdit.VehicleDocuments?.find((x) => x.Document === DocumentType.RC).ValidFrom,
-        ValidTo: props.vehicleEdit.VehicleDocuments?.find((x) => x.Document === DocumentType.RC).ValidTo,
-        RcNumber: props.vehicleEdit.VehicleDocuments?.find((x) => x.Document === DocumentType.RC).DocumentNumber,
-        InsuranceNumber: props.vehicleEdit.VehicleDocuments?.find((x) => x.Document === DocumentType.INSURANCE).DocumentNumber,
-        FitnessNumber: props.vehicleEdit.VehicleDocuments?.find((x) => x.Document === DocumentType.FITNESS).DocumentNumber,
+        ValidFrom: props.vehicleEdit.VehicleDocuments?.find(
+          (x) => x.Document === DocumentType.RC
+        ).ValidFrom,
+        ValidTo: props.vehicleEdit.VehicleDocuments?.find(
+          (x) => x.Document === DocumentType.RC
+        ).ValidTo,
+        RcNumber: props.vehicleEdit.VehicleDocuments?.find(
+          (x) => x.Document === DocumentType.RC
+        ).DocumentNumber,
+        InsuranceNumber: props.vehicleEdit.VehicleDocuments?.find(
+          (x) => x.Document === DocumentType.INSURANCE
+        ).DocumentNumber,
+        FitnessNumber: props.vehicleEdit.VehicleDocuments?.find(
+          (x) => x.Document === DocumentType.FITNESS
+        ).DocumentNumber,
       };
     });
   }, [props.vehicleEdit]);
@@ -307,7 +348,14 @@ export const AddVehicle = (props) => {
 
   return (
     <>
-      <VehicleInfoForm dispatchEvent={dispatchEvent} vehicleInfo={vehicleInfo} newVehicleInfo={newVehicleInfo} vehicleEdit={props.vehicleEdit} setNewVehicleInfo={setNewVehicleInfo} onUpdateVehicle={props.onUpdateVehicle} />
+      <VehicleInfoForm
+        dispatchEvent={dispatchEvent}
+        vehicleInfo={vehicleInfo}
+        newVehicleInfo={newVehicleInfo}
+        vehicleEdit={props.vehicleEdit}
+        setNewVehicleInfo={setNewVehicleInfo}
+        onUpdateVehicle={props.onUpdateVehicle}
+      />
 
       {!isEmpty(newVehicleInfo) && (
         <>
@@ -321,17 +369,69 @@ export const AddVehicle = (props) => {
             <div className="row">
               <div className="row w-100 justify-content-left">
                 <div className="col-4  mb-3">
-                  <ReactDatePicker showMonthDropdown showYearDropdown dropdownMode="select" id="ValidFrom" placeholderText="Enter R.C. Start Date" className="form-control" selected={documentsInfo.RcDoc.VALID_FROM ? new Date(documentsInfo.RcDoc.VALID_FROM) : documentsInfo.RcDoc.VALID_FROM} onChange={(date) => setDocumentValue(date, "RcDoc.VALID_FROM")} />
+                  <ReactDatePicker
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    id="ValidFrom"
+                    placeholderText="Enter R.C. Start Date"
+                    className="form-control"
+                    selected={
+                      documentsInfo.RcDoc.VALID_FROM
+                        ? new Date(documentsInfo.RcDoc.VALID_FROM)
+                        : documentsInfo.RcDoc.VALID_FROM
+                    }
+                    onChange={(date) =>
+                      setDocumentValue(date, "RcDoc.VALID_FROM")
+                    }
+                  />
                 </div>
                 <div className="col-4  mb-3">
-                  <ReactDatePicker showMonthDropdown showYearDropdown dropdownMode="select" id="ValidTo" placeholderText="Enter R.C. End Date" className="form-control" selected={documentsInfo.RcDoc.VALID_TO ? new Date(documentsInfo.RcDoc.VALID_TO) : documentsInfo.RcDoc.VALID_TO} onChange={(date) => setDocumentValue(date, "RcDoc.VALID_TO")} />
+                  <ReactDatePicker
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    id="ValidTo"
+                    placeholderText="Enter R.C. End Date"
+                    className="form-control"
+                    selected={
+                      documentsInfo.RcDoc.VALID_TO
+                        ? new Date(documentsInfo.RcDoc.VALID_TO)
+                        : documentsInfo.RcDoc.VALID_TO
+                    }
+                    onChange={(date) =>
+                      setDocumentValue(date, "RcDoc.VALID_TO")
+                    }
+                  />
                 </div>
                 <div className="col-3">
-                  <input type="text" name="RcDoc.DOCUMENT_NUMBER" id="RcNumber" defaultValue={documentsInfo.RcDoc.DOCUMENT_NUMBER} onChange={(e) => setDocumentValue(e)} className="form-control" placeholder="Enter Vehicle R.C. Number" />
-                  {!isEmpty(newVehicleInfo) && <p>{newVehicleInfo.VehicleDocuments?.find((x) => x.Document === DocumentType.RC).Verified === "N" ? "R.C. Verification Pending" : "Verified"}</p>}
+                  <input
+                    type="text"
+                    name="RcDoc.DOCUMENT_NUMBER"
+                    id="RcNumber"
+                    defaultValue={documentsInfo.RcDoc.DOCUMENT_NUMBER}
+                    onChange={(e) => setDocumentValue(e)}
+                    className="form-control"
+                    placeholder="Enter Vehicle R.C. Number"
+                  />
+                  {!isEmpty(newVehicleInfo) && (
+                    <p>
+                      {newVehicleInfo.VehicleDocuments?.find(
+                        (x) => x.Document === DocumentType.RC
+                      ).Verified === "N"
+                        ? "R.C. Verification Pending"
+                        : "Verified"}
+                    </p>
+                  )}
                 </div>
-                <div className="col-1  mb-3">
-                  <input type="file" name="RcDoc.FILE" id="RcFile" className="form-control d-none" onChange={(e) => setDocumentValue(e)} />
+                <div className="col-1 mb-5 align-self-center">
+                  <input
+                    type="file"
+                    name="RcDoc.FILE"
+                    id="RcFile"
+                    className="form-control d-none"
+                    onChange={(e) => setDocumentValue(e)}
+                  />
                   <label htmlFor="RcFile" role={"button"}>
                     <Upload />
                   </label>
@@ -340,21 +440,65 @@ export const AddVehicle = (props) => {
             </div>
             <div className="row w-100 justify-content-left">
               <div className="col-3 mb-3">
-                <input type="text" name="InsDoc.DOCUMENT_NUMBER" defaultValue={documentsInfo.InsDoc.DOCUMENT_NUMBER} id="InsuranceNumber" onChange={(e) => setDocumentValue(e)} className="form-control" placeholder="Enter Vehicle Insurance Number" />
-                {!isEmpty(newVehicleInfo) && <p>{newVehicleInfo.VehicleDocuments?.find((x) => x.Document === DocumentType.INSURANCE).Verified === "N" ? "Insurance Verification Pending" : "Verified"}</p>}
+                <input
+                  type="text"
+                  name="InsDoc.DOCUMENT_NUMBER"
+                  defaultValue={documentsInfo.InsDoc.DOCUMENT_NUMBER}
+                  id="InsuranceNumber"
+                  onChange={(e) => setDocumentValue(e)}
+                  className="form-control"
+                  placeholder="Enter Vehicle Insurance Number"
+                />
+                {!isEmpty(newVehicleInfo) && (
+                  <p>
+                    {newVehicleInfo.VehicleDocuments?.find(
+                      (x) => x.Document === DocumentType.INSURANCE
+                    ).Verified === "N"
+                      ? "Insurance Verification Pending"
+                      : "Verified"}
+                  </p>
+                )}
               </div>
-              <div className="col-1  mb-3">
-                <input type="file" name="InsDoc.FILE" id="InsuranceFile" className="form-control d-none" onChange={(e) => setDocumentValue(e)} />
+              <div className="col-1 mb-5 align-self-center">
+                <input
+                  type="file"
+                  name="InsDoc.FILE"
+                  id="InsuranceFile"
+                  className="form-control d-none"
+                  onChange={(e) => setDocumentValue(e)}
+                />
                 <label htmlFor="InsuranceFile" role={"button"}>
                   <Upload />
                 </label>
               </div>
               <div className="col-3 mb-3">
-                <input type="text" name="FitDoc.DOCUMENT_NUMBER" defaultValue={documentsInfo.FitDoc.DOCUMENT_NUMBER} id="FitnessNumber" onChange={(e) => setDocumentValue(e)} className="form-control" placeholder="Enter Vehicle Fitness Certificate Number" />
-                {!isEmpty(newVehicleInfo) && <p>{newVehicleInfo.VehicleDocuments?.find((x) => x.Document === DocumentType.FITNESS).Verified === "N" ? "Fitness Verification Pending" : "Verified"}</p>}
+                <input
+                  type="text"
+                  name="FitDoc.DOCUMENT_NUMBER"
+                  defaultValue={documentsInfo.FitDoc.DOCUMENT_NUMBER}
+                  id="FitnessNumber"
+                  onChange={(e) => setDocumentValue(e)}
+                  className="form-control"
+                  placeholder="Enter Vehicle Fitness Certificate Number"
+                />
+                {!isEmpty(newVehicleInfo) && (
+                  <p>
+                    {newVehicleInfo.VehicleDocuments?.find(
+                      (x) => x.Document === DocumentType.FITNESS
+                    ).Verified === "N"
+                      ? "Fitness Verification Pending"
+                      : "Verified"}
+                  </p>
+                )}
               </div>
-              <div className="col-1  mb-3">
-                <input type="file" name="FitDoc.FILE" id="FitnessFile" className="form-control d-none" onChange={(e) => setDocumentValue(e)} />
+              <div className="col-1 mb-5 align-self-center">
+                <input
+                  type="file"
+                  name="FitDoc.FILE"
+                  id="FitnessFile"
+                  className="form-control d-none"
+                  onChange={(e) => setDocumentValue(e)}
+                />
                 <label htmlFor="FitnessFile" role={"button"}>
                   <Upload />
                 </label>
@@ -363,10 +507,18 @@ export const AddVehicle = (props) => {
           </div>
           <div className="row">
             <div className="col text-end">
-              <button className="btn btn-sm btn-secondary me-3" onClick={(e) => dispatchEvent(e)} type="button">
+              <button
+                className="btn btn-sm btn-secondary me-3"
+                onClick={(e) => dispatchEvent(e)}
+                type="button"
+              >
                 Cancel
               </button>
-              <button className="btn btn-sm btn-primary" onClick={(e) => submitDocuments(e)} type="submit">
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={(e) => submitDocuments(e)}
+                type="submit"
+              >
                 Submit
               </button>
             </div>
