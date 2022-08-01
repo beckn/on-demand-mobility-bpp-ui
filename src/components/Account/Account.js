@@ -711,7 +711,7 @@ export const Account = (prop) => {
               </div>
             </div>
             <hr className="mt-0 mb-3" />
-            <div className="row w-100 justify-content-left">
+            <div className="row w-100 justify-content-left align-items-center">
               <div className="col-3 mb-3">
                 <input
                   type="text"
