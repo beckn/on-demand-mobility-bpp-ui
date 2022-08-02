@@ -31,8 +31,17 @@ export const Dashboard = () => {
   const [screenId, setScreenId] = useState();
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
-  const [drivers, setDrivers] = useState(0);
-  const [vehicles, setVehicles] = useState(0);
+  const [drivers, setDrivers] = useState({
+    totalDriver: 0,
+    driversVerified: 0,
+    driversPending: 0,
+  });
+  const [vehicles, setVehicles] = useState({
+    totalVehicle: 0,
+    vehiclesVerified: 0,
+    vehiclesPending: 0,
+  });
+
   const [show, setShow] = useState(false);
   const [isNewFarePolicy, setIsNewFarePolicy] = useState(false);
   const [existingFare, setExistingFare] = useState([]);
@@ -59,16 +68,25 @@ export const Dashboard = () => {
         setSummaries(res);
         res.UserSummaries.forEach((user) => {
           if (user.Role?.Name?.toLowerCase() === "driver") {
-            setDrivers(+user.UserCount);
+            setDrivers({
+              totalDriver: +user.UserCount,
+              driversVerified: +user.UserCount - +user.UnverifiedUserCount,
+              driversPending: +user.UnverifiedUserCount,
+            });
           }
         });
         res.VehicleSummaries?.forEach((vh) => {
-          setVehicles(vh.VehicleCount);
+          if (vh.Company?.Id?.toLowerCase() === user.Company.Id) {
+            setVehicles({
+              totalVehicle: +vh.VehicleCount,
+              vehiclesVerified: +vh.VehicleCount - +vh.UnverifiedVehicleCount,
+              vehiclesPending: +vh.UnverifiedVehicleCount,
+            });
+          }
         });
       });
     }
   };
-
   const navigateToScreen = (tabId, screenId) => {
     setActiveScreen(tabId);
     setScreenId(screenId);
@@ -205,7 +223,7 @@ export const Dashboard = () => {
                                               Total Drivers
                                             </h5>
                                             <h6 className="fs-4 fw-semibold mt-auto">
-                                              {drivers}
+                                              {drivers.totalDriver}
                                             </h6>
                                           </div>
                                         </div>
@@ -230,7 +248,7 @@ export const Dashboard = () => {
                                               Total Vehicles
                                             </h5>
                                             <h6 className="fs-4 fw-semibold mt-auto">
-                                              {+vehicles}
+                                              {vehicles.totalVehicle}
                                             </h6>
                                           </div>
                                         </div>
@@ -345,7 +363,7 @@ export const Dashboard = () => {
                                               Driver Verification Pending
                                             </h5>
                                             <h6 className="fs-4 fw-semibold mt-auto">
-                                              {0}
+                                              {drivers.driversPending}
                                             </h6>
                                           </div>
                                         </div>
@@ -368,7 +386,7 @@ export const Dashboard = () => {
                                               Vehicle Verification Pending
                                             </h5>
                                             <h6 className="fs-4 fw-semibold mt-auto">
-                                              {0}
+                                              {vehicles.vehiclesPending}
                                             </h6>
                                           </div>
                                         </div>
@@ -401,8 +419,9 @@ export const Dashboard = () => {
                     <Tab.Pane eventKey="drivers">
                       {summaries && (
                         <DriversVehicles
-                          summaries={summaries}
                           activeScreenId={screenId}
+                          driverStats={drivers}
+                          vehicleStats={vehicles}
                         />
                       )}
                     </Tab.Pane>
