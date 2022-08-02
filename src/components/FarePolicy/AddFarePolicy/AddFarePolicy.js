@@ -2,7 +2,7 @@ import isEmpty from "lodash/isEmpty";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { getDeploymentPurposes } from "../../DriversVehicles/DriversVehicles.Services";
-import { saveTariffCard } from "../FarePolicy.Services";
+import { removedFarePolicies, saveTariffCard } from "../FarePolicy.Services";
 
 const defaultTariffCard = {
   FromKms: "",
@@ -15,15 +15,21 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
   const PurposeRef = useRef(null);
   const [FareStore, setFareStore] = useState({
     DeploymentPurposes: [],
+    RemovedTariff: [],
     TariffCards: {},
   });
 
   useEffect(() => {
+    console.log("EditFare", EditFare);
     getDeploymentList();
   }, []);
 
   const getDeploymentList = () => {
+    // let key = JSON.parse(PurposeRef.current.value).Name;
+    // PurposeRef.current["selectedvalue"] = EditFare[0].DeploymentPurpose.Name;
+
     console.log("getDeploymentList", EditFare);
+
     getDeploymentPurposes().then((res) => {
       let existingFareTypes = [...new Set(existingFare.map((x) => x.DeploymentPurpose.Name))];
       let AvailableDeploymentPurposes = [];
@@ -33,20 +39,46 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
       setFareStore({
         ...FareStore,
         DeploymentPurposes: AvailableDeploymentPurposes || res.data.DeploymentPurposes,
+        TariffCards: EditFare && getTariffCards(EditFare),
       });
     });
+  };
+
+  const getTariffCards = (arrayList) => {
+    let EditTariff = {};
+    arrayList.forEach((v) => {
+      console.log("getTariffCards", v);
+      if (EditTariff[v.DeploymentPurpose.Name]) {
+        EditTariff[v.DeploymentPurpose.Name].push(v);
+      } else {
+        EditTariff[v.DeploymentPurpose.Name] = [v];
+      }
+    });
+    return EditTariff;
   };
 
   const setInputValue = (e) => {
     let { name, value, dataset } = e.target;
     if (name === "DeploymentPurpose") {
       if (value) {
-        let Vobj = JSON.parse(value);
-        defaultTariffCard.DeploymentPurpose.Id = Vobj.Id;
-        setFareStore({
-          ...FareStore,
-          TariffCards: { [Vobj.Name]: [defaultTariffCard] },
-        });
+        if (EditFare) {
+          EditFare.forEach((v) => {
+            v.DeploymentPurpose = JSON.parse(value);
+          });
+          console.log("DeploymentPurpose", EditFare, getTariffCards(EditFare));
+          setFareStore({
+            ...FareStore,
+            TariffCards: getTariffCards(EditFare),
+          });
+        } else {
+          let Vobj = JSON.parse(value);
+          let copy = Object.assign({}, defaultTariffCard);
+          copy.DeploymentPurpose.Id = Vobj.Id;
+          setFareStore({
+            ...FareStore,
+            TariffCards: { [Vobj.Name]: [copy] },
+          });
+        }
       } else {
         setFareStore({
           ...FareStore,
@@ -56,35 +88,66 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
     } else {
       let key = JSON.parse(PurposeRef.current.value).Name;
       let copy = JSON.parse(JSON.stringify(FareStore.TariffCards[key]));
-      let fieldset = copy[+dataset.index];
-      fieldset[name] = value;
-      console.log("setInputValue", key, name, value, dataset.index, fieldset, copy);
+      copy.forEach((v, i) => {
+        +dataset.index === i && (v[name] = value);
+      });
+
+      setFareStore({
+        ...FareStore,
+        TariffCards: {
+          [key]: copy,
+        },
+      });
+      // console.log("setInputValue", key, name, value, dataset.index, copy);
     }
     // let newValue = name === "DeploymentPurpose" ? { Id: value } : value;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let store = [];
-    let value = JSON.parse(PurposeRef.current.value).Name;
-    FareStore.TariffCards[value].forEach((element) => {
-      console.log("element", element);
-    });
-    let data = {
-      TariffCards: [],
-    };
-    // EditFare && (data.TariffCard.Id = EditFare.Id);
-    // saveTariffCard(data).then((res) => {
-    //   toast.success("Fare Policy Create/Update Successfully!");
-    //   res.data && onChange(false);
-    // });
+    if (FareStore.RemovedTariff.length !== 0) {
+      let data = [];
+      // removedFarePolicies
+      FareStore.RemovedTariff.forEach((x) => {
+        data.push(removedFarePolicies(x.Id));
+      });
+      Promise.all(data).then((res) => {
+        toast.success("Fare Policy Create/Update Successfully!");
+        onChange(false);
+      });
+    } else {
+      let store = [];
+      let value = JSON.parse(PurposeRef.current.value).Name;
+      console.log(PurposeRef.current.value, value);
+      FareStore.TariffCards[value].forEach((element) => {
+        EditFare && (element.Id = EditFare.Id);
+        store.push({
+          TariffCard: element,
+        });
+      });
+
+      let data = {
+        TariffCards: store,
+      };
+
+      saveTariffCard(data).then((res) => {
+        toast.success("Fare Policy Create/Update Successfully!");
+        res.data && onChange(false);
+      });
+    }
   };
 
   const handleAddRow = (e) => {
     e.preventDefault();
+
     let value = JSON.parse(PurposeRef.current.value).Name;
     let copy = FareStore.TariffCards[value];
-    copy.push(defaultTariffCard);
+    if (EditFare) {
+      defaultTariffCard.Id = EditFare[0].Id;
+      defaultTariffCard.DeploymentPurpose = EditFare[0].DeploymentPurpose;
+    }
+    copy.push(JSON.parse(JSON.stringify(defaultTariffCard)));
+    console.log("asdfasdf", copy);
     setFareStore({
       ...FareStore,
       TariffCards: {
@@ -95,17 +158,26 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
 
   const handleRemoveRow = (e) => {
     e.preventDefault();
+    let removedItem = JSON.parse(JSON.stringify(FareStore.RemovedTariff));
     let key = JSON.parse(PurposeRef.current.value).Name;
     let copy = JSON.parse(JSON.stringify(FareStore.TariffCards[key]));
-    let { name } = e.target;
+    let { name, dataset } = e.target;
+    copy.forEach((x) => x.Id === dataset.id && removedItem.push(x));
+    if (EditFare) {
+      setFareStore({
+        ...FareStore,
+        RemovedTariff: removedItem,
+      });
+    }
     copy.splice(+name, 1);
     setFareStore({
       ...FareStore,
+      RemovedTariff: removedItem,
       TariffCards: {
         [key]: copy,
       },
     });
-    console.log(name);
+    console.log("handleRemoveRow", name, copy, removedItem);
   };
 
   return (
@@ -119,26 +191,21 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col">
-            Vehicle Type:{" "}
+            Vehicle Type:
             <select ref={PurposeRef} onChange={setInputValue} className="form-select w-auto d-inline-block ms-3" name="DeploymentPurpose" id="DeploymentPurpose">
               <option value="">Select Vehicle Type</option>
-              {/* {FareStore.DeploymentPurpose.Name && (
-              <option value={FareStore.DeploymentPurpose.Name} selected>
-                {FareStore.DeploymentPurpose.Name}
-              </option>
-            )} */}
-              {FareStore.DeploymentPurposes.map((t, i) => {
-                return (
-                  <option key={i} value={JSON.stringify(t)}>
-                    {t.Name}
-                  </option>
-                );
-              })}
+              {!isEmpty(FareStore.TariffCards) &&
+                FareStore.DeploymentPurposes.map((t, i) => {
+                  return (
+                    <option key={i} value={JSON.stringify(t)} selected={JSON.stringify(t) === JSON.stringify(FareStore.TariffCards[Object.keys(FareStore.TariffCards).map((x) => x)][0].DeploymentPurpose)}>
+                      {t.Name}
+                    </option>
+                  );
+                })}
             </select>
           </div>
         </div>
         <hr />
-
         {!isEmpty(FareStore.TariffCards) && (
           <>
             <h5>
@@ -163,7 +230,7 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
                     </div>
                     {i !== 0 && (
                       <div className="col-3">
-                        <button className="btn btn-sm btn-danger" name={i} onClick={handleRemoveRow}>
+                        <button className="btn btn-sm btn-danger" name={i} data-Id={x.Id} onClick={handleRemoveRow}>
                           Remove
                         </button>
                       </div>
@@ -172,19 +239,19 @@ export const AddFarePolicy = ({ existingFare, onChange, EditFare }) => {
                 );
               });
             })}
+            <hr />
+            <div className="row">
+              <div className="col text-end">
+                <button type="button" className="btn btn-secondary me-3" onClick={() => onChange(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+            </div>
           </>
         )}
-        <hr />
-        <div className="row">
-          <div className="col text-end">
-            <button type="button" className="btn btn-secondary me-3" onClick={() => onChange(false)}>
-              Cancel
-            </button>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </div>
-        </div>
       </form>
     </>
   );
