@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { LocalKey } from "../../core/constant";
-import { getCookie } from "../../core/CookiesHandler";
 import {
   DriverGrid,
   VehicleGrid,
@@ -19,18 +17,12 @@ import "./DriversVehicles.scss";
 import { ChevronRight, Plus } from "react-feather";
 
 export const DriversVehicles = (prop) => {
-  const [tabKey, setTabKey] = useState(prop.activeScreenId || "Tdrvier");
-  const [logUser] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
+  const { driverStats, vehicleStats, activeScreenId } = prop;
+  const [tabKey, setTabKey] = useState(activeScreenId || "Tdrvier");
   const [driverList, setDriverList] = useState("");
   const [vehicleList, setVehicleList] = useState("");
   const [selectedDriver, setSelectedDriver] = useState({});
   const [selectedVehicle, setSelectedVehicle] = useState({});
-  const [drivers, setDrivers] = useState(0);
-  const [vehicles, setVehicles] = useState(0);
-  const [vehiclesVerified, setVehiclesVerified] = useState(0);
-  const [vehiclesPending, setVehiclesPending] = useState(0);
-  const [driversVerified, setDriversVerified] = useState(0);
-  const [driversPending, setDriversPending] = useState(0);
   const [isAddDriver, setIsAddDriver] = useState(false);
   const [isAddVehicle, setIsAddVehicle] = useState(false);
   const [driverEdit, setDriverEdit] = useState("");
@@ -39,8 +31,8 @@ export const DriversVehicles = (prop) => {
   const [verifyKey, setVerifyKey] = useState("");
 
   useEffect(() => {
-    setTabKey(prop.activeScreenId || "Tdrvier");
-  }, [prop.activeScreenId]);
+    setTabKey(activeScreenId || "Tdrvier");
+  }, [activeScreenId]);
 
   const handleModalClose = () => {
     setModalShow(false);
@@ -53,21 +45,6 @@ export const DriversVehicles = (prop) => {
   const init = () => {
     setDeriversList();
     setVehiclesList();
-    console.log("summary", prop.summaries);
-    prop.summaries.UserSummaries?.forEach((user) => {
-      if (user.Role?.Name?.toLowerCase() === "driver") {
-        setDrivers(+user.UserCount);
-        setDriversVerified(+user.UserCount - +user.UnverifiedUserCount);
-        setDriversPending(+user.UnverifiedUserCount);
-      }
-    });
-    prop.summaries.VehicleSummaries?.forEach((vh) => {
-      if (vh.Company?.Id?.toLowerCase() === logUser.Company.Id) {
-        setVehicles(+vh.VehicleCount);
-        setVehiclesVerified(+vh.VehicleCount - +vh.UnverifiedVehicleCount);
-        setVehiclesPending(+vh.UnverifiedVehicleCount);
-      }
-    });
   };
 
   const handleClick = (e, Details) => {
@@ -173,7 +150,9 @@ export const DriversVehicles = (prop) => {
                 <div className="col arrow-right">
                   <div>
                     <h4 className="fs-6 fw-normal">Total Drivers</h4>
-                    <p className="fs-2 fw-semibold text-center">{drivers}</p>
+                    <p className="fs-2 fw-semibold text-center">
+                      {driverStats.totalDriver}
+                    </p>
                   </div>
                   <div className="icon">
                     <ChevronRight size={64} />
@@ -183,7 +162,7 @@ export const DriversVehicles = (prop) => {
                   <div>
                     <h4 className="fs-6 fw-normal">Verified Drivers</h4>
                     <p className="fs-2 fw-semibold text-center">
-                      {driversVerified}
+                      {driverStats.driversVerified}
                     </p>
                   </div>
                   <div className="icon"></div>
@@ -193,7 +172,7 @@ export const DriversVehicles = (prop) => {
                     Driver Verification Pending
                   </h4>
                   <p className="fs-2 fw-semibold text-center">
-                    {driversPending}
+                    {driverStats.driversPending}
                   </p>
                 </div>
               </div>
@@ -257,7 +236,9 @@ export const DriversVehicles = (prop) => {
                 <div className="col arrow-right">
                   <div>
                     <h4 className="fs-6 fw-normal">Total Vehicles</h4>
-                    <p className="fs-2 fw-semibold text-center">{vehicles}</p>
+                    <p className="fs-2 fw-semibold text-center">
+                      {vehicleStats.totalVehicle}
+                    </p>
                   </div>
                   <div className="icon">
                     <ChevronRight size={64} />
@@ -267,7 +248,7 @@ export const DriversVehicles = (prop) => {
                   <div>
                     <h4 className="fs-6 fw-normal">Verified Vehicles</h4>
                     <p className="fs-2 fw-semibold text-center">
-                      {vehiclesVerified}
+                      {vehicleStats.vehiclesVerified}
                     </p>
                   </div>
                   <div className="icon"></div>
@@ -277,7 +258,7 @@ export const DriversVehicles = (prop) => {
                     Vehicles Verification Pending
                   </h4>
                   <p className="fs-2 fw-semibold text-center">
-                    {vehiclesPending}
+                    {vehicleStats.vehiclesPending}
                   </p>
                 </div>
               </div>
