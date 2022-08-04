@@ -28,6 +28,7 @@ const VehicleInfoForm = ({
   vehicleEdit,
   setNewVehicleInfo,
   onUpdateVehicle,
+  contextData,
 }) => {
   const [isDisabled, setIsDisabled] = useState(
     !isEmpty(newVehicleInfo) || !vehicleEdit
@@ -186,7 +187,7 @@ const VehicleInfoForm = ({
               })}
             >
               <option value="">Select Vehicle Type</option>
-              {vehicleInfo.otherFields.VehicleType.map((t, i) => (
+              {contextData.VehicleType.map((t, i) => (
                 <option key={i} value={t.Name}>
                   {t.Name}
                 </option>
@@ -234,10 +235,11 @@ export const AddVehicle = (props) => {
     otherFields: {
       autocompleteMakeData: [],
       autocompleteNameOfModelData: [],
-      VehicleType: [],
     },
   });
-
+  const [contextData, setContextData] = useState({
+    VehicleType: [],
+  });
   const [newVehicleInfo, setNewVehicleInfo] = useState({});
 
   const [documentsInfo, setDocumentsInfo] = useState({
@@ -259,7 +261,7 @@ export const AddVehicle = (props) => {
       DOCUMENT: DocumentType.FITNESS,
     },
   });
-
+  const { RcNumber, InsuranceNumber, FitnessNumber } = vehicleInfo;
   const dispatchEvent = (e) => {
     props.onChange(e);
   };
@@ -267,12 +269,8 @@ export const AddVehicle = (props) => {
   useEffect(() => {
     setNewVehicleInfo(props.vehicleEdit);
     getDeploymentPurposes().then((res) => {
-      setVehicleInfo({
-        ...vehicleInfo,
-        otherFields: {
-          ...vehicleInfo.otherFields,
-          VehicleType: res.data.DeploymentPurposes,
-        },
+      setContextData({
+        VehicleType: res.data.DeploymentPurposes,
       });
       console.log("getDeploymentPurposes", res.data.DeploymentPurposes);
     });
@@ -355,6 +353,7 @@ export const AddVehicle = (props) => {
         vehicleEdit={props.vehicleEdit}
         setNewVehicleInfo={setNewVehicleInfo}
         onUpdateVehicle={props.onUpdateVehicle}
+        contextData={contextData}
       />
 
       {!isEmpty(newVehicleInfo) && (
@@ -409,7 +408,9 @@ export const AddVehicle = (props) => {
                     type="text"
                     name="RcDoc.DOCUMENT_NUMBER"
                     id="RcNumber"
-                    defaultValue={documentsInfo.RcDoc.DOCUMENT_NUMBER}
+                    defaultValue={
+                      documentsInfo.RcDoc.DOCUMENT_NUMBER || RcNumber
+                    }
                     onChange={(e) => setDocumentValue(e)}
                     className="form-control"
                     placeholder="Enter Vehicle R.C. Number"
@@ -418,9 +419,9 @@ export const AddVehicle = (props) => {
                     <p>
                       {newVehicleInfo.VehicleDocuments?.find(
                         (x) => x.Document === DocumentType.RC
-                      ).Verified === "N"
-                        ? "R.C. Verification Pending"
-                        : "Verified"}
+                      ).Verified === "Y"
+                        ? "Verified"
+                        : "R.C. Verification Pending"}
                     </p>
                   )}
                 </div>
@@ -443,7 +444,9 @@ export const AddVehicle = (props) => {
                 <input
                   type="text"
                   name="InsDoc.DOCUMENT_NUMBER"
-                  defaultValue={documentsInfo.InsDoc.DOCUMENT_NUMBER}
+                  defaultValue={
+                    documentsInfo.InsDoc.DOCUMENT_NUMBER || InsuranceNumber
+                  }
                   id="InsuranceNumber"
                   onChange={(e) => setDocumentValue(e)}
                   className="form-control"
@@ -453,9 +456,9 @@ export const AddVehicle = (props) => {
                   <p>
                     {newVehicleInfo.VehicleDocuments?.find(
                       (x) => x.Document === DocumentType.INSURANCE
-                    ).Verified === "N"
-                      ? "Insurance Verification Pending"
-                      : "Verified"}
+                    ).Verified === "Y"
+                      ? "Verified"
+                      : "Insurance Verification Pending"}
                   </p>
                 )}
               </div>
@@ -475,7 +478,9 @@ export const AddVehicle = (props) => {
                 <input
                   type="text"
                   name="FitDoc.DOCUMENT_NUMBER"
-                  defaultValue={documentsInfo.FitDoc.DOCUMENT_NUMBER}
+                  defaultValue={
+                    documentsInfo.FitDoc.DOCUMENT_NUMBER || FitnessNumber
+                  }
                   id="FitnessNumber"
                   onChange={(e) => setDocumentValue(e)}
                   className="form-control"
@@ -485,9 +490,9 @@ export const AddVehicle = (props) => {
                   <p>
                     {newVehicleInfo.VehicleDocuments?.find(
                       (x) => x.Document === DocumentType.FITNESS
-                    ).Verified === "N"
-                      ? "Fitness Verification Pending"
-                      : "Verified"}
+                    ).Verified === "Y"
+                      ? "Verified"
+                      : "Fitness Verification Pending"}
                   </p>
                 )}
               </div>

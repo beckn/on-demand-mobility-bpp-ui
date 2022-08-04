@@ -12,22 +12,35 @@ const logout = () => {
     window.location.href = AppRoutes.admin;
   });
 };
-
+const roleMap = {
+  VECHICLES_OWNER: "OWNER",
+  DRIVER: "Driver",
+  ADMIN: "Admin",
+  AGENT: "Agent",
+};
 const appHeader = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const user = getCookie(LocalKey.saveUser) && JSON.parse(getCookie(LocalKey.saveUser));
-  console.log(user?.UserRoles?.map(x=>x.Role.Name))
+  const user =
+    getCookie(LocalKey.saveUser) && JSON.parse(getCookie(LocalKey.saveUser));
+  console.log(user?.UserRoles?.map((x) => x.Role.Name));
+  const userRole = user?.UserRoles?.map((x) => x.Role.Name)[0];
+
   return (
     <header className="bg-dark header-round">
       <Container fluid>
         <Row>
           <Col className="position-relative">
             <div className="round-1"></div>
-            <h1 className="text-white px-lg-5 py-lg-3 fs-4 fw-semibold">Taxi Admin</h1>
+            <h1 className="text-white px-lg-5 py-lg-3 fs-4 fw-semibold">
+              Taxi Admin
+            </h1>
           </Col>
           <Col className="d-flex align-items-center justify-content-end text-white">
-            Welcome : {user.FirstName}
-            <button className="btn btn-primary btn-sm ms-2" onClick={() => logout()}>
+            Welcome : {user.FirstName} [{roleMap[`${userRole}`] || ""}]
+            <button
+              className="btn btn-primary btn-sm ms-2"
+              onClick={() => logout()}
+            >
               Logout
             </button>
           </Col>
