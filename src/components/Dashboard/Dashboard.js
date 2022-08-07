@@ -48,10 +48,10 @@ export const Dashboard = () => {
   const handleClose = () => setShow(false);
 
   const getScreen = () => {
-    if (isEmpty(getAddress(user)) || user.Verified === "N") {
+    if (isEmpty(getAddress(user)) || user.Approved === "N") {
       setActiveScreen("profile");
       isEmpty(getAddress(user)) && setShow(true);
-      !isEmpty(getAddress(user)) && user.Verified === "N" && setShow(true);
+      !isEmpty(getAddress(user)) && user.Approved === "N" && setShow(true);
     } else {
       getUserSummaries().then((res) => {
         setSummaries(res);

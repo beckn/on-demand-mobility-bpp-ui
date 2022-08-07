@@ -728,9 +728,7 @@ export const Account = (prop) => {
                 <p className="mt-1 mb-0 small ps-2">
                   {User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Licence
-                  )?.Verified === "N"
-                    ? "Verification Pending"
-                    : User?.DriverDocuments && "Verified"}
+                  )?.VerificationStatus}
                 </p>
               </div>
               {!User?.DriverDocuments?.find(
@@ -765,11 +763,7 @@ export const Account = (prop) => {
                 <p className="mt-1 mb-0 small ps-2">
                   {User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Pan
-                  )?.Verified === "N"
-                    ? "Verification Pending"
-                    : User?.DriverDocuments?.find(
-                        (x) => x.Document === DocumentType.Pan
-                      ) && "Verified"}
+                  )?.VerificationStatus}
                 </p>
               </div>
               {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
@@ -820,9 +814,7 @@ export const Account = (prop) => {
                     <p className="mt-1 mb-0 small ps-2">
                       {User?.DriverDocuments.find(
                         (x) => x.Document === DocumentType.Aadhar
-                      ).Verified === "N"
-                        ? "Verification Pending"
-                        : "Verified"}
+                      ).VerificationStatus}
                     </p>
                   </>
                 )}

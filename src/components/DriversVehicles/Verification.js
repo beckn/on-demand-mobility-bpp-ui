@@ -121,7 +121,7 @@ export const Verification = (props) => {
                               <input
                                 type="text"
                                 maxlength="4"
-                                className="form-control-sm text-truncate"
+                                className="form-control form-control-sm text-truncate"
                                 placeholder={`last 4 digits of ${x.Document}`}
                                 onChange={(e) =>
                                   verifyDocument(

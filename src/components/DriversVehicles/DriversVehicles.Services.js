@@ -2,7 +2,7 @@ import { getRequestData, postRequestData } from "../../core/apiClient";
 import { DeploymentPurposesFields, VehicleFields } from "../../core/fieldsSet";
 
 export const verify = (id, type) => {
-  let path = `${type}/verify/${id}`;
+  let path = `${type}/approve/${id}`;
   return getRequestData(path);
 };
 

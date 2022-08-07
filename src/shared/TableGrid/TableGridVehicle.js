@@ -9,7 +9,7 @@ const TableGridVehicle = (props) => {
 
   return (
     <>
-      {props.GridData?.ColumnsData?.filter((x) => (props.Status ? x.Verified === props.Status : x)).length !== 0 ? (
+      {props.GridData?.ColumnsData?.filter((x) => (props.Status ? x.Approved === props.Status : x)).length !== 0 ? (
         <table className="table mt-4">
           <thead>
             <tr>
@@ -19,7 +19,7 @@ const TableGridVehicle = (props) => {
             </tr>
           </thead>
           <tbody>
-            {props.GridData?.ColumnsData?.filter((x) => (props.Status ? x.Verified === props.Status : x)).map((c) => (
+            {props.GridData?.ColumnsData?.filter((x) => (props.Status ? x.Approved === props.Status : x)).map((c) => (
               <tr key={c.Id}>
                 {props.GridData?.ColumnsHead?.filter((x) => x.Name !== "Action").map((v, i) => {
                   let typeString = c.Tags;
