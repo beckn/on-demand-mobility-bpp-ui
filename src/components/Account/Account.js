@@ -52,7 +52,13 @@ const renderItem = (item, isHighlighted, styles, code) => {
 
 const personalInfoSchema = getPersonalInfoSchema();
 
-const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
+const PersonalDetailsForm = ({
+  User,
+  IsStore,
+  isNewUser,
+  setNewUser,
+  roleType,
+}) => {
   const [isUserEdit, setIsUserEdit] = useState(IsStore);
   const {
     handleSubmit,
@@ -88,7 +94,7 @@ const PersonalDetailsForm = ({ User, IsStore, isNewUser, setNewUser }) => {
       Users: [{ ...user }],
     };
 
-    userSave(UserSave, userData, UserFields, IsStore).then((res) => {
+    userSave(UserSave, userData, UserFields, IsStore, roleType).then((res) => {
       console.log("User data Save");
       if (isNewUser) {
         setNewUser(res.data.Users[0]);
@@ -579,6 +585,7 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
 };
 
 export const Account = (prop) => {
+  const { formType } = prop;
   const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
   const User = prop.User
     ? JSON.parse(getCookie(LocalKey.saveUser))
@@ -693,6 +700,7 @@ export const Account = (prop) => {
           User={User}
           isNewUser={prop.NewUser}
           setNewUser={setNewUser}
+          roleType={formType}
         />
 
         <AddressInfoForm
@@ -701,6 +709,7 @@ export const Account = (prop) => {
           isNewUser={prop.NewUser}
           NewUser={NewUser}
           setNewUser={setNewUser}
+          roleType={formType}
         />
 
         <form onSubmit={(e) => {}}>
@@ -712,40 +721,46 @@ export const Account = (prop) => {
             </div>
             <hr className="mt-0 mb-3" />
             <div className="row w-100 justify-content-left align-items-center">
-              <div className="col-3 mb-3">
-                <input
-                  type="text"
-                  name="LicenseNumber"
-                  id="LicenseNumber"
-                  defaultValue={LicenseNumber}
-                  disabled={User?.DriverDocuments?.find(
-                    (x) => x.Document === DocumentType.Licence
+              {formType && formType === "agent" ? null : (
+                <>
+                  <div className="col-3 mb-3">
+                    <input
+                      type="text"
+                      name="LicenseNumber"
+                      id="LicenseNumber"
+                      defaultValue={LicenseNumber}
+                      disabled={User?.DriverDocuments?.find(
+                        (x) => x.Document === DocumentType.Licence
+                      )}
+                      onChange={(e) => setLicenseNumber(e.target.value)}
+                      className="form-control"
+                      placeholder="Enter License Number"
+                    />
+                    <p className="mt-1 mb-0 small ps-2">
+                      {
+                        User?.DriverDocuments?.find(
+                          (x) => x.Document === DocumentType.Licence
+                        )?.VerificationStatus
+                      }
+                    </p>
+                  </div>
+                  {!User?.DriverDocuments?.find(
+                    (x) => x.Document === "Licence"
+                  ) && (
+                    <div className="col-1  mb-3">
+                      <input
+                        type="file"
+                        name="LicenseFile"
+                        id="LicenseFile"
+                        className="form-control d-none"
+                        onChange={(e) => getUpload(e, DocumentType.Licence)}
+                      />
+                      <label htmlFor="LicenseFile" role={"button"}>
+                        <Upload />
+                      </label>
+                    </div>
                   )}
-                  onChange={(e) => setLicenseNumber(e.target.value)}
-                  className="form-control"
-                  placeholder="Enter License Number"
-                />
-                <p className="mt-1 mb-0 small ps-2">
-                  {User?.DriverDocuments?.find(
-                    (x) => x.Document === DocumentType.Licence
-                  )?.VerificationStatus}
-                </p>
-              </div>
-              {!User?.DriverDocuments?.find(
-                (x) => x.Document === "Licence"
-              ) && (
-                <div className="col-1  mb-3">
-                  <input
-                    type="file"
-                    name="LicenseFile"
-                    id="LicenseFile"
-                    className="form-control d-none"
-                    onChange={(e) => getUpload(e, DocumentType.Licence)}
-                  />
-                  <label htmlFor="LicenseFile" role={"button"}>
-                    <Upload />
-                  </label>
-                </div>
+                </>
               )}
               <div className="col-3 mb-3">
                 <input
@@ -761,9 +776,11 @@ export const Account = (prop) => {
                   placeholder="Enter Pan Number"
                 />
                 <p className="mt-1 mb-0 small ps-2">
-                  {User?.DriverDocuments?.find(
-                    (x) => x.Document === DocumentType.Pan
-                  )?.VerificationStatus}
+                  {
+                    User?.DriverDocuments?.find(
+                      (x) => x.Document === DocumentType.Pan
+                    )?.VerificationStatus
+                  }
                 </p>
               </div>
               {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
@@ -812,9 +829,11 @@ export const Account = (prop) => {
                       placeholder="E-Kyc Aadhar File Password"
                     />
                     <p className="mt-1 mb-0 small ps-2">
-                      {User?.DriverDocuments.find(
-                        (x) => x.Document === DocumentType.Aadhar
-                      ).VerificationStatus}
+                      {
+                        User?.DriverDocuments.find(
+                          (x) => x.Document === DocumentType.Aadhar
+                        ).VerificationStatus
+                      }
                     </p>
                   </>
                 )}

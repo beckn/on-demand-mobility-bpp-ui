@@ -222,6 +222,7 @@ export const DriversVehicles = (prop) => {
                     NewUser={false}
                     EditUser={driverEdit || {}}
                     onChange={(e, k) => toggleAddDriver(e, k)}
+                    formType="driver"
                   />
                 </>
               )}
