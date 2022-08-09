@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Tab, Tabs } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { AgentGrid, verificationKeys } from "../../shared/constant";
-import TableGridAgent from "../../shared/TableGrid/TableGridAgent";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "../DriversVehicles/AddDriver/AddDriver";
+import TableGridDriver from "../../shared/TableGrid/TableGridDriver";
+
 import { verify } from "../DriversVehicles/DriversVehicles.Services";
 import Verification from "./Verification";
 import "../DriversVehicles/DriversVehicles.scss";
@@ -62,13 +63,11 @@ export const Agents = (prop) => {
       let UpDriverList = res.data.Users.filter(
         (x) => x.Staff === "Y" && x.UserRoles && x.UserRoles[0].Role.Id === "1"
       );
-      console.log("thanos", UpDriverList);
       AgentGrid.ColumnsData = UpDriverList;
       setDriverList(TableData);
       // console.log("Driver List", UpDriverList, TableData);
     });
   };
-  console.log("thanos1", driverList);
 
   const toggleAddDriver = (e, k) => {
     e.preventDefault();
@@ -148,26 +147,29 @@ export const Agents = (prop) => {
                     className="mb-3"
                   >
                     <Tab eventKey="allAgent" title="All">
-                      <TableGridAgent
+                      <TableGridDriver
                         GridData={driverList}
                         onClick={(e, k) => handleClick(e, k)}
+                        tableType="agent"
                       />
                     </Tab>
                     <Tab eventKey="verifiedAgent" title="Verified">
-                      <TableGridAgent
+                      <TableGridDriver
                         GridData={driverList}
                         onClick={(e, k) => handleClick(e, k)}
                         Status="Y"
+                        tableType="agent"
                       />
                     </Tab>
                     <Tab
                       eventKey="unVerifiedAgent"
                       title="Verification Pending"
                     >
-                      <TableGridAgent
+                      <TableGridDriver
                         GridData={driverList}
                         onClick={(e, k) => handleClick(e, k)}
                         Status="N"
+                        tableType="agent"
                       />
                     </Tab>
                   </Tabs>
@@ -201,4 +203,4 @@ export const Agents = (prop) => {
   );
 };
 
-export default Agents;
+export default React.memo(Agents);

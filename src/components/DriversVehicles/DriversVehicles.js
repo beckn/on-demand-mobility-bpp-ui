@@ -195,6 +195,7 @@ export const DriversVehicles = (prop) => {
                       <TableGridDriver
                         GridData={driverList}
                         onClick={(e, k) => handleClick(e, k)}
+                        tableType="driver"
                       />
                     </Tab>
                     <Tab eventKey="verifiedDriver" title="Verified">
@@ -202,6 +203,7 @@ export const DriversVehicles = (prop) => {
                         GridData={driverList}
                         onClick={(e, k) => handleClick(e, k)}
                         Status="Y"
+                        tableType="driver"
                       />
                     </Tab>
                     <Tab
@@ -212,6 +214,7 @@ export const DriversVehicles = (prop) => {
                         GridData={driverList}
                         onClick={(e, k) => handleClick(e, k)}
                         Status="N"
+                        tableType="driver"
                       />
                     </Tab>
                   </Tabs>
