@@ -12,7 +12,10 @@ export const AddDriver = (prop) => {
             <h3 className="mb-0">Add/Edit Driver:</h3>
           </div>
           <div className="col text-end">
-            <button className="btn btn-secondary btn-sm me-2" onClick={(e) => dispatchEvent(e)}>
+            <button
+              className="btn btn-secondary btn-sm me-2"
+              onClick={(e) => dispatchEvent(e)}
+            >
               Cancel
             </button>
           </div>
@@ -24,6 +27,7 @@ export const AddDriver = (prop) => {
               NewUser={true}
               EditUser={prop?.EditUser}
               onChange={(e, k) => dispatchEvent(e, k)}
+              formType={prop.formType}
             />
           </div>
         </div>

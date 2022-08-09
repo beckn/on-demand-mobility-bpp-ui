@@ -6,12 +6,24 @@ import { Plus } from "react-feather";
 import { getAddress } from "../../core/common.functions";
 import { LocalKey } from "../../core/constant";
 import { getCookie } from "../../core/CookiesHandler";
-import { AgentVerification, DriverIcon, VehicleIcon, AgentsIcon, RidesIcon, RevenueIcon } from "../../shared/icons";
+import {
+  AgentVerification,
+  DriverIcon,
+  VehicleIcon,
+  AgentsIcon,
+  RidesIcon,
+  RevenueIcon,
+} from "../../shared/icons";
 import "./Dashboard.scss";
 import { getUserSummaries } from "./Dashboard.Services";
 const FarePolicy = React.lazy(() => import("../FarePolicy/FarePolicy"));
-const AddFarePolicy = React.lazy(() => import("../FarePolicy/AddFarePolicy/AddFarePolicy"));
-const DriversVehicles = React.lazy(() => import("../DriversVehicles/DriversVehicles"));
+const AddFarePolicy = React.lazy(() =>
+  import("../FarePolicy/AddFarePolicy/AddFarePolicy")
+);
+const DriversVehicles = React.lazy(() =>
+  import("../DriversVehicles/DriversVehicles")
+);
+const Agents = React.lazy(() => import("../Agent/Agents"));
 const Account = React.lazy(() => import("../Account/Account"));
 
 export const Dashboard = () => {
@@ -29,6 +41,11 @@ export const Dashboard = () => {
     totalVehicle: 0,
     vehiclesVerified: 0,
     vehiclesPending: 0,
+  });
+  const [agents, setAgents] = useState({
+    totalAgent: 0,
+    agentsVerified: 0,
+    agentsPending: 0,
   });
 
   const [show, setShow] = useState(false);
@@ -54,6 +71,7 @@ export const Dashboard = () => {
       !isEmpty(getAddress(user)) && user.Approved === "N" && setShow(true);
     } else {
       getUserSummaries().then((res) => {
+        console.log("sunny", res);
         setSummaries(res);
         res.UserSummaries.forEach((user) => {
           if (user.Role?.Name?.toLowerCase() === "driver") {
@@ -61,6 +79,14 @@ export const Dashboard = () => {
               totalDriver: +user.UserCount,
               driversVerified: +user.UserCount - +user.UnverifiedUserCount,
               driversPending: +user.UnverifiedUserCount,
+            });
+          }
+          if (user.Role?.Name?.toLowerCase() === "agent") {
+            console.log("sunny", user);
+            setAgents({
+              totalAgent: +user.UserCount,
+              agentsVerified: +user.UserCount - +user.UnverifiedUserCount,
+              agentsPending: +user.UnverifiedUserCount,
             });
           }
         });
@@ -111,41 +137,67 @@ export const Dashboard = () => {
       <Container fluid className="vh-100">
         <Row>
           <Col>
-            <Tab.Container onSelect={(k) => setActiveScreen(k)} activeKey={activeScreen}>
+            <Tab.Container
+              onSelect={(k) => setActiveScreen(k)}
+              activeKey={activeScreen}
+            >
               <Row className="vh-100">
-                <Col xxl={2} lg={2} className="position-relative bg-dark left-section rounded-0">
+                <Col
+                  xxl={2}
+                  lg={2}
+                  className="position-relative bg-dark left-section rounded-0"
+                >
                   <div className="round-2"></div>
-                  <Nav variant="pills" className="flex-column mt-4 me-n3 position-relative">
+                  <Nav
+                    variant="pills"
+                    className="flex-column mt-4 me-n3 position-relative"
+                  >
                     <Nav.Item>
-                      <Nav.Link role={"button"} eventKey="home" disabled={user.Verified === "N"}>
+                      <Nav.Link
+                        role={"button"}
+                        eventKey="home"
+                        disabled={user.Verified === "N"}
+                      >
                         Home
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link role={"button"} eventKey="drivers" disabled={user.Verified === "N"}>
+                      <Nav.Link
+                        role={"button"}
+                        eventKey="drivers"
+                        disabled={user.Verified === "N"}
+                      >
                         Drivers / Vehicles
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                      <Nav.Link role={"button"} eventKey="agents" disabled>
+                      <Nav.Link
+                        role={"button"}
+                        eventKey="agents"
+                        disabled={user.Verified === "N"}
+                      >
                         Agents
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link role={"button"} eventKey="verification" disabled>
+                    {/* <Nav.Item>
+                      <Nav.Link
+                        role={"button"}
+                        eventKey="verification"
+                        disabled
+                      >
                         Verification
                       </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Nav.Item>
                       <Nav.Link role={"button"} eventKey="profile">
                         User Profile
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item>
+                    {/* <Nav.Item>
                       <Nav.Link role={"button"} eventKey="support" disabled>
                         Support
                       </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item> */}
                   </Nav>
                 </Col>
                 <Col xxl={10} sm={10} className="py-3">
@@ -154,130 +206,211 @@ export const Dashboard = () => {
                       {!isNewFarePolicy ? (
                         <div className="nested-tabs">
                           {tabKey === "FarePolicy" && (
-                            <button className="ms-auto btn btn-icon shift-down py-0" onClick={() => toggleAddEditPolicy(true)}>
+                            <button
+                              className="ms-auto btn btn-icon shift-down py-0"
+                              onClick={() => toggleAddEditPolicy(true)}
+                            >
                               <Plus size={24} />
                               <span>New</span>
                             </button>
                           )}
-                          <Tabs activeKey={tabKey} onSelect={(k) => setTabKey(k)} className="mb-3">
-                            <Tab eventKey="DashBoard" title="Dashboard" className="main-tab-content">
+                          <Tabs
+                            activeKey={tabKey}
+                            onSelect={(k) => setTabKey(k)}
+                            className="mb-3"
+                          >
+                            <Tab
+                              eventKey="DashBoard"
+                              title="Dashboard"
+                              className="main-tab-content"
+                            >
                               <div className="w-100">
                                 <div className="row justify-content-left">
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 rounded-0 text-white" role={"button"} onClick={(e) => navigateToScreen("drivers", "Tdrvier")}>
+                                    <div
+                                      className="card bg-dark h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) =>
+                                        navigateToScreen("drivers", "Tdrvier")
+                                      }
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <DriverIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Total Drivers</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{drivers.totalDriver}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Total Drivers
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {drivers.totalDriver}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => navigateToScreen("drivers", "Tvehicle")}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) =>
+                                        navigateToScreen("drivers", "Tvehicle")
+                                      }
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <VehicleIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Total Vehicles</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{vehicles.totalVehicle}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Total Vehicles
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {vehicles.totalVehicle}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => {}}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) =>
+                                        navigateToScreen("agent", "Tagent")
+                                      }
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <AgentsIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Total Agents</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{0}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Total Agents
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {agents.totalAgent || 0}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => {}}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) => {}}
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <RidesIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Total Rides</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{0}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Total Rides
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {0}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => {}}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) => {}}
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <RevenueIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Total Revenue</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{0}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Total Revenue
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {0}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => {}}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) => {}}
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <AgentVerification className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Agent Verification Pending</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{0}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Agent Verification Pending
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {agents.agentsPending || 0}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => {}}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) => {}}
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <DriverIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Driver Verification Pending</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{drivers.driversPending}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Driver Verification Pending
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {drivers.driversPending}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div className="card bg-dark h-100 h-100 rounded-0 text-white" role={"button"} onClick={(e) => {}}>
+                                    <div
+                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
+                                      role={"button"}
+                                      onClick={(e) => {}}
+                                    >
                                       <div className="row g-0 h-100">
                                         <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
                                           <VehicleIcon className="w-50" />
                                         </div>
                                         <div className="col-8">
                                           <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">Vehicle Verification Pending</h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">{vehicles.vehiclesPending}</h6>
+                                            <h5 className="card-title fs-6 fw-normal">
+                                              Vehicle Verification Pending
+                                            </h5>
+                                            <h6 className="fs-4 fw-semibold mt-auto">
+                                              {vehicles.vehiclesPending}
+                                            </h6>
                                           </div>
                                         </div>
                                       </div>
@@ -286,19 +419,42 @@ export const Dashboard = () => {
                                 </div>
                               </div>
                             </Tab>
-                            <Tab eventKey="FarePolicy" title="Fare Policy" className="main-tab-content">
-                              <FarePolicy onUpdate={handleUpdate} onChange={handleFareEdit} />
+                            <Tab
+                              eventKey="FarePolicy"
+                              title="Fare Policy"
+                              className="main-tab-content"
+                            >
+                              <FarePolicy
+                                onUpdate={handleUpdate}
+                                onChange={handleFareEdit}
+                              />
                             </Tab>
                           </Tabs>
                         </div>
                       ) : (
-                        <AddFarePolicy EditFare={editFare} existingFare={existingFare} onChange={handleOnFareChange} />
+                        <AddFarePolicy
+                          EditFare={editFare}
+                          existingFare={existingFare}
+                          onChange={handleOnFareChange}
+                        />
                       )}
                     </Tab.Pane>
-                    <Tab.Pane eventKey="drivers">{summaries && <DriversVehicles activeScreenId={screenId} driverStats={drivers} vehicleStats={vehicles} />}</Tab.Pane>
-                    <Tab.Pane eventKey="agents">Agents</Tab.Pane>
+                    <Tab.Pane eventKey="drivers">
+                      {summaries && (
+                        <DriversVehicles
+                          activeScreenId={screenId}
+                          driverStats={drivers}
+                          vehicleStats={vehicles}
+                        />
+                      )}
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="agents">
+                      {summaries && (
+                        <Agents activeScreenId={screenId} agentStats={agents} />
+                      )}
+                    </Tab.Pane>
                     <Tab.Pane eventKey="documents">Documents</Tab.Pane>
-                    <Tab.Pane eventKey="verification">Verification</Tab.Pane>
+                    {/* <Tab.Pane eventKey="verification">Verification</Tab.Pane> */}
                     <Tab.Pane eventKey="profile">
                       <Account User={user} />
                     </Tab.Pane>

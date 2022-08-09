@@ -20,13 +20,18 @@ export const axiosInstance = axios.create({
 });
 
 const getErrorMessage = function getErrorMessage(error) {
-  const errorTxt = error && error.response && error.response.data ? error.response.data.SWFHttpResponse.Error : "Oops! Something Went Wrong, Please Try Again Later.";
+  const errorTxt =
+    error && error.response && error.response.data
+      ? error.response.data.SWFHttpResponse.Error
+      : "Oops! Something Went Wrong, Please Try Again Later.";
   return errorTxt;
 };
 
 // 'Accept-Encoding': 'gzip'
 const isHandlerEnabled = (config = {}) => {
-  return config.hasOwnProperty("handlerEnabled") && !config.handlerEnabled ? false : true;
+  return config.hasOwnProperty("handlerEnabled") && !config.handlerEnabled
+    ? false
+    : true;
 };
 
 const errorHandler = (error) => {
@@ -56,10 +61,16 @@ const successHandler = (response) => {
 
 const requestHandler = (request) => {
   if (isHandlerEnabled(request)) {
-    if (request.url && !NoLoader.includes(request.url.split("?")[0])) spinnerService.show(LocalKey.spinnerKey);
+    if (request.url && !NoLoader.includes(request.url.split("?")[0]))
+      spinnerService.show(LocalKey.spinnerKey);
     // Modify request here
-    if (window.localStorage.getItem(LocalKey.saveApi) && request.url !== "login") {
-      request.headers["ApiKey"] = JSON.parse(window.localStorage.getItem(LocalKey.saveApi)).ApiKey;
+    if (
+      window.localStorage.getItem(LocalKey.saveApi) &&
+      request.url !== "login"
+    ) {
+      request.headers["ApiKey"] = JSON.parse(
+        window.localStorage.getItem(LocalKey.saveApi)
+      ).ApiKey;
     }
   }
   return request;
@@ -103,9 +114,23 @@ export const postRequestData = (paths, data, fieldsList) => {
   return axiosInstance.post(paths, data, headers);
 };
 
-export const userSave = (path, data, fieldsList, IsStoreUpdate) => {
+const makeAgent = async (id) => {
+  let roleUrl = "user_roles/save";
+  let roleData = {
+    UserRole: {
+      UserId: id,
+      Role: {
+        Id: "1",
+      },
+    },
+  };
+  return await postRequestData(roleUrl, roleData);
+};
+
+export const userSave = (path, data, fieldsList, IsStoreUpdate, roleType) => {
   return postRequestData(path, data, fieldsList).then((res) => {
     console.log("userUpdate", res.data.Users[0]);
+    roleType === "agent" && makeAgent(res.data.Users[0].Id);
     IsStoreUpdate && getUser(res.data.Users[0].Id);
     return res;
   });
