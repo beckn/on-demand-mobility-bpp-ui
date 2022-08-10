@@ -1,8 +1,12 @@
 import { getRequestData, postRequestData } from "../../core/apiClient";
 import { DeploymentPurposesFields, VehicleFields } from "../../core/fieldsSet";
 
-export const verify = (id, type) => {
+export const approve = (id, type) => {
   let path = `${type}/approve/${id}`;
+  return getRequestData(path);
+};
+export const reject = (id, type) => {
+  let path = `${type}/reject/${id}`;
   return getRequestData(path);
 };
 

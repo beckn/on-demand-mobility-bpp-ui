@@ -6,7 +6,7 @@ import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "../DriversVehicles/AddDriver/AddDriver";
 import TableGridDriver from "../../shared/TableGrid/TableGridDriver";
 
-import { verify } from "../DriversVehicles/DriversVehicles.Services";
+import { approve } from "../DriversVehicles/DriversVehicles.Services";
 import Verification from "./Verification";
 import "../DriversVehicles/DriversVehicles.scss";
 import { ChevronRight, Plus } from "react-feather";
@@ -78,7 +78,7 @@ export const Agents = (prop) => {
 
   const verifyDocument = (id, type) => {
     console.log("verifyDocument", id, type);
-    verify(id, type).then((res) => {
+    approve(id, type).then((res) => {
       toast.success("Document Verified Successfully!");
       setSelectedDriver(null);
       setSelectedVehicle(null);

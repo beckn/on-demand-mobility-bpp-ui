@@ -151,7 +151,7 @@ export const Verification = (props) => {
                                 disabled={!isValid[x.Id]}
                                 onClick={() =>
                                   props.onUpdate(
-                                    x.Id,
+                                    { id: x.Id, verifyType: "verify" },
                                     props.verify ===
                                       verificationKeys.verifyDriver
                                       ? "driver_documents"
@@ -165,7 +165,15 @@ export const Verification = (props) => {
                               <button
                                 className="btn btn-danger ml-2 btn-sm"
                                 disabled={isValid[x.id]}
-                                //Static as if now ( needs to be implemented from backend)
+                                onClick={() =>
+                                  props.onUpdate(
+                                    { id: x.Id, verifyType: "reject" },
+                                    props.verify ===
+                                      verificationKeys.verifyDriver
+                                      ? "driver_documents"
+                                      : "vehicle_documents"
+                                  )
+                                }
                               >
                                 Reject
                               </button>
