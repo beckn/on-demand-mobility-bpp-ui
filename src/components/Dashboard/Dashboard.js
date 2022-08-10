@@ -1,5 +1,5 @@
 import isEmpty from "lodash/isEmpty";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Modal, Nav, Row, Tab, Tabs } from "react-bootstrap";
 import { Plus } from "react-feather";
@@ -14,6 +14,7 @@ import {
   RidesIcon,
   RevenueIcon,
 } from "../../shared/icons";
+import UserStatsCard from "../../shared/UserStatsCard";
 import "./Dashboard.scss";
 import { getUserSummaries } from "./Dashboard.Services";
 const FarePolicy = React.lazy(() => import("../FarePolicy/FarePolicy"));
@@ -32,6 +33,12 @@ export const Dashboard = () => {
   const [screenId, setScreenId] = useState();
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
+  const userRole = useMemo(
+    () => user?.UserRoles?.map((x) => x.Role.Name)[0],
+    [user]
+  );
+  console.log("sunny", userRole);
+
   const [drivers, setDrivers] = useState({
     totalDriver: 0,
     driversVerified: 0,
@@ -71,7 +78,6 @@ export const Dashboard = () => {
       !isEmpty(getAddress(user)) && user.Approved === "N" && setShow(true);
     } else {
       getUserSummaries().then((res) => {
-        console.log("sunny", res);
         setSummaries(res);
         res.UserSummaries.forEach((user) => {
           if (user.Role?.Name?.toLowerCase() === "driver") {
@@ -82,7 +88,6 @@ export const Dashboard = () => {
             });
           }
           if (user.Role?.Name?.toLowerCase() === "agent") {
-            console.log("sunny", user);
             setAgents({
               totalAgent: +user.UserCount,
               agentsVerified: +user.UserCount - +user.UnverifiedUserCount,
@@ -227,208 +232,90 @@ export const Dashboard = () => {
                               <div className="w-100">
                                 <div className="row justify-content-left">
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) =>
-                                        navigateToScreen("drivers", "Tdrvier")
-                                      }
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <DriverIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Total Drivers
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {drivers.totalDriver}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) =>
+                                    <UserStatsCard
+                                      icon={<DriverIcon className="w-50" />}
+                                      cardTitle="Total Drivers"
+                                      count={drivers.totalDriver}
+                                      handleClick={(e) =>
                                         navigateToScreen("drivers", "Tvehicle")
                                       }
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <VehicleIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Total Vehicles
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {vehicles.totalVehicle}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    />
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) =>
-                                        navigateToScreen("agent", "Tagent")
+                                    <UserStatsCard
+                                      icon={<VehicleIcon className="w-50" />}
+                                      cardTitle="Total Vehicles"
+                                      count={vehicles.totalVehicle}
+                                      handleClick={(e) =>
+                                        navigateToScreen("drivers", "Tvehicle")
                                       }
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <AgentsIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Total Agents
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {agents.totalAgent || 0}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    />
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) => {}}
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <RidesIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Total Rides
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {0}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    <UserStatsCard
+                                      icon={<AgentsIcon className="w-50" />}
+                                      cardTitle="Total Agents"
+                                      count={agents.totalAgent}
+                                      handleClick={(e) => {}}
+                                    />
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) => {}}
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <RevenueIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Total Revenue
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {0}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    <UserStatsCard
+                                      icon={<RidesIcon className="w-50" />}
+                                      cardTitle="Total Rides"
+                                      count={0}
+                                      handleClick={(e) => {}}
+                                    />
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) => {}}
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <AgentVerification className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Agent Verification Pending
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {agents.agentsPending || 0}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    <UserStatsCard
+                                      icon={<RevenueIcon className="w-50" />}
+                                      cardTitle="Total Revenue"
+                                      count={0}
+                                      handleClick={(e) => {}}
+                                    />
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) => {}}
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <DriverIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Driver Verification Pending
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {drivers.driversPending}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    <UserStatsCard
+                                      icon={
+                                        <AgentVerification className="w-50" />
+                                      }
+                                      cardTitle="Agent Verification Pending"
+                                      count={agents.agentsPending}
+                                      handleClick={(e) => {}}
+                                    />
                                   </div>
                                   <div className="col-sm-4 mb-3">
-                                    <div
-                                      className="card bg-dark h-100 h-100 rounded-0 text-white"
-                                      role={"button"}
-                                      onClick={(e) => {}}
-                                    >
-                                      <div className="row g-0 h-100">
-                                        <div className="col-4 bg-white bg-opacity-25 d-flex justify-content-center align-items-center icon-col">
-                                          <VehicleIcon className="w-50" />
-                                        </div>
-                                        <div className="col-8">
-                                          <div className="card-body">
-                                            <h5 className="card-title fs-6 fw-normal">
-                                              Vehicle Verification Pending
-                                            </h5>
-                                            <h6 className="fs-4 fw-semibold mt-auto">
-                                              {vehicles.vehiclesPending}
-                                            </h6>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                    <UserStatsCard
+                                      icon={<DriverIcon className="w-50" />}
+                                      cardTitle="Driver Verification Pending"
+                                      count={drivers.driversPending}
+                                      handleClick={(e) => {}}
+                                    />
+                                  </div>
+                                  <div className="col-sm-4 mb-3">
+                                    <UserStatsCard
+                                      icon={<VehicleIcon className="w-50" />}
+                                      cardTitle="Vehicle Verification Pending"
+                                      count={vehicles.vehiclesPending}
+                                      handleClick={(e) => {}}
+                                    />
                                   </div>
                                 </div>
                               </div>
                             </Tab>
-                            <Tab
-                              eventKey="FarePolicy"
-                              title="Fare Policy"
-                              className="main-tab-content"
-                            >
-                              <FarePolicy
-                                onUpdate={handleUpdate}
-                                onChange={handleFareEdit}
-                              />
-                            </Tab>
+                            {userRole === "ADMIN" && (
+                              <Tab
+                                eventKey="FarePolicy"
+                                title="Fare Policy"
+                                className="main-tab-content"
+                              >
+                                <FarePolicy
+                                  onUpdate={handleUpdate}
+                                  onChange={handleFareEdit}
+                                />
+                              </Tab>
+                            )}
                           </Tabs>
                         </div>
                       ) : (

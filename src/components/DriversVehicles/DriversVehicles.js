@@ -11,7 +11,7 @@ import TableGridVehicle from "../../shared/TableGrid/TableGridVehicle";
 import { getUsers } from "../Dashboard/Dashboard.Services";
 import AddDriver from "./AddDriver";
 import AddVehicle from "./AddVehicle/AddVehicle";
-import { getVehicles, verify } from "./DriversVehicles.Services";
+import { getVehicles, approve, reject } from "./DriversVehicles.Services";
 import Verification from "./Verification";
 import "./DriversVehicles.scss";
 import { ChevronRight, Plus } from "react-feather";
@@ -121,9 +121,10 @@ export const DriversVehicles = (prop) => {
     setVehiclesList();
   };
 
-  const verifyDocument = (id, type) => {
-    console.log("verifyDocument", id, type);
-    verify(id, type).then((res) => {
+  const verifyDocument = ({ id, verifyType }, type) => {
+    console.log("verifyDocument", id, type, verifyType);
+    const verifyFunc = verifyType === "verify" ? approve : reject;
+    verifyFunc(id, type).then((res) => {
       toast.success("Document Verified Successfully!");
       setSelectedDriver(null);
       setSelectedVehicle(null);

@@ -39,7 +39,7 @@ const TableGridDriver = (props) => {
                   return <td key={i}>{type}</td>;
                 })}
                 <td>
-                  {props.Status === "N" && (
+                  {props.Status === "N" && c.VehicleDocuments && (
                     <button
                       className="btn btn-sm btn-link"
                       name={verificationKeys.verifyDriver}
