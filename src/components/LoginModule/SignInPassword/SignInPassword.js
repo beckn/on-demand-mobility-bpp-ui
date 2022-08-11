@@ -93,7 +93,7 @@ export const Login = (props) => {
                       </div>
                       <div className="row">
                         <button type="submit" className="btn btn-primary">Sign In</button>
-                        <Link to={AppRoutes.admin} role="button" type="reset" className="link-primary">
+                        <Link to={AppRoutes.admin} role="button" className="link-primary">
                           Cancel
                         </Link>
                       </div>
