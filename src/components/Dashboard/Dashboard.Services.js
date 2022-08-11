@@ -6,7 +6,10 @@ export const getUserSummaries = () => {
   let vPath = "vehicle_summaries";
   return getRequestData(uPath).then((res) => {
     return getRequestData(vPath).then((res2) => {
-      return { UserSummaries: res.data.UserSummaries, VehicleSummaries: res2.data.VehicleSummaries };
+      return {
+        UserSummaries: res.data.UserSummaries,
+        VehicleSummaries: res2.data.VehicleSummaries,
+      };
     });
   });
 };
@@ -14,6 +17,11 @@ export const getUserSummaries = () => {
 export const getUsers = () => {
   let uPath = "users";
   return getRequestData(uPath, UserFields);
+};
+
+export const getTrips = () => {
+  let uPath = "trips";
+  return getRequestData(uPath);
 };
 
 export const getUserShow = (id) => {

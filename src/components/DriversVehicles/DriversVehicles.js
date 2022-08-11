@@ -15,6 +15,7 @@ import { getVehicles, approve, reject } from "./DriversVehicles.Services";
 import Verification from "./Verification";
 import "./DriversVehicles.scss";
 import { ChevronRight, Plus } from "react-feather";
+const activeDriverTab = ["ADMIN", "AGENT"];
 
 export const DriversVehicles = (prop) => {
   const { driverStats, vehicleStats, activeScreenId } = prop;
@@ -138,99 +139,103 @@ export const DriversVehicles = (prop) => {
       <div className="row drivers-vehicles">
         <div className="col">
           <Tabs
-            activeKey={tabKey}
+            activeKey={
+              activeDriverTab.includes(prop.userRole) ? tabKey : "Tvehicle"
+            }
             onSelect={(k) => setTabKey(k)}
             className="mb-3"
           >
-            <Tab
-              eventKey="Tdrvier"
-              title="Total Drivers"
-              className="main-tab-content"
-            >
-              <div className="row mb-5">
-                <div className="col arrow-right">
-                  <div>
-                    <h4 className="fs-6 fw-normal">Total Drivers</h4>
+            {activeDriverTab.includes(prop.userRole) && (
+              <Tab
+                eventKey="Tdrvier"
+                title="Total Drivers"
+                className="main-tab-content"
+              >
+                <div className="row mb-5">
+                  <div className="col arrow-right">
+                    <div>
+                      <h4 className="fs-6 fw-normal">Total Drivers</h4>
+                      <p className="fs-2 fw-semibold text-center">
+                        {driverStats.totalDriver}
+                      </p>
+                    </div>
+                    <div className="icon">
+                      <ChevronRight size={64} />
+                    </div>
+                  </div>
+                  <div className="col line-right">
+                    <div>
+                      <h4 className="fs-6 fw-normal">Verified Drivers</h4>
+                      <p className="fs-2 fw-semibold text-center">
+                        {driverStats.driversVerified}
+                      </p>
+                    </div>
+                    <div className="icon"></div>
+                  </div>
+                  <div className="col">
+                    <h4 className="fs-6 fw-normal text-center">
+                      Driver Verification Pending
+                    </h4>
                     <p className="fs-2 fw-semibold text-center">
-                      {driverStats.totalDriver}
+                      {driverStats.driversPending}
                     </p>
                   </div>
-                  <div className="icon">
-                    <ChevronRight size={64} />
-                  </div>
                 </div>
-                <div className="col line-right">
-                  <div>
-                    <h4 className="fs-6 fw-normal">Verified Drivers</h4>
-                    <p className="fs-2 fw-semibold text-center">
-                      {driverStats.driversVerified}
-                    </p>
-                  </div>
-                  <div className="icon"></div>
-                </div>
-                <div className="col">
-                  <h4 className="fs-6 fw-normal text-center">
-                    Driver Verification Pending
-                  </h4>
-                  <p className="fs-2 fw-semibold text-center">
-                    {driverStats.driversPending}
-                  </p>
-                </div>
-              </div>
 
-              {!isAddDriver ? (
-                <div className="nested-tabs">
-                  <button
-                    className="ms-auto btn btn-icon shift-down"
-                    onClick={(e) => toggleAddDriver(e, true)}
-                  >
-                    <Plus size={24} />
-                    <span>New</span>
-                  </button>
-                  <Tabs
-                    defaultActiveKey="allDriver"
-                    id="driver-filtered"
-                    className="mb-3"
-                  >
-                    <Tab eventKey="allDriver" title="All">
-                      <TableGridDriver
-                        GridData={driverList}
-                        onClick={(e, k) => handleClick(e, k)}
-                        tableType="driver"
-                      />
-                    </Tab>
-                    <Tab eventKey="verifiedDriver" title="Verified">
-                      <TableGridDriver
-                        GridData={driverList}
-                        onClick={(e, k) => handleClick(e, k)}
-                        Status="Y"
-                        tableType="driver"
-                      />
-                    </Tab>
-                    <Tab
-                      eventKey="unVerifiedDriver"
-                      title="Verification Pending"
+                {!isAddDriver ? (
+                  <div className="nested-tabs">
+                    <button
+                      className="ms-auto btn btn-icon shift-down"
+                      onClick={(e) => toggleAddDriver(e, true)}
                     >
-                      <TableGridDriver
-                        GridData={driverList}
-                        onClick={(e, k) => handleClick(e, k)}
-                        Status="N"
-                        tableType="driver"
-                      />
-                    </Tab>
-                  </Tabs>
-                </div>
-              ) : (
-                <>
-                  <AddDriver
-                    NewUser={false}
-                    EditUser={driverEdit || {}}
-                    onChange={(e, k) => toggleAddDriver(e, k)}
-                    formType="driver"
-                  />
-                </>
-              )}
-            </Tab>
+                      <Plus size={24} />
+                      <span>New</span>
+                    </button>
+                    <Tabs
+                      defaultActiveKey="allDriver"
+                      id="driver-filtered"
+                      className="mb-3"
+                    >
+                      <Tab eventKey="allDriver" title="All">
+                        <TableGridDriver
+                          GridData={driverList}
+                          onClick={(e, k) => handleClick(e, k)}
+                          tableType="driver"
+                        />
+                      </Tab>
+                      <Tab eventKey="verifiedDriver" title="Verified">
+                        <TableGridDriver
+                          GridData={driverList}
+                          onClick={(e, k) => handleClick(e, k)}
+                          Status="Y"
+                          tableType="driver"
+                        />
+                      </Tab>
+                      <Tab
+                        eventKey="unVerifiedDriver"
+                        title="Verification Pending"
+                      >
+                        <TableGridDriver
+                          GridData={driverList}
+                          onClick={(e, k) => handleClick(e, k)}
+                          Status="N"
+                          tableType="driver"
+                        />
+                      </Tab>
+                    </Tabs>
+                  </div>
+                ) : (
+                  <>
+                    <AddDriver
+                      NewUser={false}
+                      EditUser={driverEdit || {}}
+                      onChange={(e, k) => toggleAddDriver(e, k)}
+                      formType="driver"
+                    />
+                  </>
+                )}
+              </Tab>
+            )}
 
             <Tab
               eventKey="Tvehicle"

@@ -179,6 +179,16 @@ export const verificationKeys = {
   verifyVehicle: "verifyVehicle",
   editVehicle: "editVehicle",
 };
+export const roleBasedMapUser = {
+  "Total Drivers": ["ADMIN", "AGENT"],
+  "Total Vehicles": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
+  "Total Agents": ["ADMIN"],
+  "Total Rides": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
+  "Total Revenue": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
+  "Agent Verification Pending": ["ADMIN"],
+  "Driver Verification Pending": ["ADMIN", "AGENT"],
+  "Vehicle Verification Pending": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
+};
 
 export const VehicleTags = ["Make", "NameOfModel", "VehicleType", "FuelType"];
 export const VehicleType = ["SUV", "SEDAN", "HATCHBACK"];
