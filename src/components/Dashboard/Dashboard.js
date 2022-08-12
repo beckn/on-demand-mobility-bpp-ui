@@ -16,7 +16,7 @@ import {
 } from "../../shared/icons";
 import UserStatsCard from "../../shared/UserStatsCard";
 import "./Dashboard.scss";
-import { getUserSummaries } from "./Dashboard.Services";
+import { getUserSummaries, getTrips } from "./Dashboard.Services";
 const FarePolicy = React.lazy(() => import("../FarePolicy/FarePolicy"));
 const AddFarePolicy = React.lazy(() =>
   import("../FarePolicy/AddFarePolicy/AddFarePolicy")
@@ -26,6 +26,7 @@ const DriversVehicles = React.lazy(() =>
 );
 const Agents = React.lazy(() => import("../Agent/Agents"));
 const Account = React.lazy(() => import("../Account/Account"));
+const activeDriverTab = ["ADMIN", "AGENT"];
 
 export const Dashboard = () => {
   const [activeScreen, setActiveScreen] = useState("home");
@@ -33,10 +34,12 @@ export const Dashboard = () => {
   const [screenId, setScreenId] = useState();
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
-  const userRole = useMemo(
-    () => user?.UserRoles?.map((x) => x.Role.Name)[0],
-    [user]
-  );
+  //Uncomment to enable rolebase Access
+  // const userRole = useMemo(
+  //   () => user?.UserRoles?.map((x) => x.Role.Name)[0],
+  //   [user]
+  // );
+  const userRole = "ADMIN";
   console.log("sunny", userRole);
 
   const [drivers, setDrivers] = useState({
@@ -172,18 +175,22 @@ export const Dashboard = () => {
                         eventKey="drivers"
                         disabled={user.Verified === "N"}
                       >
-                        Drivers / Vehicles
+                        {activeDriverTab.includes(userRole)
+                          ? "Drivers / Vehicles"
+                          : "Vehicles"}
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link
-                        role={"button"}
-                        eventKey="agents"
-                        disabled={user.Verified === "N"}
-                      >
-                        Agents
-                      </Nav.Link>
-                    </Nav.Item>
+                    {userRole === "ADMIN" && (
+                      <Nav.Item>
+                        <Nav.Link
+                          role={"button"}
+                          eventKey="agents"
+                          disabled={user.Verified === "N"}
+                        >
+                          Agents
+                        </Nav.Link>
+                      </Nav.Item>
+                    )}
                     {/* <Nav.Item>
                       <Nav.Link
                         role={"button"}
@@ -239,6 +246,7 @@ export const Dashboard = () => {
                                       handleClick={(e) =>
                                         navigateToScreen("drivers", "Tvehicle")
                                       }
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -249,6 +257,7 @@ export const Dashboard = () => {
                                       handleClick={(e) =>
                                         navigateToScreen("drivers", "Tvehicle")
                                       }
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -257,6 +266,7 @@ export const Dashboard = () => {
                                       cardTitle="Total Agents"
                                       count={agents.totalAgent}
                                       handleClick={(e) => {}}
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -265,6 +275,7 @@ export const Dashboard = () => {
                                       cardTitle="Total Rides"
                                       count={0}
                                       handleClick={(e) => {}}
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -273,6 +284,7 @@ export const Dashboard = () => {
                                       cardTitle="Total Revenue"
                                       count={0}
                                       handleClick={(e) => {}}
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -283,6 +295,7 @@ export const Dashboard = () => {
                                       cardTitle="Agent Verification Pending"
                                       count={agents.agentsPending}
                                       handleClick={(e) => {}}
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -291,6 +304,7 @@ export const Dashboard = () => {
                                       cardTitle="Driver Verification Pending"
                                       count={drivers.driversPending}
                                       handleClick={(e) => {}}
+                                      userRole={userRole}
                                     />
                                   </div>
                                   <div className="col-sm-4 mb-3">
@@ -299,6 +313,7 @@ export const Dashboard = () => {
                                       cardTitle="Vehicle Verification Pending"
                                       count={vehicles.vehiclesPending}
                                       handleClick={(e) => {}}
+                                      userRole={userRole}
                                     />
                                   </div>
                                 </div>
@@ -332,14 +347,20 @@ export const Dashboard = () => {
                           activeScreenId={screenId}
                           driverStats={drivers}
                           vehicleStats={vehicles}
+                          userRole={userRole}
                         />
                       )}
                     </Tab.Pane>
-                    <Tab.Pane eventKey="agents">
-                      {summaries && (
-                        <Agents activeScreenId={screenId} agentStats={agents} />
-                      )}
-                    </Tab.Pane>
+                    {userRole === "ADMIN" && (
+                      <Tab.Pane eventKey="agents">
+                        {summaries && (
+                          <Agents
+                            activeScreenId={screenId}
+                            agentStats={agents}
+                          />
+                        )}
+                      </Tab.Pane>
+                    )}
                     <Tab.Pane eventKey="documents">Documents</Tab.Pane>
                     {/* <Tab.Pane eventKey="verification">Verification</Tab.Pane> */}
                     <Tab.Pane eventKey="profile">
