@@ -34,13 +34,12 @@ export const Dashboard = () => {
   const [screenId, setScreenId] = useState();
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
-  //Uncomment to enable rolebase Access
-  // const userRole = useMemo(
-  //   () => user?.UserRoles?.map((x) => x.Role.Name)[0],
-  //   [user]
-  // );
-  const userRole = "ADMIN";
-  console.log("sunny", userRole);
+  // comment to enable rolebase Access
+  const userRole = useMemo(
+    () => user?.UserRoles?.map((x) => x.Role.Name)[0],
+    [user]
+  );
+  //const userRole = "ADMIN";
 
   const [drivers, setDrivers] = useState({
     totalDriver: 0,
@@ -80,6 +79,9 @@ export const Dashboard = () => {
       isEmpty(getAddress(user)) && setShow(true);
       !isEmpty(getAddress(user)) && user.Approved === "N" && setShow(true);
     } else {
+      // getTrips().then((res) => {
+      //   console.log("trips", res);
+      // });
       getUserSummaries().then((res) => {
         setSummaries(res);
         res.UserSummaries.forEach((user) => {
