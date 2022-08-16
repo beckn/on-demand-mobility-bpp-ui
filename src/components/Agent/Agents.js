@@ -7,7 +7,7 @@ import AddDriver from "../DriversVehicles/AddDriver/AddDriver";
 import TableGridDriver from "../../shared/TableGrid/TableGridDriver";
 
 import { approve } from "../DriversVehicles/DriversVehicles.Services";
-import Verification from "./Verification";
+import { Verification } from "../DriversVehicles/Verification";
 import "../DriversVehicles/DriversVehicles.scss";
 import { ChevronRight, Plus } from "react-feather";
 
