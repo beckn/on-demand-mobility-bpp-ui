@@ -33,7 +33,7 @@ export const Login = (props) => {
             </Col>
             <Col lg="9" className="d-flex align-items-center">
               <div className="row w-100 justify-content-center">
-                <div className="col-6">
+                <div className="col-12 col-lg-6" >
                   <Title>
                     Welcome <br /> to the {App} App
                   </Title>
