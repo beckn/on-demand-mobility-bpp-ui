@@ -89,8 +89,8 @@ export const SignInPassword = () => {
             </Col>
             <Col lg="9" className="d-flex align-items-center">
               <div className="w-100">
-                <div className="row w-100 justify-content-center">
-                  <div className="col-10">
+                <div className="row mt-3 w-100 justify-content-center">
+                  <div className="col-12 col-lg-6">
                     <h1 className="mb-4">
                       Welcome <br /> to the Taxi Admin App
                     </h1>
@@ -102,7 +102,7 @@ export const SignInPassword = () => {
                   )}
                 >
                   <div className="row w-100 justify-content-center">
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="text"
                         {...register("FirstName", {
@@ -121,7 +121,7 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.FirstName} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <input
                         type="text"
                         name="LastName"
@@ -140,7 +140,7 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.LastName} />
                     </div>
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <select
                         name="Company"
                         id="Company"
@@ -164,7 +164,7 @@ export const SignInPassword = () => {
                       </select>
                       <ErrorMessage fieldError={errors?.Company} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <select
                         name="Role"
                         id="Role"
@@ -187,7 +187,7 @@ export const SignInPassword = () => {
                       </select>
                       <ErrorMessage fieldError={errors?.Role} />
                     </div>
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="text"
                         name="PhoneNumber"
@@ -211,7 +211,7 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.PhoneNumber} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <input
                         type="email"
                         {...register("Email", {
@@ -226,7 +226,7 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.Email} />
                     </div>
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="password"
                         name="Password1"
@@ -241,7 +241,7 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.Password1} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <input
                         type="password"
                         name="Password2"
@@ -263,7 +263,7 @@ export const SignInPassword = () => {
                     </div>
                   </div>
                   <div className="row w-100 justify-content-center">
-                    <div className="col-5 d-grid">
+                    <div className="col-5 mb-3 d-grid col-12 col-lg-6">
                       <a
                         href={AppRoutes.admin}
                         role="button"
@@ -273,7 +273,7 @@ export const SignInPassword = () => {
                         cancel
                       </a>
                     </div>
-                    <div className="col-5 d-grid">
+                    <div className="col-5 mb-3 d-grid col-12 col-lg-6">
                       <button className="btn btn-primary" type="submit">
                         submit
                       </button>
@@ -281,7 +281,7 @@ export const SignInPassword = () => {
                   </div>
                 </form>
                 <div className="row w-100 justify-content-center">
-                  <div className="col-10">
+                  <div className="col-10 col-12 col-lg-6">
                     <p className="mt-5">
                       Existing User?{" "}
                       <Link to={AppRoutes.admin} className="link-primary">
