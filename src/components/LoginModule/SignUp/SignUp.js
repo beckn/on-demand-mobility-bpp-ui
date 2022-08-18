@@ -280,7 +280,7 @@ export const SignInPassword = () => {
                     </div>
                   </div>
                 </form>
-                <div className="row w-100 justify-content-center">
+                <div className="row w-100 justify-content-left">
                   <div className="col-10 col-12 col-lg-6">
                     <p className="mt-5">
                       Existing User?{" "}

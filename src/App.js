@@ -14,10 +14,16 @@ const MenuBar = React.lazy(() => import("./components/AppHeader/MenuBar"));
 
 const Login = React.lazy(() => import("./components/LoginModule/Login"));
 const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));
-const SignInPassword = React.lazy(() => import("./components/LoginModule/SignInPassword/SignInPassword"));
-const SignInPhone = React.lazy(() => import("./components/LoginModule/SignInPhone"));
+const SignInPassword = React.lazy(() =>
+  import("./components/LoginModule/SignInPassword/SignInPassword")
+);
+const SignInPhone = React.lazy(() =>
+  import("./components/LoginModule/SignInPhone")
+);
 const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
-const PageNotFound = React.lazy(() => import("./shared/PageNotFound/PageNotFound"));
+const PageNotFound = React.lazy(() =>
+  import("./shared/PageNotFound/PageNotFound")
+);
 let isLogin = !NoHeader.includes(window.location.pathname);
 
 function App() {
@@ -47,7 +53,7 @@ function App() {
       <BrowserRouter forceRefresh={true}>
         <ErrorBoundary>
           <Suspense>
-            {isLogin && <MenuBar />}
+            {isLogin && <AppHeader />}
             <Routes>
               <Route path="/" element={<Login />}></Route>
               <Route path={AppRoutes.admin} element={<Login />}></Route>
