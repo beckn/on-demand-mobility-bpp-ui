@@ -87,7 +87,10 @@ export const SignInPassword = () => {
             <Col lg="3" className="p-0">
               <LeftSection />
             </Col>
-            <Col lg="9" className="d-flex align-items-center">
+            <Col
+              lg="9"
+              className="d-flex align-items-center justify-content-center"
+            >
               <div className="w-100">
                 <div className="row mt-3 w-100 justify-content-center">
                   <div className="col-12 col-lg-6">

@@ -25,7 +25,10 @@ export const SignInPhone = (props) => {
             <Col lg="3" className="p-0">
               <LeftSection />
             </Col>
-            <Col lg="9" className="d-flex align-items-center">
+            <Col
+              lg="9"
+              className="d-flex align-items-center justify-content-center"
+            >
               <div className="row w-100 justify-content-center">
                 <div className="col-6 col-12 col-lg-6">
                   <Title>
@@ -43,11 +46,17 @@ export const SignInPhone = (props) => {
 
                   <SignUpTextContainer>
                     <div>
-                      New User? <Link to={AppRoutes.signUp} className="link-primary">Sign Up</Link>
+                      New User?{" "}
+                      <Link to={AppRoutes.signUp} className="link-primary">
+                        Sign Up
+                      </Link>
                     </div>
 
                     <div style={{ textAlign: "right" }}>
-                      <Link to={AppRoutes.signInPassword} className="link-primary">
+                      <Link
+                        to={AppRoutes.signInPassword}
+                        className="link-primary"
+                      >
                         Sign in with Email
                       </Link>
                     </div>
