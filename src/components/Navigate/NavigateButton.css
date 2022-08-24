@@ -1,0 +1,53 @@
+.me-2 {
+    align-items: center;  
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    display: flex;
+  
+}
+.me-2{
+    background-color: #34C759;
+    color:white;
+     padding: 30px 25px; 
+     width: 100%;
+     height: 100%;
+    position: absolute;
+    border-color: #34C759;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.popup{
+    background-color: #f5f1ed;
+    position: fixed;
+    top: 50%;
+    display: flex;
+    padding-left: 130px;
+    padding-right: 90px;
+    padding-bottom: 70px;
+    border-radius: 10px;
+  }
+.carLog {
+    position: absolute;
+    width: 46.7px;
+    height: 46.7px;
+    left: 15px;
+    top: 310px;
+}
+.callLog {
+    position: relative;
+    width: 53px;
+    display: flex;
+    left: 20px;
+
+}
+
+/* .container {
+    display: flex;
+    position: relative;
+    padding: 20px;
+} */

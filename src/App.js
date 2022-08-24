@@ -1,29 +1,33 @@
-import { Spinner } from "@simply007org/react-spinners";
-import "bootstrap/dist/css/bootstrap.min.css";
-import React, { Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import "./App.scss";
-import { Vehicles } from "./components/Vechicles/Vehicles";
-import { AuthGuard } from "./core/AuthGuard";
-import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
-import ErrorBoundary from "./shared/ErrorBoundary";
-const AppHeader = React.lazy(() => import("./components/AppHeader"));
-const MenuBar = React.lazy(() => import("./components/AppHeader/MenuBar"));
+/* eslint-disable no-undef */
+// import { Spinner } from "@simply007org/react-spinners";
+// import "bootstrap/dist/css/bootstrap.min.css";
+import React from "react";
+// import { BrowserRouter, Route, Routes } from "react-router-dom";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import "./App.scss";
+// import { Vehicles } from "./components/Vechicles/Vehicles";
+// import { AuthGuard } from "./core/AuthGuard";
+// import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
+// import ErrorBoundary from "./shared/ErrorBoundary";
+import DriverAppHeader from "./components/DriverAppHeader/DriverAppHeader";
+import DriverAppFooter from "./components/driverAppFooter/DriverAppFooter";
+// const AppHeader = React.lazy(() => import("./components/AppHeader"));
+// const MenuBar = React.lazy(() => import("./components/AppHeader/MenuBar"));
 
-const Login = React.lazy(() => import("./components/LoginModule/Login"));
-const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));
-const SignInPassword = React.lazy(() => import("./components/LoginModule/SignInPassword/SignInPassword"));
-const SignInPhone = React.lazy(() => import("./components/LoginModule/SignInPhone"));
-const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
-const PageNotFound = React.lazy(() => import("./shared/PageNotFound/PageNotFound"));
-let isLogin = !NoHeader.includes(window.location.pathname);
+// const Login = React.lazy(() => import("./components/LoginModule/Login"));
+// const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));
+// const SignInPassword = React.lazy(() => import("./components/LoginModule/SignInPassword/SignInPassword"));
+// const SignInPhone = React.lazy(() => import("./components/LoginModule/SignInPhone"));
+// const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
+// const PageNotFound = React.lazy(() => import("./shared/PageNotFound/PageNotFound"));
+// let isLogin = !NoHeader.includes(window.location.pathname);
+
 
 function App() {
   return (
     <>
-      <ToastContainer position="top-center" hideProgressBar="false" />
+      {/* <ToastContainer position="top-center" hideProgressBar="false" />
       <Spinner name={LocalKey.spinnerKey}>
         <div className="modal d-block">
           <div className="modal-dialog modal-sm modal-dialog-centered">
@@ -71,9 +75,11 @@ function App() {
               <Route path="/*" element={<PageNotFound />}></Route>
             </Routes>
             {/* {isLogin && <AppFooter />} */}
-          </Suspense>
-        </ErrorBoundary>
-      </BrowserRouter>
+          {/* </Suspense> */}
+        {/* </ErrorBoundary> */} 
+
+       <DriverAppHeader />
+       <DriverAppFooter />
     </>
   );
 }
