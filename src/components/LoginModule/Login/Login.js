@@ -31,9 +31,12 @@ export const Login = (props) => {
             <Col lg="3" className="p-0">
               <LeftSection />
             </Col>
-            <Col lg="9" className="d-flex align-items-center">
+            <Col
+              lg="9"
+              className="d-flex align-items-center justify-content-center"
+            >
               <div className="row w-100 justify-content-center">
-                <div className="col-12 col-lg-6" >
+                <div className="col-12 col-lg-6">
                   <Title>
                     Welcome <br /> to the {App} App
                   </Title>
@@ -54,7 +57,10 @@ export const Login = (props) => {
                     </Link>
                   </ButtonsContainer>
                   <SignUpTextContainer>
-                    New User? <Link className="link-primary" to={AppRoutes.signUp}>Sign Up</Link>
+                    New User?{" "}
+                    <Link className="link-primary" to={AppRoutes.signUp}>
+                      Sign Up
+                    </Link>
                   </SignUpTextContainer>
                 </div>
               </div>
