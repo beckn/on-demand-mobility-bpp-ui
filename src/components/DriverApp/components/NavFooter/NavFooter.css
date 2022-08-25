@@ -1,0 +1,19 @@
+.Container{
+    padding-top: 14.5cm;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.homeicon {
+    padding-left: 10px;
+
+}
+.caricon {
+  padding-left: 10px;
+ 
+}
+.profileicon{
+  padding-left: 10px;
+}
