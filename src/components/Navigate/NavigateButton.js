@@ -22,16 +22,25 @@ function NavigateButton() {
         onHide={() => setSmShow(false)}
         aria-labelledby="example-modal-sizes-title-sm"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="example-modal-sizes-title-sm">
+        <Modal.Header >
+          <Modal.Title className='titlle' id="example-modal-sizes-title-sm">
            Going for Pickup
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className='container'>
-        <CarLogIcon className='carLog' />
-        <CallLogIcon className='callLog'/>
-          <h6>Reach pick  up location in 5 mins</h6>
-          <LocationIcon />
+        <Modal.Body>
+        <div className='carLog'>
+        <CarLogIcon  />
+        </div>
+        <div className='callLog'>
+        <CallLogIcon />
+        </div>
+          <h6 className='h6'>Reach pick  up location in 5 mins.</h6>
+          <hr  className='hr'/>
+         <div className='loc'><LocationIcon />
+         <p className='sub'>Raja Dinkar Kelkar Museum</p>
+         <h6 className='min'>5 min away</h6>
+         <h6 className='kms'>2.5kms</h6>
+         </div> 
         </Modal.Body>
       </Modal>   
     </>
