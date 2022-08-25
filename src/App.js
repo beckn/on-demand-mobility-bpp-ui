@@ -21,6 +21,9 @@ const SignInPhone = React.lazy(() =>
   import("./components/LoginModule/SignInPhone")
 );
 const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
+const DriverDashboard = React.lazy(() =>
+  import("./components/DriverApp/DriverDashboard")
+);
 const PageNotFound = React.lazy(() =>
   import("./shared/PageNotFound/PageNotFound")
 );
@@ -53,7 +56,6 @@ function App() {
       <BrowserRouter forceRefresh={true}>
         <ErrorBoundary>
           <Suspense>
-            {isLogin && <AppHeader />}
             <Routes>
               <Route path="/" element={<Login />}></Route>
               <Route path={AppRoutes.admin} element={<Login />}></Route>
@@ -70,7 +72,7 @@ function App() {
                 path={AppRoutes.adminDashboard}
                 element={
                   <AuthGuard>
-                    <Dashboard />
+                    <DriverDashboard />
                   </AuthGuard>
                 }
               ></Route>

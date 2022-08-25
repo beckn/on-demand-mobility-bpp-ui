@@ -1,0 +1,46 @@
+.header {
+    align-items: center;  
+    justify-content: center;
+    text-align: center;
+  
+}
+.header-text {
+    font-weight: 'bold';
+    font-size: 20px;
+    color: white;
+    background-color: #9DAFF0;
+    padding:20px;
+    margin-top: -1%;
+    letter-spacing: 1;
+    align-items: center;
+    justify-items: center;;
+
+}
+.Arrow {
+   display: flex;
+   position: relative;
+   bottom: 60px;
+
+}
+.Btn {
+  display: flex;
+  position: relative;
+  background-color:transparent;
+  background-repeat:no-repeat;
+  font-size: 17px;
+  border: none; 
+}
+
+ .radio {
+   display: flex;
+   position: relative;
+   bottom: 20px;
+ 
+} 
+
+ .navigate{
+  top: 470px;
+  position: relative;
+  justify-content: center;
+  
+} 
