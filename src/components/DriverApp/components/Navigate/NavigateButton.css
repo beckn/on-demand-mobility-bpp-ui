@@ -9,75 +9,66 @@
 
 .popup{
     background-color: #f5f1ed;
-    position:absolute;
-    top: 45%;
-    display: flex;
-    padding-left: 150px;
-    padding-right: 110px;
-    /* padding-bottom: 20px; */
-    border-radius: 5px;
-   
-
+    position:relative;
+    padding-bottom:20px;
   }
 .carLog {
-    position: relative;
-    display: flex;
     width: 46.7px;
     height: 46.7px;
-    right: 140px;
+    right: -2px;
+    position: relative;
+    bottom: 32px;
 }
 .callLog{
     position:relative;
     display: flex;
-    left: 145px;
+    left: 295px;
     width: 53px;
     height: 57px;
-    bottom: 50px;
+    bottom: 80px;
 }
 .titlle {
-    position: relative;
+    position:absolute;
     display: flex;
-    top: 30px;
-    right: 80px;
+    right: 95px;
    font-size: 24px;
    font-weight: 500;
+   top: 20px;
 
 }
 .h6{
     display: flex;
-    position: relative;
-    bottom: 95px;
-    right: 82px;
+     position: relative;
+    bottom: 93px;
+    left: 60px;
     width: 229px;
     height: 21px;
     font-weight: 400;
     font-size: 14px;
-
-
 }
 .hr{
     display: flex;
     position: relative;
     bottom:100px;
-    right: 145px;
+    right: 14px;
     border:none;
    border-top:1px dashed;
    color:black;
    height:1px;
-  width:155%;
+  width:108%;
 }
 .loc{
     display: flex;
     position: relative;
-    bottom:41px;
-    right:27%;
+    bottom:78px;
+    left: 20px;
     margin-bottom: 10px;    
 }
 .sub {
     display: flex;
     position: relative;
-    bottom: 15px;
-    left: 20px;
+    bottom: 110px;
+    left: 60px;
     font-style: normal;
    font-weight: 300;
    font-size: 16px;
@@ -88,8 +79,8 @@
 .min{
    display: flex;
    position: relative;
-   top: 30px;
-   right:53%;
+   bottom: 80px;
+   left: 60px;
    font-weight: 400;
 font-size: 14px;
 line-height: 21px;
@@ -100,8 +91,8 @@ text-overflow: ellipsis;
 .kms{
     display: flex;
     position: relative;
-    top: 30px;
-    right: 35%;
+    bottom: 110px;
+    left: 200px;
     font-weight: 400;
    font-size: 14px;
     line-height: 21px;
