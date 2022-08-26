@@ -1,24 +1,10 @@
-.me-2 {
-    align-items: center;  
-    justify-content: center;
-    text-align: center;
-    flex: 1;
-    display: flex;
-  
-}
 .me-2{
     background-color: #34C759;
     color:white;
-     padding: 30px 25px; 
-     width: 100%;
-     height: 100%;
-    position: absolute;
+    position: fixed;
     border-color: #34C759;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
+    bottom: 35px;
+
 }
 
 .popup{

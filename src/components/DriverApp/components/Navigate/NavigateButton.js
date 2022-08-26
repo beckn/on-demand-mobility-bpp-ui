@@ -11,7 +11,7 @@ function NavigateButton() {
 
   return (
     <>
-      <Button onClick={() => setSmShow(true)} className="me-2">
+      <Button onClick={() => setSmShow(true)} className="me-2 fixed-bottom">
         Navigate
       </Button>
       <Modal

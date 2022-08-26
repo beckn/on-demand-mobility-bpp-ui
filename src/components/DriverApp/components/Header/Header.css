@@ -33,14 +33,7 @@
 
  .radio {
    display: flex;
-   position: relative;
-   bottom: 20px;
+   top: 70px;
+   position: fixed;
  
-} 
-
- .navigate{
-  top: 470px;
-  position: relative;
-  justify-content: center;
-  
 } 

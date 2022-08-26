@@ -43,7 +43,7 @@ function CustomMap() {
      {isLoaded && <GoogleMap
         center={position}
         zoom={8}
-          mapContainerStyle={{ width: '100%', height: '50vh' }}
+          mapContainerStyle={{ top: '150px', width: '100%', height: '500px' }}
           options={{
             zoomControl: false,
             streetViewControl: false,
