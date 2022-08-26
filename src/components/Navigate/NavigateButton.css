@@ -19,17 +19,20 @@
     font-weight: 500;
     font-size: 20px;
     line-height: 30px;
+    overflow: inherit;
 }
-
 .popup{
-    background-color: #f5f1ed;
+    background-color:#fff;
     position:absolute;
-    top: 45%;
+    visibility:visible;
+    opacity: 1;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 6);
+    top: 45.4%;
     display: flex;
     padding-left: 150px;
     padding-right: 110px;
     /* padding-bottom: 20px; */
-    border-radius: 5px;
+    border-radius: 1px;
    
 
   }
