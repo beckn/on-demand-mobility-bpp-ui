@@ -1,10 +1,10 @@
 .switch{
-    position: relative;
+    position: fixed;
     display: inline-block;
     width: 60px;
     height: 34px;
-    left: 320px;
-    bottom: 100px;
+    left: 320px;  
+      
 }
 
 .switch input {
@@ -65,30 +65,24 @@
     font-size: 18px;
     line-height: 22px;
     display: flex;
-    position: relative;
-    bottom: 25px;
+    position: fixed;
     left: 12px;
+    top: 70px;
   }
 
 .text{
-font-family: 'Poppins';
-font-style: normal;
 font-weight: 275;
 font-size: 14px;
 line-height: 22px;
-display: flex;
-position: relative;
-bottom: 30px;
-left: 15px;
+position: fixed;
+ top:105px;
+ left: 15px;
   }
 .textav{
-font-family: 'Poppins';
-font-style: normal;
 font-weight: 300;
 font-size: 14px;
 line-height: 22px;
-display: flex;
-position: relative;
-left: 1px;
-bottom: -2px;
+position: fixed;
+top: 105px;
+left: inherit;
 }

@@ -6,7 +6,7 @@ import { ProfileIcon } from "../../../../shared/icons/Profile";
 
 function DriverAppFooter() {
   return (
-    <div className="Container">
+    <div className="Container fixed-bottom">
       <div className="homeicon">
         {" "}
         <HomeIcon />

@@ -7,17 +7,17 @@ import SwitchButton from "../SwitchButton/SwitchButton";
 function DriverAppHeader() {
   return (
     <>
-      <div className="header">
+      <div className="header fixed-top">
         <h3 className="header-text">Home</h3>
         <div className="Arrow">
           <BackArrowIcon />
           <button className="Btn">Back</button>
         </div>
       </div>
-      <div className="radio">
+      <div className="radio fixed-top">
         <SwitchButton />
       </div>
-      <div className="navigate">
+      <div className="fixed-bottom">
         <NavigateButton />
       </div>
     </>
