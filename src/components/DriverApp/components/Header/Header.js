@@ -1,8 +1,8 @@
 import React from "react";
 import "./Header.css";
-import { BackArrowIcon } from "../../shared/icons/BackArrow";
+import { BackArrowIcon } from "../../../../shared/icons/BackArrow";
 import NavigateButton from "../Navigate/NavigateButton";
-import SwitchButton from "../SwitchBotton/SwitchButton";
+import SwitchButton from "../SwitchButton/SwitchButton";
 
 function DriverAppHeader() {
   return (

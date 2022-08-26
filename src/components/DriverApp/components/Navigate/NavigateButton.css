@@ -1,0 +1,123 @@
+.me-2 {
+    align-items: center;  
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    display: flex;
+  
+}
+.me-2{
+    background-color: #34C759;
+    color:white;
+     padding: 30px 25px; 
+     width: 100%;
+     height: 100%;
+    position: absolute;
+    border-color: #34C759;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.popup{
+    background-color: #f5f1ed;
+    position:absolute;
+    top: 45%;
+    display: flex;
+    padding-left: 150px;
+    padding-right: 110px;
+    /* padding-bottom: 20px; */
+    border-radius: 5px;
+   
+
+  }
+.carLog {
+    position: relative;
+    display: flex;
+    width: 46.7px;
+    height: 46.7px;
+    right: 140px;
+}
+.callLog{
+    position:relative;
+    display: flex;
+    left: 145px;
+    width: 53px;
+    height: 57px;
+    bottom: 50px;
+}
+.titlle {
+    position: relative;
+    display: flex;
+    top: 30px;
+    right: 80px;
+   font-size: 24px;
+   font-weight: 500;
+
+}
+.h6{
+    display: flex;
+    position: relative;
+    bottom: 95px;
+    right: 82px;
+    width: 229px;
+    height: 21px;
+    font-weight: 400;
+    font-size: 14px;
+
+
+}
+.hr{
+    display: flex;
+    position: relative;
+    bottom:100px;
+    right: 145px;
+    border:none;
+   border-top:1px dashed;
+   color:black;
+   height:1px;
+  width:155%;
+}
+.loc{
+    display: flex;
+    position: relative;
+    bottom:41px;
+    right:27%;
+    margin-bottom: 10px;    
+}
+.sub {
+    display: flex;
+    position: relative;
+    bottom: 15px;
+    left: 20px;
+    font-style: normal;
+   font-weight: 300;
+   font-size: 16px;
+   line-height: 18px;   
+   white-space: nowrap;
+   text-overflow: ellipsis;
+}
+.min{
+   display: flex;
+   position: relative;
+   top: 30px;
+   right:53%;
+   font-weight: 400;
+font-size: 14px;
+line-height: 21px;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+
+.kms{
+    display: flex;
+    position: relative;
+    top: 30px;
+    right: 35%;
+    font-weight: 400;
+   font-size: 14px;
+    line-height: 21px;
+    
+ }
