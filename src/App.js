@@ -69,7 +69,7 @@ function App() {
                 element={<SignInPhone />}
               ></Route>
               <Route
-                path={AppRoutes.adminDashboard}
+                path={AppRoutes.driverDashboard}
                 element={
                   <AuthGuard>
                     <DriverDashboard />
