@@ -1,9 +1,9 @@
-.switch{
+ .switch{
     position: fixed;
     display: inline-block;
     width: 60px;
     height: 34px;
-    left: 320px;  
+    left: 82%;  
       
 }
 
@@ -48,8 +48,7 @@
     -ms-transform: translateX(26px);
     transform: translateX(26px);
   }
-  
-  /* Rounded sliders */
+ 
   .slider.round {
     border-radius: 34px;
   }
@@ -68,6 +67,7 @@
     position: fixed;
     left: 12px;
     top: 70px;
+ 
   }
 
 .text{
@@ -85,4 +85,5 @@ line-height: 22px;
 position: fixed;
 top: 105px;
 left: inherit;
-}
+} 
+

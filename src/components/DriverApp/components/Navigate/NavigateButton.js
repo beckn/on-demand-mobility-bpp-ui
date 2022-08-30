@@ -16,7 +16,7 @@ function NavigateButton() {
       </Button>
       <Modal
         className='popup'
-        size="sm"
+        size="lg"
         show={smShow}
         
         onHide={() => setSmShow(false)}
