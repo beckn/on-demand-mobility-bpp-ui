@@ -20,7 +20,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #34C759;
+    background-color: rgba(120, 120, 128, 0.16);
     transition: 0.4s;
   }
   
@@ -86,4 +86,21 @@ position: fixed;
 top: 105px;
 left: inherit;
 } 
+
+.dot {
+  height: 6px;
+  width: 6px;
+  background-color:#DBDBDB;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right:8px
+}
+.accept-button {
+  background: #34C759;
+  color:white;
+}
+.decline-button {
+  background:  none;
+  color:red;
+}
 
