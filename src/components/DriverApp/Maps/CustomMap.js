@@ -1,5 +1,6 @@
 import React,{useState} from "react";
 import {usePosition} from "../hooks/usePosition";
+import {CarIcon} from "../../../shared/icons/Car"
 import {
   useJsApiLoader,
   GoogleMap,
@@ -55,7 +56,6 @@ function CustomMap() {
       >
         { /* Child components, such as markers, info windows, etc. */ }
         <Marker
-    
       position={position}
     />
       </GoogleMap>}

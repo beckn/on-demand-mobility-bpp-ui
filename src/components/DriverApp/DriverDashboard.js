@@ -1,17 +1,23 @@
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import DriverAppHeader from "./components/Header/Header";
 import DriverAppFooter from "./components/NavFooter/NavFooter";
-import {usePosition} from "./hooks/usePosition";
+import { usePosition } from "./hooks/usePosition";
 import CustomMap from "./Maps/CustomMap";
 
 function DriverDashboard() {
- 
-  
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = () => {
+    document.title = `Driver App`;
+  };
+
   return (
     <div>
-      <DriverAppHeader/> 
+      <DriverAppHeader />
       <div>
-    <CustomMap />
+        <CustomMap />
       </div>
       <DriverAppFooter />
     </div>

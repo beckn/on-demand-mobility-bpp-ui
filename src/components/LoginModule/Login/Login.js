@@ -15,10 +15,10 @@ export const Login = (props) => {
 
   useEffect(() => {
     isAuthenticated();
-    document.title = `taxi BPP`;
+    document.title = `Driver App`;
     let appTitle =
       (window.location.pathname === "/" && "Driver") ||
-      (window.location.pathname === AppRoutes.admin && "Taxi Admin");
+      (window.location.pathname === AppRoutes.admin && "Taxi Driver");
     setApp(appTitle);
     // spinnerService.show("mySpinner");
   }, []);
