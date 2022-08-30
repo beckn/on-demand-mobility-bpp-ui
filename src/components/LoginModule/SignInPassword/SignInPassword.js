@@ -31,7 +31,7 @@ export const Login = (props) => {
       },
     };
     userAction(path, data).then((res) => {
-      window.location.href = AppRoutes.adminDashboard;
+      window.location.href = AppRoutes.driverDashboard;
     });
   };
 

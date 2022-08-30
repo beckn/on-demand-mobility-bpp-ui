@@ -29,7 +29,7 @@ export const getValue = (propertyPath, obj) => {
 };
 
 export const isAuthenticated = () => {
-  if (getCookie(LocalKey.saveApi)) window.location.href = AppRoutes.adminDashboard;
+  if (getCookie(LocalKey.saveApi)) window.location.href = AppRoutes.driverDashboard;
 };
 
 export const getAddress = function getAddress(address) {

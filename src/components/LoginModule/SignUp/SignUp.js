@@ -29,7 +29,7 @@ export const SignInPassword = () => {
 
   const init = () => {
     isAuthenticated();
-    document.title = `taxi BPP Sign up`;
+    document.title = `Driver App Sign up`;
     !Associations && getRequiredList();
     // spinnerService.show(LocalKey.spinnerKey);
   };
@@ -37,11 +37,11 @@ export const SignInPassword = () => {
   const navigateTo = (key) => navigate(key);
 
   const getRequiredList = () => {
-    let initData = [getCompanies("companies"), getRoles("roles")];
+    let initData = [getCompanies("companies")];
     Promise.all(initData).then((allData) => {
       // console.log("All Predata", allData);
       setAssociation(allData[0].data.Companies);
-      setRoles(allData[1].data.Roles);
+      //setRoles(allData[1].data.Roles);
     });
   };
 
@@ -75,7 +75,7 @@ export const SignInPassword = () => {
     };
 
     userAction(path, data).then((res) => {
-      navigateTo(AppRoutes.adminDashboard);
+      navigateTo(AppRoutes.driverDashboard);
     });
   };
 
@@ -167,7 +167,7 @@ export const SignInPassword = () => {
                       </select>
                       <ErrorMessage fieldError={errors?.Company} />
                     </div>
-                    <div className="col-5  mb-4 col-12 col-lg-6">
+                    {/* <div className="col-5  mb-4 col-12 col-lg-6">
                       <select
                         name="Role"
                         id="Role"
@@ -189,7 +189,7 @@ export const SignInPassword = () => {
                           ))}
                       </select>
                       <ErrorMessage fieldError={errors?.Role} />
-                    </div>
+                    </div> */}
                     <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="text"
