@@ -21,7 +21,7 @@ const SwitchButton = () => {
     !value && setRideModalShow(!rideModalShow);
   };
   return (
-    <div className="switchButtonBody">
+    <div className="">
       <div>
         <h2 className="title">Bharat Ganapathy</h2>
         <h3 className="text">Driver - Beckn One</h3>
@@ -56,7 +56,7 @@ const OfflineModalContent = () => {
 
 const RideRequest = () => {
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center p-3">
+    <div className="d-flex flex-column justify-content-center align-items-center p-3 ">
       <Title id="contained-modal-title-vcenter">New Ride Request!</Title>
       <span className="p-2">
         <MarkerIcon />
