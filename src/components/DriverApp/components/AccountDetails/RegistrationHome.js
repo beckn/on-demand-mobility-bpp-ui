@@ -211,10 +211,9 @@ function RegistrationSubmit() {
         </div>
 
         <Modal
-          className="popup1"
-          size="sm"
           show={showModal}
           onHide={() => setShowModal(false)}
+          centered
         >
           <div>
             <button class="close" onClick={() => setShowModal(false)}>
