@@ -5,6 +5,8 @@ import Modal from "react-bootstrap/Modal";
 import Success from "./success.png";
 import DriverAppHeader from "../Header/Header";
 import DriverAppFooter from "../NavFooter/NavFooter";
+import { getCookie } from "../../../../core/CookiesHandler";
+import { LocalKey } from "../../../../core/constant";
 
 export default function Registration() {
   const [flag, setFlag] = useState(false);
@@ -21,11 +23,13 @@ export default function Registration() {
 }
 
 function RegistrationHome({ Flag }) {
-  const [name, setName] = useState("");
-  const [mobileno, setMobileNo] = useState("");
-  const [email, setEmail] = useState("");
-  const [sex, setSex] = useState("");
-  const [age, setAge] = useState("");
+  const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
+  console.log({ User });
+  const [name, setName] = useState(User.LongName || "");
+  const [mobileno, setMobileNo] = useState(User.PhoneNumber || "");
+  const [email, setEmail] = useState(User.Name || "");
+  const [sex, setSex] = useState("Male" || "");
+  const [age, setAge] = useState(32 || "");
 
   function SubmitButton() {
     if (name && mobileno && email && sex && age) {
@@ -206,7 +210,12 @@ function RegistrationSubmit() {
           <SubmitButton />
         </div>
 
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal
+          className="popup1"
+          size="sm"
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        >
           <div>
             <button class="close" onClick={() => setShowModal(false)}>
               ×
