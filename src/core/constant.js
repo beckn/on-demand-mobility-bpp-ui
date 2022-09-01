@@ -3,8 +3,10 @@ export const AppRoutes = {
   signUp: "/sign-up",
   signInOtp: "/sign-in-phone",
   signInPassword: "/sign-in-password",
+  adminDashboard: "/admin-dashboard",
   driverDashboard: "/driver-dashboard",
   addVehicle: "/add-vehicles",
+  accountRegistration: "/account-Registration",
 };
 
 export const LocalKey = {
@@ -13,7 +15,14 @@ export const LocalKey = {
   spinnerKey: "taxiSpinner",
 };
 
-export const NoHeader = ["/", AppRoutes.admin, AppRoutes.signInOtp, AppRoutes.signInPassword, AppRoutes.signUp];
+export const NoHeader = [
+  "/",
+  AppRoutes.admin,
+  AppRoutes.signInOtp,
+  AppRoutes.signInPassword,
+  AppRoutes.signUp,
+  AppRoutes.accountRegistration,
+];
 
 export const DocumentType = {
   Aadhar: "Aadhar",
@@ -28,8 +37,20 @@ export const commonMsg = {
   NoValue: "Not Available",
 };
 
-export const SearchGroupsCode = { PinCode: "pin_codes", State: "states", City: "cities" };
+export const SearchGroupsCode = {
+  PinCode: "pin_codes",
+  State: "states",
+  City: "cities",
+};
 
-export const GroupsCode = { PinCode: "PinCodes", State: "States", City: "Cities" };
+export const GroupsCode = {
+  PinCode: "PinCodes",
+  State: "States",
+  City: "Cities",
+};
 
-export const NoLoader = ["user/cities/search", "user/pin_codes/search", "user/states/search"];
+export const NoLoader = [
+  "user/cities/search",
+  "user/pin_codes/search",
+  "user/states/search",
+];
