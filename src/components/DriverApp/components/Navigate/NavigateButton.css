@@ -4,24 +4,21 @@
     position: fixed;
     border-color: #34C759;
     bottom: 35px;
-    border: none;
 
 }
+
 
 .popup{
     background-color: #f5f1ed;
     position:relative;
-    padding-bottom:20px;
-    display: flex;
+    padding-bottom:20%;
   }
 .carLog {
     width: 46.7px;
     height: 46.7px;
     right: -2px;
     position: relative;
-    bottom: 32px;
-    border: none;
-    display: flex;
+    bottom: 8px;
 }
 .callLog{
     position:relative;
@@ -29,52 +26,102 @@
     left: 295px;
     width: 53px;
     height: 57px;
-    bottom: 80px;
+    bottom: 55px;
 }
 .titlle {
-    position:fixed;
-     display: flex;
-    right: 2.9cm;
+    position:absolute;
+    display:flex;
+    right: 27%;
    font-size: 24px;
    font-weight: 500;
-   top: 60%;
+   top: 2%;
 
 }
 .h6{
     display: flex;
-     position: absolute;
-    bottom: 6.5cm;
-    left: 80px;
-    width: 80%;
+    position:absolute;
+    bottom: 80%;
+    left: 68px;
+    width: 229px;
     height: 21px;
     font-weight: 400;
     font-size: 14px;
-     border: none;
 }
 .hr{
     display: flex;
     position: relative;
-    bottom:2.2cm;
+    bottom:65px;
     right: 14px;
     border:none;
    border-top:1px dashed;
    color:black;
    height:1px;
   width:108%;
-
 }
 .loc{
     display: flex;
     position: relative;
-    bottom:2.1cm;
+    bottom:55px;
     left: 20px;
     margin-bottom: 10px;    
+}
+.MapPin{
+    display: flex;
+    position: relative;
+    bottom:-35px;
+    right: 5px;
+}
+.map{
+    display: flex;
+    position: relative;
+    bottom:-px;
+    right: 15px;
+     
+}
+.hrs{
+    display: flex;
+    position: relative;
+    bottom:60px;
+    right: 14px;
+    border:none;
+   border-top:1px dashed;
+   color:black;
+   height:1px;
+  width:108%;
+}
+.hd{
+    display: flex;
+    position: relative;
+    bottom:60px;
+}
+.rs{
+    display: flex;
+    position: relative;
+    left: 80%;
+    bottom: 90px;
+    font-weight: 500;
+font-size: 16px;
+line-height: 24px;
+}
+.ps{
+    display: flex;
+    position: relative;
+    bottom: 70px;
+    font-weight: 300;
+font-size: 14px;
+line-height: 21px;
+}
+.ride{
+    display: flex;
+    position: relative;
+    bottom: 40px;
+    color: red;
 }
 .sub {
     display: flex;
     position: relative;
-    bottom: 3cm;
-    left: 1.5cm;
+    bottom:90px;
+    left: 60px;
     font-style: normal;
    font-weight: 300;
    font-size: 16px;
@@ -85,7 +132,7 @@
 .min{
    display: flex;
    position: relative;
-   bottom: 80px;
+   bottom: 65px;
    left: 60px;
    font-weight: 400;
 font-size: 14px;
@@ -97,10 +144,10 @@ text-overflow: ellipsis;
 .kms{
     display: flex;
     position: relative;
-    bottom: 2.9cm;
-    left: 5.6cm;
+    bottom: 95px;
+    left: 200px;
     font-weight: 400;
-    font-size: 14px;
+   font-size: 14px;
     line-height: 21px;
     
  }

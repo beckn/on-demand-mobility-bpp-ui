@@ -17,9 +17,6 @@ function DriverAppHeader() {
       <div className="radio fixed-top">
         <SwitchButton />
       </div>
-      <div className="fixed-bottom">
-        <NavigateButton />
-      </div>
     </>
   );
 }

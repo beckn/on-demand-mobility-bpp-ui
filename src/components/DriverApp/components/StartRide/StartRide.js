@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { MapPin } from "react-feather";
 import { CallLogIcon } from "../../../../shared/icons/CallLog";
 import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { LocationIcon } from "../../../../shared/icons/Location";
-import ReadyStart from "../ReadyStart/ReadyStart";
-// import RideCompleted from "../RideCompleted/RideCompleted";
-import RideStart from "../StartRide/StartRide";
-import RideStarted from "../RideStarted/RideStarted";
-import "./NavigateButton.css";
 
-function NavigateButton() {
+
+function StartRide() {
   const [smShow, setSmShow] = useState(false);
 
   return (
@@ -26,7 +23,7 @@ function NavigateButton() {
         aria-labelledby="example-modal-sizes-title-sm"
       >
           <Modal.Title className="titlle" id="example-modal-sizes-title-sm">
-          Going for Pickup
+          Ride Started
           </Modal.Title>
         <Modal.Body>
           <div className="carLog">
@@ -39,18 +36,20 @@ function NavigateButton() {
           <hr className="hr" />
           <div className="loc">
             <LocationIcon />
+            <span className="MapPin">
+        <MapPin color="#D22323" className="map" />
+        Shaniwar wada
+      </span>
           </div>
           <p className="sub">Raja Dinkar Kelkar Museum</p>
-          <h6 className="min">5 min away</h6>
-          <h6 className="kms">2.5kms</h6>
+          <hr className="hrs" />
+          <h6 className="hd">Total Fare:</h6>
+          <h6 className="rs">Rs.200</h6>
+          <p className="ps">To be collected at the end of the ride</p>
         </Modal.Body>
       </Modal>
-       {/* <ReadyStart /> */}
-      {/* <RideStart /> */}
-     <RideStarted />
-      {/* <RideCompleted />  */}
     </>
   );
 }
 
-export default NavigateButton;
+export default StartRide

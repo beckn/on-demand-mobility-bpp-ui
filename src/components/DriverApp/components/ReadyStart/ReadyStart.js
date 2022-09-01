@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { MapPin } from "react-feather";
 import { CallLogIcon } from "../../../../shared/icons/CallLog";
 import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { LocationIcon } from "../../../../shared/icons/Location";
-import ReadyStart from "../ReadyStart/ReadyStart";
-// import RideCompleted from "../RideCompleted/RideCompleted";
-import RideStart from "../StartRide/StartRide";
-import RideStarted from "../RideStarted/RideStarted";
-import "./NavigateButton.css";
+import { ReadyStartData } from "../DriveData";
 
-function NavigateButton() {
+
+function ReadyStart(props) {
   const [smShow, setSmShow] = useState(false);
-
+  
   return (
     <>
       <Button onClick={() => setSmShow(true)} className="me-2 fixed-bottom">
@@ -25,9 +23,9 @@ function NavigateButton() {
         onHide={() => setSmShow(false)}
         aria-labelledby="example-modal-sizes-title-sm"
       >
-          <Modal.Title className="titlle" id="example-modal-sizes-title-sm">
-          Going for Pickup
-          </Modal.Title>
+      <Modal.Title className="titlle" id="example-modal-sizes-title-sm">
+        {ReadyStartData.title}
+        </Modal.Title>
         <Modal.Body>
           <div className="carLog">
             <CarLogIcon />
@@ -35,22 +33,25 @@ function NavigateButton() {
           <div className="callLog">
             <CallLogIcon />
           </div>
-          <h6 className="h6">Reach pick up location in 5 mins.</h6>
+          <h6 className="h6">{ReadyStartData.Subtitle}</h6>
           <hr className="hr" />
           <div className="loc">
             <LocationIcon />
+            <span className="MapPin">
+        <MapPin color="#D22323" className="map" />
+      {ReadyStartData.Address}
+      </span>
           </div>
-          <p className="sub">Raja Dinkar Kelkar Museum</p>
-          <h6 className="min">5 min away</h6>
-          <h6 className="kms">2.5kms</h6>
+          <p className="sub">{ReadyStartData.Location}</p>
+          <hr className="hrs" />
+          <h6 className="hd">{ReadyStartData.TotalRide}</h6>
+          <h6 className="rs">{ReadyStartData.Amount}</h6>
+          <p className="ps">{ReadyStartData.Colletion}</p>
+          <h6 className="ride">{ReadyStartData.Ride}</h6>
         </Modal.Body>
       </Modal>
-       {/* <ReadyStart /> */}
-      {/* <RideStart /> */}
-     <RideStarted />
-      {/* <RideCompleted />  */}
     </>
   );
 }
 
-export default NavigateButton;
+export default ReadyStart
