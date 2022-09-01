@@ -3,9 +3,8 @@
     display: inline-block;
     width: 60px;
     height: 34px;
-    left: 82%;  
-      
-}
+    right: 2%;  
+  }
 
 .switch input {
     opacity: 0;
@@ -66,7 +65,7 @@
     display: flex;
     position: fixed;
     left: 12px;
-    top: 70px;
+    top: 94px;
  
   }
 
@@ -75,7 +74,7 @@ font-weight: 275;
 font-size: 14px;
 line-height: 22px;
 position: fixed;
- top:105px;
+ top:130px;
  left: 15px;
   }
 .textav{
@@ -83,7 +82,7 @@ font-weight: 300;
 font-size: 14px;
 line-height: 22px;
 position: fixed;
-top: 105px;
+top: 130px;
 left: inherit;
 } 
 
@@ -104,3 +103,7 @@ left: inherit;
   color:red;
 }
 
+.switchButtonBody{
+  top: 100px;
+  background-color: #34C759;
+}

@@ -12,6 +12,7 @@ const containerStyle = {
   width: "400px",
   height: "400px",
 };
+
 const center = {
   lat: 0,
   lng: -180,
@@ -44,7 +45,11 @@ function CustomMap() {
         <GoogleMap
           center={position}
           zoom={8}
-          mapContainerStyle={{ top: "150px", width: "100%", mineight: "500px" }}
+          mapContainerStyle={{
+            top: "85px",
+            width: "100%",
+            minHeight: "500px",
+          }}
           options={{
             zoomControl: false,
             streetViewControl: false,

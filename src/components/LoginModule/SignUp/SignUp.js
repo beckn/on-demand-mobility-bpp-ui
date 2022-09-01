@@ -287,7 +287,7 @@ export const SignInPassword = () => {
                   <div className="col-10 col-12 col-lg-6">
                     <p className="mt-5">
                       Existing User?{" "}
-                      <Link to={AppRoutes.admin} className="link-primary">
+                      <Link to={AppRoutes.adminDashboard} className="link-primary">
                         Sign In
                       </Link>
                     </p>

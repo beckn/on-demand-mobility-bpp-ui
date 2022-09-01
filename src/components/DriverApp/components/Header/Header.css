@@ -2,8 +2,8 @@
     align-items: center;  
     justify-content: center;
     text-align: center;
-  
 }
+
 .header-text {
     font-weight: 'bold';
     font-size: 20px;
@@ -16,12 +16,14 @@
     justify-items: center;;
 
 }
+
 .Arrow {
    display: flex;
    position: relative;
    bottom: 60px;
 
 }
+
 .Btn {
   display: flex;
   position: relative;
@@ -33,7 +35,33 @@
 
  .radio {
    display: flex;
-   top: 70px;
+   top: 94px;
    position: fixed;
  
 } 
+
+.back-button{
+  border: none;
+  background-color: transparent;
+}
+
+.top-bar .icon_back {
+  position: absolute;
+  left: 0;
+  margin: 10px;
+}
+
+.top-bar{
+  align-items: center;
+  display: flex;
+  font-size: 18px;
+  justify-content: space-around;
+  height: 88px;
+  font-weight: 500;
+  background: #9DAFF0;
+  box-shadow: 0 4px 8pxrgba(0,0,0,.07);
+}
+
+.text-white{
+  color: white;
+}

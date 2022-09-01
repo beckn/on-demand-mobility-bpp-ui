@@ -1,9 +1,8 @@
-import React , { useContext , useState , useEffect } from 'react'
-import {Link, Routes, Route, useNavigate} from "react-router-dom";
-import {Navbar,Container, Nav, FormControl} from "react-bootstrap"
+import React from 'react'
+import {useNavigate} from "react-router-dom";
 import './Registration_css.css';
 
-export default function Header() {
+export default function Header({title}) {
    const navigate = useNavigate();
 
    return (     
@@ -12,7 +11,7 @@ export default function Header() {
             <button className='back-button' onClick={() => navigate(-1)}><span>&#60;</span> Back</button>
          </span>
          <span class="header-push text-white">
-            Account
+            {title}
          </span>
       </div>
    )
