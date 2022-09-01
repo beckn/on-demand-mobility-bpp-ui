@@ -21,7 +21,7 @@ const SwitchButton = () => {
     !value && setRideModalShow(!rideModalShow);
   };
   return (
-    <div>
+    <div className="switchButtonBody">
       <div>
         <h2 className="title">Bharat Ganapathy</h2>
         <h3 className="text">Driver - Beckn One</h3>

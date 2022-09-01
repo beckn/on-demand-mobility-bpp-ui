@@ -3,7 +3,9 @@
     color:white;
     position: fixed;
     border-color: #34C759;
-    bottom: 45px;
+    bottom: 50px;
+    height: 60px;
+    width: 100%;
     border: none;
 
 }

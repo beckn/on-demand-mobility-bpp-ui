@@ -3,7 +3,7 @@ import './Registration_css.css';
 import Upload from "./upload.png";
 import Modal from 'react-bootstrap/Modal';
 import Success from './success.png';
-import Header from './Header';
+import DriverAppHeader from '../Header/Header';
 import DriverAppFooter from '../NavFooter/NavFooter';
 
 export default function Registration() {
@@ -12,7 +12,7 @@ export default function Registration() {
 
    return (
    <div>
-      <Header/>
+      <DriverAppHeader title={"Account"}/>
       <div>
 
          {flag ? (

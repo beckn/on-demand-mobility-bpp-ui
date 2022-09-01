@@ -1,25 +1,26 @@
 import React from "react";
 import "./Header.css";
-import { BackArrowIcon } from "../../../../shared/icons/BackArrow";
-import NavigateButton from "../Navigate/NavigateButton";
-import SwitchButton from "../SwitchButton/SwitchButton";
+import {useNavigate} from "react-router-dom";
 
-function DriverAppHeader() {
+function DriverAppHeader({title}) {
+  const navigate = useNavigate();
   return (
     <>
-      <div className="header fixed-top">
+       <div className='top-bar'>
+         <span className='icon_back'>
+            <button className='back-button' onClick={() => navigate(-1)}><span>&#60;</span> Back</button>
+         </span>
+         <span class="header-push text-white">
+            {title}
+         </span>
+      </div>
+      {/*<div className="header fixed-top">
         <h3 className="header-text">Home</h3>
         <div className="Arrow">
           <BackArrowIcon />
           <button className="Btn">Back</button>
         </div>
-      </div>
-      <div className="radio fixed-top">
-        <SwitchButton />
-      </div>
-      <div className="fixed-bottom">
-        <NavigateButton />
-      </div>
+      </div>*/}
     </>
   );
 }
