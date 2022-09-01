@@ -21,9 +21,8 @@ const SignInPhone = React.lazy(() =>
   import("./components/LoginModule/SignInPhone")
 );
 const Registration = React.lazy(()=>
-import("./components/DriverApp/components/AccountDetails/RegistrationHome"));
-const SubmitRegistration = React.lazy(()=>
-import("./components/DriverApp/components/AccountDetails/RegistrationSubmitPage"));
+  import("./components/DriverApp/components/AccountDetails/RegistrationHome")
+);
 const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
 const DriverDashboard = React.lazy(() =>
   import("./components/DriverApp/DriverDashboard")
@@ -75,10 +74,6 @@ function App() {
               <Route
                 path={AppRoutes.accountRegistration}
                 element={<Registration />}
-              ></Route>
-              <Route
-                path={AppRoutes.registrationSubmit}
-                element={<SubmitRegistration />}
               ></Route>
               <Route
                 path={AppRoutes.adminDashboard}

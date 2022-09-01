@@ -6,7 +6,6 @@ export const AppRoutes = {
   adminDashboard: "/admin-dashboard",
   addVehicle: "/add-vehicles",
   accountRegistration: "/account-Registration",
-  registrationSubmit: "/registration-Submit",
 };
 
 export const LocalKey = {
@@ -15,7 +14,7 @@ export const LocalKey = {
   spinnerKey: "taxiSpinner",
 };
 
-export const NoHeader = ["/", AppRoutes.admin, AppRoutes.signInOtp, AppRoutes.signInPassword, AppRoutes.signUp, AppRoutes.accountRegistration,AppRoutes.registrationSubmit];
+export const NoHeader = ["/", AppRoutes.admin, AppRoutes.signInOtp, AppRoutes.signInPassword, AppRoutes.signUp, AppRoutes.accountRegistration];
 
 export const DocumentType = {
   Aadhar: "Aadhar",
