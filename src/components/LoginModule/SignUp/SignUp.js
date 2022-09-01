@@ -69,7 +69,7 @@ export const SignInPassword = () => {
           Id: Company,
         },
         UserRole: {
-          Id: Role,
+          Id: "3",
         },
       },
     };
@@ -287,7 +287,10 @@ export const SignInPassword = () => {
                   <div className="col-10 col-12 col-lg-6">
                     <p className="mt-5">
                       Existing User?{" "}
-                      <Link to={AppRoutes.adminDashboard} className="link-primary">
+                      <Link
+                        to={AppRoutes.adminDashboard}
+                        className="link-primary"
+                      >
                         Sign In
                       </Link>
                     </p>
