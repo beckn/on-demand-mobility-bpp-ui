@@ -1,0 +1,260 @@
+.back-button{
+    border: none;
+    background-color: transparent;
+}
+
+.text-white{
+    color: white;
+}
+
+.Footer{
+    bottom:0%;
+    width:100%;
+    position: absolute;
+    height: 83px;
+    background: rgba(249, 249, 249, 0.94);
+    box-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+} 
+.Registration-body{
+   /* padding-top: 5%; */
+    padding-right: 2%;
+    padding-left: 2%;
+    position: absolute;
+    /*background-color: aqua;*/
+    width: 100%;
+    top: 88px;
+   /* background-color: azure;*/
+
+}
+.btn-secondary{
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    left: 0%;
+    right: 0%;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 14px;
+    color: white;
+    letter-spacing: 0.38px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    bottom: 8%;
+}
+input {
+    outline: 0;
+    border-width: 0 0 1px;
+    border-color: rgba(0, 0, 0, 0.3);
+    left: 0;
+    width: 100%;
+    text-align: left;
+    color: black;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+  }
+  input:focus {
+    border-color:rgba(0, 0, 0, 0.6);
+  }
+
+table{
+    width: 100%;
+    border: none;
+}
+
+ td {
+  padding-top: 6%;
+}
+
+.top-padding{
+  padding-top: 6%;
+}
+
+.top-padding4{
+  padding-top: 4%;
+}
+
+.top-padding2{
+  padding-top: 8%;
+}
+
+.AccountIcon{
+    height: 20px;
+    width: 20px;
+}
+
+.position-relative{
+  position: relative;
+}
+ 
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    float: right;
+    
+  }
+  .align-left{
+    text-align: left;
+    padding-top: 0;
+  }
+  .uploadbtn{
+    /*border: 2px solid gray;*/
+    border: none;
+    color: gray;
+    background-color: white;
+    color: aquamarine;
+    /*border-radius: 8px;*/
+    font-size: 10px;
+    font-weight: bold;
+    height: 30px;
+    width: 35px;
+      
+      
+    bottom: 60px;
+    
+  }
+  
+  .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+  
+ .footer-content{
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    padding-left: 18%;
+    padding-top: 15px;
+  }
+
+  .top-bar .icon_back {
+    position: absolute;
+    left: 0;
+    margin: 10px;
+  }
+
+  .top-bar{
+    align-items: center;
+    display: flex;
+    font-size: 18px;
+    justify-content: space-around;
+    height: 88px;
+    font-weight: 500;
+    background: #9DAFF0;
+    box-shadow: 0 4px 8pxrgba(0,0,0,.07);
+}
+
+.selectpicker{
+  /*color: #9DAFF0;*/
+  width: 96%;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  position: absolute;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  padding-bottom: 5px;
+}
+
+.selectdata{
+  padding-top: 10px;
+}
+
+.coloract{
+  background-color: #9DAFF0;
+}
+
+.mrspace{
+  padding-right: 15px;
+}
+.mlspace{
+  padding-left: 15px;
+}
+
+.bold-text{
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 22px;
+/* identical to box height, or 122% */
+
+letter-spacing: -0.408px;
+
+/* Label Color / Light / Primary */
+
+color: #000000;
+}
+
+.popup1:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.modal-dialog {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.popup1 .modal-content{
+  border-radius: 29px;
+  left: 20%;
+  text-align: center;
+ /* padding: 20px 20px 20px 20px;*/
+  -webkit-animation-name: modal-animation;
+  -webkit-animation-duration: 0.5s;
+  animation-name: modal-animation;
+  animation-duration: 0.5s;
+}
+
+@-webkit-keyframes modal-animation {
+  from {
+      top: -100px;
+      opacity: 0;
+  }
+  to {
+      top: 0px;
+      opacity: 1;
+  }
+}
+
+@keyframes modal-animation {
+  from {
+      top: -100px;
+      opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+}
+}
+
+.close {
+  border: none;
+  font-size: 30px;
+  float: right;
+  padding-right: 20px;
+  background-color: transparent;
+}
+.m-header{
+  right: 0px;
+}
+
+.success{
+  height: 1%;
+  width: 100%;
+}
+
