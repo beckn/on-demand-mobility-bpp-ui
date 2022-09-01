@@ -5,6 +5,7 @@
     justify-content: space-around;
     flex-direction: row;
     flex-wrap: wrap;
+    bottom: 20px;
 }
 .homeicon {
     padding-left: 10px;

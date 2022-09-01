@@ -3,9 +3,10 @@
     color:white;
     position: fixed;
     border-color: #34C759;
-    bottom: 35px;
+    bottom: 60px;
+    height: 60px;
+    width: 100%;
     border: none;
-
 }
 
 .popup{
@@ -88,10 +89,10 @@
    bottom: 80px;
    left: 60px;
    font-weight: 400;
-font-size: 14px;
-line-height: 21px;
-white-space: nowrap;
-text-overflow: ellipsis;
+   font-size: 14px;
+   line-height: 21px;
+   white-space: nowrap;
+   text-overflow: ellipsis;
 }
 
 .kms{

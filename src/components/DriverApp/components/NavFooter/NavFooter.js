@@ -3,6 +3,8 @@ import "./NavFooter.css";
 import { CarIcon } from "../../../../shared/icons/Car";
 import { HomeIcon } from "../../../../shared/icons/Home";
 import { ProfileIcon } from "../../../../shared/icons/Profile";
+import { Link } from "react-router-dom";
+import { AppRoutes, LocalKey } from "../../../../core/constant";
 
 function DriverAppFooter() {
   return (
@@ -12,10 +14,14 @@ function DriverAppFooter() {
         <HomeIcon />
       </div>
       <dniv className="caricon">
-        <CarIcon />
+        <Link to={AppRoutes.driverDashboard} className="link-primary">
+          <CarIcon />
+        </Link>
       </dniv>
       <div className="profileicon">
-        <ProfileIcon />
+        <Link to={AppRoutes.accountRegistration} className="link-primary">
+          <ProfileIcon />
+        </Link>
       </div>
     </div>
   );
