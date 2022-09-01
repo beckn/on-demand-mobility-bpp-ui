@@ -14,21 +14,14 @@ function DriverAppFooter() {
         <HomeIcon />
       </div>
       <dniv className="caricon">
-        <Link
-          to={AppRoutes.adminDashboard}
-          className="link-primary"
-        >
-         <CarIcon />
+        <Link to={AppRoutes.driverDashboard} className="link-primary">
+          <CarIcon />
         </Link>
       </dniv>
       <div className="profileicon">
-        <Link
-          to={AppRoutes.accountRegistration}
-          className="link-primary"
-        >
+        <Link to={AppRoutes.accountRegistration} className="link-primary">
           <ProfileIcon />
         </Link>
-        
       </div>
     </div>
   );

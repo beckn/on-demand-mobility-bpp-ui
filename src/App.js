@@ -20,7 +20,7 @@ const SignInPassword = React.lazy(() =>
 const SignInPhone = React.lazy(() =>
   import("./components/LoginModule/SignInPhone")
 );
-const Registration = React.lazy(()=>
+const Registration = React.lazy(() =>
   import("./components/DriverApp/components/AccountDetails/RegistrationHome")
 );
 const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
@@ -76,7 +76,7 @@ function App() {
                 element={<Registration />}
               ></Route>
               <Route
-                path={AppRoutes.adminDashboard}
+                path={AppRoutes.driverDashboard}
                 element={
                   <AuthGuard>
                     <DriverDashboard />
