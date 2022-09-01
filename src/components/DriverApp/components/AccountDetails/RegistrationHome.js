@@ -167,10 +167,9 @@ function RegistrationSubmit() {
         </div>
 
         <Modal
-            className='popup1'
-            size="sm"
             show={showModal}  
             onHide={() => setShowModal(false)}
+            centered
          >
 
              <div >
@@ -179,7 +178,7 @@ function RegistrationSubmit() {
                </button>
             </div>
             
-            <Modal.Body className='modal-dialog'>
+            <Modal.Body className='mbody'>
                <div>
                   <img src={Success} className='success'/>
                </div>
