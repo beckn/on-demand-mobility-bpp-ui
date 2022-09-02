@@ -48,7 +48,7 @@ function CustomMap() {
           mapContainerStyle={{
             top: "85px",
             width: "100%",
-            height: "450px",
+            height: "400px",
           }}
           options={{
             zoomControl: false,
