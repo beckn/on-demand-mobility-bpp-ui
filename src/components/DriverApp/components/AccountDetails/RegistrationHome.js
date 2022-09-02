@@ -9,7 +9,6 @@ import DriverAppFooter from "../NavFooter/NavFooter";
 import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { LocalKey, DocumentType, AppRoutes } from "../../../../core/constant";
 import { uploadFile } from "../../../Account/Account.Services";
-
 import { userLogout } from "../../../LoginModule/Login.services";
 
 export default function Registration() {
@@ -31,14 +30,19 @@ export default function Registration() {
     </div>
   );
 }
-
+const getDocumentDetails = (user, type) => {
+  return (
+    user?.DriverDocuments?.find((x) => x.Document === type)?.DocumentNumber ||
+    ""
+  );
+};
 function RegistrationHome({ Flag, User }) {
   const [name, setName] = useState(User.LongName || "");
   const [mobileno, setMobileNo] = useState(User.PhoneNumber || "");
   const [email, setEmail] = useState(User.Name || "");
   const [sex, setSex] = useState("Male" || "");
   const [age, setAge] = useState(32 || "");
-
+  const isVerified = User?.Approved === "Y" ? true : false;
   const SubmitButton = () => {
     if (name && mobileno && email && sex && age) {
       return (
@@ -63,6 +67,7 @@ function RegistrationHome({ Flag, User }) {
       console.log("User Logout", res);
       removeCookie(LocalKey.saveApi);
       removeCookie(LocalKey.saveUser);
+      // navigate(AppRoutes.admin);
       window.location.href = AppRoutes.admin;
     });
   };
@@ -80,6 +85,7 @@ function RegistrationHome({ Flag, User }) {
             <input
               placeholder="Enter your Name"
               value={name}
+              disabled={isVerified}
               onChange={(e) => setName(e.target.value)}
               type="text"
               className="top-padding4"
@@ -94,6 +100,7 @@ function RegistrationHome({ Flag, User }) {
               placeholder="Enter Your Email ID"
               type="text"
               value={email}
+              disabled={isVerified}
               onChange={(e) => setEmail(e.target.value)}
               className="top-padding4"
             />
@@ -107,6 +114,7 @@ function RegistrationHome({ Flag, User }) {
               placeholder="Enter Your Mobile Number"
               type="text"
               value={mobileno}
+              disabled={isVerified}
               onChange={(e) => setMobileNo(e.target.value)}
               className="top-padding4"
             />
@@ -114,12 +122,15 @@ function RegistrationHome({ Flag, User }) {
         </div>
 
         <div className="top-padding">
-          <span className="bold-text">Sex :</span>
+          <span className="bold-text">
+            {isVerified ? "Driving License :" : "Sex :"}
+          </span>
           <span className="top-padding4 align-left">
             <input
-              placeholder="Enter Your Sex"
+              placeholder={isVerified ? "Driving License" : "Enter Your Sex"}
               type="text"
-              value={sex}
+              value={getDocumentDetails(User, DocumentType.Licence)}
+              disabled={isVerified}
               onChange={(e) => setSex(e.target.value)}
               className="top-padding4"
             />
@@ -127,19 +138,20 @@ function RegistrationHome({ Flag, User }) {
         </div>
 
         <div className="top-padding">
-          <span className="bold-text">Age :</span>
+          <span className="bold-text">{isVerified ? "Pan no :" : "Age :"}</span>
           <span className="top-padding4 align-left">
             <input
-              placeholder="Enter Your Age"
+              placeholder={isVerified ? "Pan no." : "Enter Your Age"}
               type="text"
-              value={age}
+              value={getDocumentDetails(User, DocumentType.Pan)}
+              disabled={isVerified}
               onChange={(e) => setAge(e.target.value)}
               className="top-padding4"
             />
           </span>
         </div>
 
-        {User.Approved === "N" && (
+        {!isVerified && (
           <div className="top-padding2">
             <SubmitButton />
           </div>
