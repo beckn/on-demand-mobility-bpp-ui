@@ -7,8 +7,6 @@ import { usePosition } from "./hooks/usePosition";
 import CustomMap from "./Maps/CustomMap";
 import SwitchButton from "./components/SwitchButton/SwitchButton";
 
-
-
 function DriverDashboard() {
   useEffect(() => {
     init();
