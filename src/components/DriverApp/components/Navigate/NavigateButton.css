@@ -50,10 +50,19 @@
     font-weight: 400;
     font-size: 14px;
 }
+.h5{
+    display: flex;
+    position:absolute;
+    bottom: 76%;
+    left: 70px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+}
 .hr{
     display: flex;
     position: relative;
-    bottom:65px;
+    bottom:50px;
     right: 14px;
     border:none;
    border-top:1px dashed;

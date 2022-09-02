@@ -1,5 +1,5 @@
 export const ReadyStartData = {
-    title: 'Ready to Start.',
+    title: 'Ready to Start',
     Subtitle: 'Please Start the trip to navigate',
     Location: 'Raja Dinkar Kelkar Museum',
     Address: 'Shaniwar wada',
@@ -11,7 +11,13 @@ export const ReadyStartData = {
 };
 
 export const RideStartedData = {
-    title: 'Ride to Started.',
+    title: 'Ride Started',
     Location: 'Raja Dinkar Kelkar Museum',
     subtitle: 'You are on your way towards the drop location',
 };
+
+export const RideCompletedData ={
+    Button: 'Collect Payment',
+    tittle: 'Ride Completed',
+    Subtitle: 'you hav reached te destination'
+}

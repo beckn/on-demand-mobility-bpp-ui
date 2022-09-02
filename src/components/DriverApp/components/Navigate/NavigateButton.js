@@ -5,10 +5,11 @@ import { CallLogIcon } from "../../../../shared/icons/CallLog";
 import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { LocationIcon } from "../../../../shared/icons/Location";
 import ReadyStart from "../ReadyStart/ReadyStart";
-// import RideCompleted from "../RideCompleted/RideCompleted";
+import RideCompleted from "../RideCompleted/RideCompleted";
 import RideStart from "../StartRide/StartRide";
 import RideStarted from "../RideStarted/RideStarted";
 import "./NavigateButton.css";
+import StartRide from "../StartRide/StartRide";
 
 function NavigateButton() {
   const [smShow, setSmShow] = useState(false);
@@ -46,9 +47,9 @@ function NavigateButton() {
         </Modal.Body>
       </Modal>
        {/* <ReadyStart /> */}
-      {/* <RideStart /> */}
-     <RideStarted />
+     {/* <RideStarted /> */}
       {/* <RideCompleted />  */}
+      {/* <StartRide /> */}
     </>
   );
 }

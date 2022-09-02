@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { CallLogIcon } from "../../../../shared/icons/CallLog";
-import { CarLogIcon } from "../../../../shared/icons/CarLog";
-
+import { RideCompletedData, RideStartedData } from "../DriveData";
 
 
 function RideCompleted() {
@@ -12,7 +10,7 @@ function RideCompleted() {
   return (
     <>
       <Button onClick={() => setSmShow(true)} className="me-2 fixed-bottom">
-        Navigate
+      {RideCompletedData.Button}
       </Button>
       <Modal
         className="popup"
@@ -22,16 +20,12 @@ function RideCompleted() {
         aria-labelledby="example-modal-sizes-title-sm"
       >
           <Modal.Title className="titlle" id="example-modal-sizes-title-sm">
-          Ready to Started
+          {RideCompletedData.tittle}
           </Modal.Title>
         <Modal.Body>
-          <div className="carLog">
-            <CarLogIcon />
-          </div>
-          <div className="callLog">
-            <CallLogIcon />
-          </div>
-          <h6 className="h6">You have reached the destination</h6>
+        <div>
+        <h6 className="h6">{RideCompletedData.subtitle}</h6>
+        </div>
         </Modal.Body>
       </Modal>
     </>

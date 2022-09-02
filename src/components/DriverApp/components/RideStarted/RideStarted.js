@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { MapPin } from "react-feather";
-import { CallLogIcon } from "../../../../shared/icons/CallLog";
-import { CarLogIcon } from "../../../../shared/icons/CarLog";
-import { LocationIcon } from "../../../../shared/icons/Location";
 import { ReadyStartData, RideStartedData } from "../DriveData";
 
 
-function RideStart() {
+function RideStarted() {
   const [smShow, setSmShow] = useState(false);
 
   return (
@@ -27,30 +23,11 @@ function RideStart() {
       {RideStartedData.title}
           </Modal.Title>
         <Modal.Body>
-          <div className="carLog">
-            <CarLogIcon />
-          </div>
-          <div className="callLog">
-            <CallLogIcon />
-          </div>
-          <h6 className="h6">{RideStartedData.subtitle}</h6>
-          <hr className="hr" />
-          <div className="loc">
-            <LocationIcon />
-            <span className="MapPin">
-        <MapPin color="#D22323" className="map" />
-        {ReadyStartData.Address}
-      </span>
-          </div>
-          <p className="sub">{ReadyStartData.Location}</p>
-          <hr className="hrs" />
-          <h6 className="hd">{ReadyStartData.TotalRide}</h6>
-          <h6 className="rs">{ReadyStartData.Amount}</h6>
-          <p className="ps">{ReadyStartData.Colletion}</p>
+          <h6 className="h5">{RideStartedData.subtitle}</h6>
         </Modal.Body>
       </Modal>
     </>
   );
 }
 
-export default RideStart
+export default RideStarted
