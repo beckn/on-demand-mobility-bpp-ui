@@ -68,16 +68,14 @@ const RideRequest = () => {
           <span className="dot"></span>2.5 kms
         </ul>
       </div>
-      <div>
-        <span className="d-flex mt-3 align-left">
-          <MapPin color="#80BC48" />
-          Raja Dinkar Kelkar Museum
-        </span>
-        <span className="d-flex mt-3">
-          <MapPin color="#D22323" />
-          Shaniwar wada
-        </span>
-      </div>
+      <span className="d-flex mt-3">
+        <MapPin color="#80BC48" />
+        Raja Dinkar Kelkar Museum
+      </span>
+      <span className="d-flex mt-3">
+        <MapPin color="#D22323" />
+        Shaniwar wada
+      </span>
       <button
         type="button"
         class="w-100 btn btn-primary btn-lg btn-block mt-3 accept-button"
