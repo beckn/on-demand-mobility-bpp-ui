@@ -35,11 +35,11 @@ export const Dashboard = () => {
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
   // comment to enable rolebase Access
-  // const userRole = useMemo(
-  //   () => user?.UserRoles?.map((x) => x.Role.Name)[0],
-  //   [user]
-  // );
-  const userRole = "ADMIN";
+  const userRole = useMemo(
+    () => user?.UserRoles?.map((x) => x.Role.Name)[0],
+    [user]
+  );
+  //const userRole = "ADMIN";
 
   const [drivers, setDrivers] = useState({
     totalDriver: 0,

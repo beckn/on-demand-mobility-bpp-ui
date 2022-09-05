@@ -10,7 +10,6 @@ import { AuthGuard } from "./core/AuthGuard";
 import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
 import ErrorBoundary from "./shared/ErrorBoundary";
 const AppHeader = React.lazy(() => import("./components/AppHeader"));
-const MenuBar = React.lazy(() => import("./components/AppHeader/MenuBar"));
 
 const Login = React.lazy(() => import("./components/LoginModule/Login"));
 const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));
