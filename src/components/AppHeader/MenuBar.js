@@ -17,7 +17,7 @@ const roleMap = {
   VECHICLES_OWNER: "OWNER",
   DRIVER: "Driver",
   ADMIN: "Admin",
-  AGENT: "Agent",
+  AGENT: "Operator",
 };
 const MenuBar = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -27,41 +27,46 @@ const MenuBar = (props) => {
   const userRole = user?.UserRoles?.map((x) => x.Role.Name)[0];
 
   return (
-  <nav class="navbar navbar-expand-lg navbar-light bg-light ">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
- <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-    <header className="bg-dark header-round">
-       <Container fluid>
-         <Row>
-           <Col className="position-relative">
-             <div className="round-1"></div>
-             <h1 className="text-white px-lg-5 py-lg-3 fs-4 fw-semibold">
-               Taxi Admin
-             </h1>
-           </Col>
-           <Col className="d-flex align-items-center justify-content-end text-white">
-             Welcome : {user.FirstName} [{roleMap[`${userRole}`] || ""}]
-           <button
-              className="btn btn-primary btn-sm ms-2"
-               onClick={() => logout()}
-             >
-               Logout
-             </button>
-            
-           </Col>
-         </Row>
-       </Container>
-        </header>
-    </ul>
-  </div>
-</nav>
-
-   );
- };
-
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <header className="bg-dark header-round">
+            <Container fluid>
+              <Row>
+                <Col className="position-relative">
+                  <div className="round-1"></div>
+                  <h1 className="text-white px-lg-5 py-lg-3 fs-4 fw-semibold">
+                    Taxi Admin
+                  </h1>
+                </Col>
+                <Col className="d-flex align-items-center justify-content-end text-white">
+                  Welcome : {user.FirstName} [{roleMap[`${userRole}`] || ""}]
+                  <button
+                    className="btn btn-primary btn-sm ms-2"
+                    onClick={() => logout()}
+                  >
+                    Logout
+                  </button>
+                </Col>
+              </Row>
+            </Container>
+          </header>
+        </ul>
+      </div>
+    </nav>
+  );
+};
 
 // todo: Unless you need to use lifecycle methods or local state,
 // write your component in functional form as above and delete

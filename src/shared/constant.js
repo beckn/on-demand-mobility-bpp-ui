@@ -182,10 +182,10 @@ export const verificationKeys = {
 export const roleBasedMapUser = {
   "Total Drivers": ["ADMIN", "AGENT"],
   "Total Vehicles": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
-  "Total Agents": ["ADMIN"],
+  "Total Operators": ["ADMIN"],
   "Total Rides": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
   "Total Revenue": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
-  "Agent Verification Pending": ["ADMIN"],
+  "Operator Verification Pending": ["ADMIN"],
   "Driver Verification Pending": ["ADMIN", "AGENT"],
   "Vehicle Verification Pending": ["ADMIN", "VECHICLES_OWNER", "AGENT"],
 };

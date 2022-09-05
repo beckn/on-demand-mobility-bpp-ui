@@ -35,11 +35,11 @@ export const Dashboard = () => {
   const [user] = useState(JSON.parse(getCookie(LocalKey.saveUser)));
   const [summaries, setSummaries] = useState(0);
   // comment to enable rolebase Access
-  const userRole = useMemo(
-    () => user?.UserRoles?.map((x) => x.Role.Name)[0],
-    [user]
-  );
-  //const userRole = "ADMIN";
+  // const userRole = useMemo(
+  //   () => user?.UserRoles?.map((x) => x.Role.Name)[0],
+  //   [user]
+  // );
+  const userRole = "ADMIN";
 
   const [drivers, setDrivers] = useState({
     totalDriver: 0,
@@ -189,7 +189,7 @@ export const Dashboard = () => {
                           eventKey="agents"
                           disabled={user.Verified === "N"}
                         >
-                          Agents
+                          Operators
                         </Nav.Link>
                       </Nav.Item>
                     )}
@@ -265,7 +265,7 @@ export const Dashboard = () => {
                                   <div className="col-sm-4 mb-3">
                                     <UserStatsCard
                                       icon={<AgentsIcon className="w-50" />}
-                                      cardTitle="Total Agents"
+                                      cardTitle="Total Operators"
                                       count={agents.totalAgent}
                                       handleClick={(e) => {}}
                                       userRole={userRole}
@@ -294,7 +294,7 @@ export const Dashboard = () => {
                                       icon={
                                         <AgentVerification className="w-50" />
                                       }
-                                      cardTitle="Agent Verification Pending"
+                                      cardTitle="Operator Verification Pending"
                                       count={agents.agentsPending}
                                       handleClick={(e) => {}}
                                       userRole={userRole}
