@@ -67,7 +67,6 @@ function RegistrationHome({ Flag, User }) {
       console.log("User Logout", res);
       removeCookie(LocalKey.saveApi);
       removeCookie(LocalKey.saveUser);
-      // navigate(AppRoutes.admin);
       window.location.href = AppRoutes.admin;
     });
   };
@@ -311,11 +310,7 @@ function RegistrationSubmit({ User }) {
           <SubmitButton />
         </div>
 
-        <Modal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          centered
-        >
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <div>
             <button className="close" onClick={() => setShowModal(false)}>
               ×
