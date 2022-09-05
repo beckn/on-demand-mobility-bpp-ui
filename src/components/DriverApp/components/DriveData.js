@@ -19,5 +19,17 @@ export const RideStartedData = {
 export const RideCompletedData ={
     Button: 'Collect Payment',
     tittle: 'Ride Completed',
-    Subtitle: 'you hav reached te destination'
+    Subtitle: 'you hav reached te destination',
+};
+
+export const EndRideData ={
+    title :'Ride Ended',
+    Subtitle: 'Please collect the amount form the customer.',
+    Rupues: '₹ 200',
+    Date: 'Wednesday, 26/05 16:45',
+    Distance: '45kms',
+    Time: '30 min',
+    addres: 'Raja Dinkar kelkar Museum',
+    LocationPin: 'Shaniwar wada',
+
 }
