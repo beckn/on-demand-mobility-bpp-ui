@@ -7,9 +7,9 @@ import RideStarted from "../RideStarted/RideStarted";
 function NavigateButton() {
   return (
     <>
-       { <Pickup /> }
+       {/* <Pickup /> */}
        {/* <ReadyStart /> */}
-       {/* <RideStarted /> */}
+       { <RideStarted /> }
        {/* <RideCompleted /> */}
        {/* <StartRide /> */}
     </>
