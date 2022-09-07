@@ -26,7 +26,6 @@ export default function Registration() {
           <RegistrationHome Flag={setFlag} User={User} />
         )}
       </div>
-      <DriverAppFooter />
     </div>
   );
 }
@@ -43,6 +42,7 @@ function RegistrationHome({ Flag, User }) {
   const [sex, setSex] = useState("Male" || "");
   const [age, setAge] = useState(32 || "");
   const isVerified = User?.Approved === "Y" ? true : false;
+  console.log("ver",isVerified);
   const SubmitButton = () => {
     if (name && mobileno && email && sex && age) {
       return (
