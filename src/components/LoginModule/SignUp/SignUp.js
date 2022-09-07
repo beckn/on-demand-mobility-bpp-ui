@@ -114,6 +114,10 @@ export const SignInPassword = () => {
                             value: 20,
                             message: "Character limit exceeded",
                           },
+                          minLength: {
+                            value: 20,
+                            message: "Please enter latter",
+                          },
                         })}
                         className={`form-control ${
                           errors?.FirstName ? "is-invalid" : ""
@@ -134,6 +138,10 @@ export const SignInPassword = () => {
                           maxLength: {
                             value: 20,
                             message: "Character limit exceeded",
+                          },
+                          minLength: {
+                            value: 20,
+                            message: "Please enter latter",
                           },
                         })}
                         className={`form-control ${
