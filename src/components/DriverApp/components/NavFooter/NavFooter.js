@@ -26,7 +26,7 @@ function DriverAppFooter() {
     setHomeColor("#3c65f8");
   };
   return (
-    <div className="Container fixed-bottom">
+    <div className="Container fixed-bottom1">
       <div className="homeicon" onClick={()=>HomeActiveColor()}>
         {" "}
         <HomeIcon fill={homeActive}/>
