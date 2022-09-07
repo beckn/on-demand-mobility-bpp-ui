@@ -116,7 +116,7 @@ export const SignInPassword = () => {
                           },
                           minLength: {
                             value: 20,
-                            message: "Please enter latter",
+                            message: "Please enter Character",
                           },
                         })}
                         className={`form-control ${
@@ -141,7 +141,7 @@ export const SignInPassword = () => {
                           },
                           minLength: {
                             value: 20,
-                            message: "Please enter latter",
+                            message: "Please enter Character",
                           },
                         })}
                         className={`form-control ${
