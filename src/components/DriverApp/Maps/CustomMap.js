@@ -24,24 +24,7 @@ function CustomMap({latitude, longitude}) {
     libraries:['places'],
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
   });
-  const source_add=useRef();
-  const dest_add=useRef();
-  const [directionResponse, setDirectionResponse] = useState(null);
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
-  async function calculateRoute() {
-    const directionsService = new window.google.maps.DirectionsService();
-    const results=await directionsService.route({
-      origin: "nagpur",
-      destination: "pune",
-      travelMode: window.google.maps.TravelMode.DRIVING,
-    })
-    setDirectionResponse(results)
-    setDistance(results.routes[0].legs[0].distance.text)
-    setDuration(results.routes[0].legs[0].duration.text)
-  }
-  calculateRoute();
-  //console.log("directionResponse", directionResponse);
+  
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
@@ -81,7 +64,6 @@ function CustomMap({latitude, longitude}) {
         >
           {/* Child components, such as markers, info windows, etc. */}
           {<Marker position={position} />}
-          {directionResponse && <DirectionsRenderer  directions={directionResponse}/>}
         </GoogleMap>
         </div>
       )}

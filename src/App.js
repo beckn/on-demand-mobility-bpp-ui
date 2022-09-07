@@ -85,7 +85,7 @@ function App() {
               ></Route>
               <Route path="/*" element={<PageNotFound />}></Route>
             </Routes>
-            <DriverAppFooter/>
+            {/*<DriverAppFooter/>*/}
             {/* {isLogin && <AppFooter />} */}
           </Suspense>
         </ErrorBoundary>

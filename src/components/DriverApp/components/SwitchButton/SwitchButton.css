@@ -109,13 +109,13 @@ background-color: #34C759;
 }
 
 .alertdata{
-font-size: 18px;
-font-weight: 400px;
-color: black;
+  font-size: 18px;
+  font-weight: 400px;
+  color: black;
 }
 
 .locationicon{
-margin-top: 25px;
-height: 50px;
-width: 50px;
+  margin-top: 25px;
+  height: 50px;
+  width: 50px;
 }
