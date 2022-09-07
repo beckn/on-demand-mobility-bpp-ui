@@ -8,7 +8,7 @@ import { AppRoutes, LocalKey } from "../../../../core/constant";
 
 function DriverAppFooter() {
   const [accountActive, setAccountColor] = useState("gray");
-  const [rideActive, setRideColor] = useState("#3c65f8");
+  const [rideActive, setRideColor] = useState("black");
   const [homeActive, setHomeColor] = useState("gray");
   const AccountActiveColor=()=>{
     setHomeColor("gray");
