@@ -26,6 +26,7 @@ export default function Registration() {
           <RegistrationHome Flag={setFlag} User={User} />
         )}
       </div>
+      <DriverAppFooter/>
     </div>
   );
 }

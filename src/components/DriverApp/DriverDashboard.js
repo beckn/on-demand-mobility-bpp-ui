@@ -39,6 +39,7 @@ function DriverDashboard() {
               <NavigateButton />
             </div>
           </div>
+          <DriverAppFooter/>
         </div>:
         <div>
           {navigate(AppRoutes.accountRegistration)}
