@@ -17,7 +17,7 @@ const center = {
   lat: 0,
   lng: -180,
 };
-function CustomMap() {
+function CustomMap({ customHeight }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
@@ -48,7 +48,7 @@ function CustomMap() {
           mapContainerStyle={{
             top: "85px",
             width: "100%",
-            height: "450px",
+            height: customHeight || "calc(100vh - 305px)",
           }}
           options={{
             zoomControl: false,
