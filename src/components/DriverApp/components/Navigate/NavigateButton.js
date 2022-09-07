@@ -7,11 +7,11 @@ import RideStarted from "../RideStarted/RideStarted";
 function NavigateButton() {
   return (
     <>
-       {/* <Pickup /> */}
-       {/* <ReadyStart /> */}
-       { <RideStarted /> }
-       {/* <RideCompleted /> */}
-       {/* <StartRide /> */}
+      {/* <Pickup /> */}
+      {/* <ReadyStart /> */}
+      {<RideStarted />}
+      {/* <RideCompleted /> */}
+      {/* <StartRide /> */}
     </>
   );
 }

@@ -6,6 +6,7 @@ import {
   GoogleMap,
   Marker,
   Autocomplete,
+  DirectionsService,
   DirectionsRenderer,
 } from "@react-google-maps/api";
 const containerStyle = {
@@ -20,6 +21,7 @@ const center = {
 function CustomMap({latitude, longitude}) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
+    libraries:['places'],
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
   });
   
