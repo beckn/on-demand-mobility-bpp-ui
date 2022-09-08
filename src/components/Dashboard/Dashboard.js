@@ -1,6 +1,7 @@
 import isEmpty from "lodash/isEmpty";
 import React, { useEffect, useState, useMemo } from "react";
 // import PropTypes from "prop-types";
+import AppHeader from "../AppHeader/AppHeader";
 import { Col, Container, Modal, Nav, Row, Tab, Tabs } from "react-bootstrap";
 import { Plus } from "react-feather";
 import { getAddress } from "../../core/common.functions";
@@ -146,6 +147,7 @@ export const Dashboard = () => {
     <section className="dashboard">
       <Container fluid className="vh-100">
         <Row>
+          <AppHeader />
           <Col>
             <Tab.Container
               onSelect={(k) => setActiveScreen(k)}

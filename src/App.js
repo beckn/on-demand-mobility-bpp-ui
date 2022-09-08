@@ -52,7 +52,7 @@ function App() {
       <BrowserRouter forceRefresh={true}>
         <ErrorBoundary>
           <Suspense>
-            {isLogin && <AppHeader />}
+            {/*isLogin && <AppHeader />*/}
             <Routes>
               <Route path="/" element={<Login />}></Route>
               <Route path={AppRoutes.admin} element={<Login />}></Route>
