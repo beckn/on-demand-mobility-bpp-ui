@@ -6,14 +6,10 @@ import CustomMap from "./Maps/CustomMap";
 import SwitchButton from "./components/SwitchButton/SwitchButton";
 import NavigateButton from "./components/Navigate/NavigateButton";
 import { getCookie, removeCookie } from "../../core/CookiesHandler";
-import { LocalKey, DocumentType, AppRoutes} from "../../core/constant";
-import { Link,useNavigate } from "react-router-dom";
+import { LocalKey, DocumentType, AppRoutes } from "../../core/constant";
+import { Link, useNavigate } from "react-router-dom";
 
 function DriverDashboard() {
-  useEffect(() => {
-    init();
-  }, []);
-
   const init = () => {
     document.title = `Driver App`;
   };
@@ -24,27 +20,27 @@ function DriverDashboard() {
   console.log(isVerified);
   const { latitude, longitude, error } = usePosition();
 
+  useEffect(() => {
+    init();
+    if (!isVerified) {
+      navigate(AppRoutes.accountRegistration);
+    }
+  }, []);
   return (
     <div>
-      {
-        isVerified ? 
+      <div>
+        <DriverAppHeader title={"Home"} />
         <div>
-          <DriverAppHeader title={"Home"}/>
-          <div>
-            <div className="radio fixed-top">
-              <SwitchButton latitude={latitude} longitude={longitude}/>
-            </div>
-            <CustomMap latitude={latitude} longitude={longitude}/>
-            <div className="fixed-bottom">
-              <NavigateButton />
-            </div>
+          <div className="radio fixed-top">
+            <SwitchButton latitude={latitude} longitude={longitude} />
           </div>
-          <DriverAppFooter/>
-        </div>:
-        <div>
-          {navigate(AppRoutes.accountRegistration)}
+          <CustomMap latitude={latitude} longitude={longitude} />
+          {/*<div className="fixed-bottom">
+            <NavigateButton />
+          </div>*/}
         </div>
-      }
+        <DriverAppFooter />
+      </div>
     </div>
   );
 }
