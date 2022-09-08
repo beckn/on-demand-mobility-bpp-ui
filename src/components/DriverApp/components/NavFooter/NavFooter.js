@@ -9,14 +9,14 @@ import { AppRoutes, LocalKey } from "../../../../core/constant";
 function DriverAppFooter() {
   const [accountActive, setAccountColor] = useState("gray");
   const [rideActive, setRideColor] = useState("black");
-  const [homeActive, setHomeColor] = useState("gray");
+  const [homeActive, setHomeColor] = useState("black");
   const AccountActiveColor=()=>{
     setHomeColor("gray");
     setRideColor("black");
     setAccountColor("#9DAFF0");
   };
   const RideActiveColor=()=>{
-    setHomeColor("gray");
+    setHomeColor("black");
     setAccountColor("gray");
     setRideColor("#3c65f8");
   };
@@ -28,13 +28,12 @@ function DriverAppFooter() {
   return (
     <div className="Container fixed-bottom1">
       <div className="homeicon" onClick={()=>HomeActiveColor()}>
-        {" "}
-        <HomeIcon fill={homeActive}/>
+        <Link to={AppRoutes.driverDashboard} >
+          <HomeIcon fill={homeActive}/>
+        </Link>
       </div>
       <div className="caricon" onClick={()=>RideActiveColor()}>
-        <Link to={AppRoutes.driverDashboard} >
           <CarIcon fill={rideActive} />
-        </Link>
       </div>
       <div className="profileicon" onClick={()=>AccountActiveColor()}>
         <Link to={AppRoutes.accountRegistration}> 

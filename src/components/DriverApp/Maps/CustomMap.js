@@ -51,7 +51,7 @@ function CustomMap({latitude, longitude}) {
           mapContainerStyle={{
             top: "85px",
             width: "100%",
-            height: "calc(100vh - 305px)",
+            height: "calc(100vh - 230px)",
           }}
           options={{
             zoomControl: false,

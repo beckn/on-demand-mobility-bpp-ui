@@ -35,9 +35,9 @@ function DriverDashboard() {
             <SwitchButton latitude={latitude} longitude={longitude} />
           </div>
           <CustomMap latitude={latitude} longitude={longitude} />
-          <div className="fixed-bottom">
+          {/*<div className="fixed-bottom">
             <NavigateButton />
-          </div>
+          </div>*/}
         </div>
         <DriverAppFooter />
       </div>
