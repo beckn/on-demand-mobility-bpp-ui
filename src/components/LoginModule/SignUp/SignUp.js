@@ -73,7 +73,6 @@ export const SignInPassword = () => {
         },
       },
     };
-
     userAction(path, data).then((res) => {
       navigateTo(AppRoutes.adminDashboard);
     });
@@ -110,6 +109,10 @@ export const SignInPassword = () => {
                         type="text"
                         {...register("FirstName", {
                           required: "First name is required",
+                          pattern: {
+                            value: /^[a-zA-Z][\sa-zA-Z]*/,
+                            message: "Can use upper and lower letters, and spaces but must not start with a space",
+                          },
                           maxLength: {
                             value: 20,
                             message: "Character limit exceeded",
@@ -117,6 +120,8 @@ export const SignInPassword = () => {
                           minLength: {
                             value: 20,
                             message: "Please enter Character",
+                            value: 2,
+                            message: "Please enter Valid FirstName",
                           },
                         })}
                         className={`form-control ${
@@ -135,6 +140,10 @@ export const SignInPassword = () => {
                         id="LastName"
                         {...register("LastName", {
                           required: "Last name is required",
+                          pattern: {
+                            value: /^[a-zA-Z][\sa-zA-Z]*/,
+                            message: "Can use upper and lower letters, and spaces but must not start with a space",
+                          },
                           maxLength: {
                             value: 20,
                             message: "Character limit exceeded",
@@ -142,6 +151,8 @@ export const SignInPassword = () => {
                           minLength: {
                             value: 20,
                             message: "Please enter Character",
+                            value: 2,
+                            message: "Please enter Valid LastName",
                           },
                         })}
                         className={`form-control ${
@@ -205,6 +216,10 @@ export const SignInPassword = () => {
                         id="PhoneNumber"
                         {...register("PhoneNumber", {
                           required: "Number is required",
+                          pattern: {
+                            value: /^[0-9\b]+$/,
+                            message: "Please Not The Enter spaces",
+                          },
                           maxLength: {
                             value: 10,
                             message: "Please enter valid number",
@@ -227,6 +242,10 @@ export const SignInPassword = () => {
                         type="email"
                         {...register("Email", {
                           required: "Email is required",
+                          pattern: {
+                            value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            message: "Please Enter valid Email Address",
+                          },
                         })}
                         id="Email"
                         //value={Name}
@@ -244,6 +263,10 @@ export const SignInPassword = () => {
                         id="Password1"
                         {...register("Password1", {
                           required: "Password is required",
+                          pattern: {
+                            value: /^\S*$/,
+                            message: "Please Don't Enter Spaces",
+                          },
                         })}
                         className={`form-control ${
                           errors?.PhoneNumber ? "is-invalid" : ""
@@ -259,6 +282,10 @@ export const SignInPassword = () => {
                         id="Password2"
                         {...register("Password2", {
                           required: "Password is required",
+                          pattern: {
+                            value: /^\S*$/,
+                            message: "Please Don't Enter Spaces",
+                          },
                           validate: (val) => {
                             if (watch("Password1") !== val) {
                               return "Your passwords do no match";
