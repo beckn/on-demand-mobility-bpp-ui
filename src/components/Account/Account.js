@@ -413,11 +413,12 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
         <div className="col-4 mb-3">
           <input
             type="text"
-            {...register("AddressLine1")}
+            {...register("AddressLine1", )}
             id="AddressLine1"
             disabled={isAddressEdit}
             className="form-control"
             placeholder="Apartment, unit, suite, or floor #"
+           pattern='\d{1,5}\s\w.\s(\b\w*\b\s){1,2}\w' title="Not use Special Charactar "
           />
 
           <ErrorMessage fieldError={errors?.AddressLine1} />
@@ -728,6 +729,8 @@ export const Account = (prop) => {
                       type="text"
                       name="LicenseNumber"
                       id="LicenseNumber"
+                      pattern=""
+                      title="Invalid PAN No."
                       defaultValue={LicenseNumber}
                       disabled={User?.DriverDocuments?.find(
                         (x) => x.Document === DocumentType.Licence
@@ -767,6 +770,8 @@ export const Account = (prop) => {
                   type="text"
                   name="PanNumber"
                   id="PanNumber"
+                  pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" 
+                  title="Invalid PAN No."
                   defaultValue={PanNumber}
                   disabled={User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Pan
@@ -809,6 +814,8 @@ export const Account = (prop) => {
                     onChange={(e) => setEKycPassword(e.target.value)}
                     className="form-control"
                     placeholder="E-Kyc Aadhar File Password"
+                    pattern="^[0-9]{8}$"
+                      title="Invalid Ekyc Password format"
                   />
                 ) : (
                   <>
@@ -827,6 +834,8 @@ export const Account = (prop) => {
                       onChange={(e) => setEKycPassword(e.target.value)}
                       className="form-control"
                       placeholder="E-Kyc Aadhar File Password"
+                      pattern="^[0-9]{8}$"
+                      title="Invalid Ekyc Password format"
                     />
                     <p className="mt-1 mb-0 small ps-2">
                       {
