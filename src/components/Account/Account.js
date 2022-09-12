@@ -418,7 +418,8 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
             disabled={isAddressEdit}
             className="form-control"
             placeholder="Apartment, unit, suite, or floor #"
-          //  pattern='\d{1,5}\s\w.\s(\b\w*\b\s){1,2}\w' title="Not use Special Charactar "
+            pattern="()\s+((?:[\w+\s*-])+)[\,]\s+([a-zA-Z]+)\s+([0-9a-zA-Z]+)"
+           title="Invalid Charatar"
           />
 
           <ErrorMessage fieldError={errors?.AddressLine1} />
