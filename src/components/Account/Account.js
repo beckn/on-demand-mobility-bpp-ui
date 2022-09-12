@@ -729,7 +729,8 @@ export const Account = (prop) => {
                       type="text"
                       name="LicenseNumber"
                       id="LicenseNumber"
-                      pattern=""
+                      // eslint-disable-next-line no-octal-escape
+                      pattern="^\d{1,6}\040([A-Z]{1}[a-z]{1,}\040[A-Z]{1}"
                       title="Invalid PAN No."
                       defaultValue={LicenseNumber}
                       disabled={User?.DriverDocuments?.find(
