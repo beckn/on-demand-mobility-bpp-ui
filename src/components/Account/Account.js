@@ -400,7 +400,7 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
               <button
                 className="btn btn-primary btn-sm"
                 type="submit"
-                disabled={!isValid || !isDirty}
+                // disabled={!isValid || !isDirty}
               >
                 Save
               </button>
@@ -418,7 +418,7 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
             disabled={isAddressEdit}
             className="form-control"
             placeholder="Apartment, unit, suite, or floor #"
-           pattern='\d{1,5}\s\w.\s(\b\w*\b\s){1,2}\w' title="Not use Special Charactar "
+          //  pattern='\d{1,5}\s\w.\s(\b\w*\b\s){1,2}\w' title="Not use Special Charactar "
           />
 
           <ErrorMessage fieldError={errors?.AddressLine1} />
