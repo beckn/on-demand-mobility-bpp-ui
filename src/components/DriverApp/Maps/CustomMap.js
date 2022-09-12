@@ -1,30 +1,14 @@
-import React, { useState,useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 //import { usePosition } from "../hooks/usePosition";
 import { CarIcon } from "../../../shared/icons/Car";
-import {
-  useJsApiLoader,
-  GoogleMap,
-  Marker,
-  Autocomplete,
-  DirectionsService,
-  DirectionsRenderer,
-} from "@react-google-maps/api";
-const containerStyle = {
-  width: "400px",
-  height: "400px",
-};
+import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
-const center = {
-  lat: 0,
-  lng: -180,
-};
-function CustomMap({latitude, longitude}) {
+function CustomMap({ latitude, longitude }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    libraries:['places'],
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
   });
-  
+
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
@@ -45,26 +29,26 @@ function CustomMap({latitude, longitude}) {
     <div>
       {isLoaded && (
         <div>
-        <GoogleMap
-          center={position}
-          zoom={8}
-          mapContainerStyle={{
-            top: "85px",
-            width: "100%",
-            height: "calc(100vh - 230px)",
-          }}
-          options={{
-            zoomControl: false,
-            streetViewControl: false,
-            mapTypeControl: false,
-            fullscreenControl: false,
-          }}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-        >
-          {/* Child components, such as markers, info windows, etc. */}
-          {<Marker position={position} />}
-        </GoogleMap>
+          <GoogleMap
+            center={position}
+            zoom={8}
+            mapContainerStyle={{
+              top: "85px",
+              width: "100%",
+              height: "calc(100vh - 230px)",
+            }}
+            options={{
+              zoomControl: false,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: false,
+            }}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+          >
+            {/* Child components, such as markers, info windows, etc. */}
+            {<Marker position={position} />}
+          </GoogleMap>
         </div>
       )}
     </div>
