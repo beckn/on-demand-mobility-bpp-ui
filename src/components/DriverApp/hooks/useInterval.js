@@ -1,6 +1,6 @@
 import React from "react";
 
-export const useInterval = (callback, delay) => {
+export const useInterval = (callback, delay, isActive) => {
   const cachedCallback = React.useRef();
 
   React.useEffect(() => {
@@ -8,7 +8,7 @@ export const useInterval = (callback, delay) => {
   }, [callback]);
 
   React.useEffect(() => {
-    if (delay !== 0) {
+    if (delay !== 0 && isActive) {
       const id = setInterval(() => cachedCallback?.current?.(), delay);
       return () => clearInterval(id);
     }

@@ -8,7 +8,8 @@ import { CallLogIcon } from "../../../../shared/icons/CallLog";
 import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { MapPin } from "react-feather";
 import { LocationIcon } from "../../../../shared/icons/Location";
-import { startRide } from "../SwitchButton/Driver.Services";
+import { startRide, endRide } from "../SwitchButton/Driver.Services";
+import RideEnd from "../EndRide/RideEnd";
 
 function RideStarted({ trip, location }) {
   console.log({ trip, location });
@@ -18,8 +19,15 @@ function RideStarted({ trip, location }) {
     const res = await startRide(trip.Id).then((response) => response.data);
     setSmShow({ status: !smShow.status, data: res.Trip });
   };
+  const handleEndRide = async () => {
+    !isTripEnded && (await endRide(trip.Id).then((response) => response.data));
+    //setSmShow({ status: !smShow.status, data: res.Trip });
+    isTripEnded && window.location.reload();
+  };
   console.log({ smShow });
   const status = smShow.data ? smShow.data.DisplayStatus : "Not Confirmed";
+  const isTripEnded = trip.DisplayStatus === "Ended" ? true : false;
+
   return (
     <>
       {smShow.status ? (
@@ -33,20 +41,25 @@ function RideStarted({ trip, location }) {
             </button>
           </div>
           <div className="titlle" id="example-modal-sizes-title-sm">
-            {RideStartedData.title}
+            {!isTripEnded ? RideStartedData.title : "Ride Completed"}
           </div>
           <div>
             <div className="titlle-text" id="example-modal-sizes-title-sm">
-              <div>You are on your way towards</div>
-              the drop locations
+              {!isTripEnded
+                ? "You are on your way\n towards the drop locations"
+                : "You have reached the destination."}
             </div>
           </div>
-          <div className="carLog">
-            <CarLogIcon />
-          </div>
-          <div className="callLog">
-            <CallLogIcon />
-          </div>
+          {!isTripEnded && (
+            <>
+              <div className="carLog">
+                <CarLogIcon />
+              </div>
+              <div className="callLog">
+                <CallLogIcon />
+              </div>
+            </>
+          )}
           <RideStartedExpand
             rideDetail={rideDetail}
             trip={trip}
@@ -57,9 +70,15 @@ function RideStarted({ trip, location }) {
       ) : (
         <div></div>
       )}
-      <Button onClick={handleStartRide} className="me-2 fixed-bottom">
-        {status === "Started" ? "Navigate" : "Start Ride"}
-      </Button>
+      {status === "Not Confirmed" ? (
+        <Button onClick={handleStartRide} className="me-2 fixed-bottom">
+          Start Ride
+        </Button>
+      ) : (
+        <Button onClick={handleEndRide} className="me-2 fixed-bottom">
+          {isTripEnded ? "Ride Ended" : "End Ride"}
+        </Button>
+      )}
     </>
   );
 }
@@ -67,6 +86,14 @@ function RideStarted({ trip, location }) {
 export default RideStarted;
 
 function RideStartedExpand({ rideDetail, setRideDetail, location, trip }) {
+  // if (trip.DisplayStatus === "Ended") {
+  //   return (
+  //     <>
+  //       <RideEnd />
+  //     </>
+  //   );
+  // }
+
   return (
     <>
       {rideDetail ? (

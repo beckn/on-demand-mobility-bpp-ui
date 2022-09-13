@@ -13,9 +13,15 @@ function NavigateButton({ location, trip }) {
     const res = await getTripStatus(trip.Id).then((res) => res.data.Trip);
     DisplayStatus !== res.DisplayStatus && setRide(res);
   };
-  useInterval(() => {
-    getRideData();
-  }, 8000);
+  const isActive = ride.DisplayStatus === "Ended" ? false : true;
+
+  useInterval(
+    () => {
+      getRideData();
+    },
+    8000,
+    isActive
+  );
   console.log({ ride });
   return (
     <>
