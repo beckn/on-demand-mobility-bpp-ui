@@ -26,7 +26,7 @@ export default function Registration() {
           <RegistrationHome Flag={setFlag} User={User} />
         )}
       </div>
-      <DriverAppFooter />
+      <DriverAppFooter/>
     </div>
   );
 }
@@ -43,6 +43,7 @@ function RegistrationHome({ Flag, User }) {
   const [sex, setSex] = useState("Male" || "");
   const [age, setAge] = useState(32 || "");
   const isVerified = User?.Approved === "Y" ? true : false;
+  console.log("ver",isVerified);
   const SubmitButton = () => {
     if (name && mobileno && email && sex && age) {
       return (
@@ -311,7 +312,11 @@ function RegistrationSubmit({ User }) {
           <SubmitButton />
         </div>
 
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          centered
+        >
           <div>
             <button className="close" onClick={() => setShowModal(false)}>
               ×
