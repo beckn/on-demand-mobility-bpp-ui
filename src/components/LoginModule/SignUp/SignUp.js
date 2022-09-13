@@ -264,8 +264,8 @@ export const SignInPassword = () => {
                         {...register("Password1", {
                           required: "Password is required",
                           pattern: {
-                            value: /^\S*$/,
-                            message: "Please Don't Enter Spaces",
+                            value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                            message: "Please Enter Valid Password Format",
                           },
                         })}
                         className={`form-control ${
@@ -283,8 +283,8 @@ export const SignInPassword = () => {
                         {...register("Password2", {
                           required: "Password is required",
                           pattern: {
-                            value: /^\S*$/,
-                            message: "Please Don't Enter Spaces",
+                            value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                            message: "Please Enter Valid Password Format",
                           },
                           validate: (val) => {
                             if (watch("Password1") !== val) {

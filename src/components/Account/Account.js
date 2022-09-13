@@ -1,5 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // import PropTypes from "prop-types";
+import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { useEffect, useState } from "react";
@@ -34,6 +37,14 @@ const enableEdit = (e, func, state) => {
 const getItemValue = (item, code) => {
   return `${item[code]}`;
 };
+
+const renderImageTooltip = props => (
+  <Tooltip {...props}>Please fill required Information and then Upload File In JPG or PNG Format</Tooltip>
+);
+
+const renderZipTooltip = props => (
+  <Tooltip {...props}>Please fill required Information and then Upload File In Zip Format</Tooltip>
+);
 
 const renderItem = (item, isHighlighted, styles, code) => {
   return (
@@ -752,11 +763,13 @@ export const Account = (prop) => {
                   {!User?.DriverDocuments?.find(
                     (x) => x.Document === "Licence"
                   ) && (
+                    <OverlayTrigger placement="top" overlay={renderImageTooltip}>
                     <div className="col-1  mb-3">
                       <input
                         type="file"
                         name="LicenseFile"
                         id="LicenseFile"
+                        disabled={LicenseNumber==""}
                         className="form-control d-none"
                         onChange={(e) => getUpload(e, DocumentType.Licence)}
                       />
@@ -764,6 +777,7 @@ export const Account = (prop) => {
                         <Upload />
                       </label>
                     </div>
+                    </OverlayTrigger>
                   )}
                 </>
               )}
@@ -791,18 +805,21 @@ export const Account = (prop) => {
                 </p>
               </div>
               {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
-                <div className="col-1  mb-3">
-                  <input
-                    type="file"
-                    name="PanFile"
-                    id="PanFile"
-                    className="form-control d-none"
-                    onChange={(e) => getUpload(e, DocumentType.Pan)}
-                  />
-                  <label htmlFor="PanFile" role={"button"}>
-                    <Upload />
-                  </label>
-                </div>
+                <OverlayTrigger placement="top" overlay={renderImageTooltip}>
+                  <div className="col-1  mb-3">
+                    <input
+                      type="file"
+                      name="PanFile"
+                      id="PanFile"
+                      className="form-control d-none"
+                      disabled={PanNumber==""}
+                      onChange={(e) => getUpload(e, DocumentType.Pan)}
+                    />
+                    <label htmlFor="PanFile" role={"button"}>
+                      <Upload />
+                    </label>
+                  </div>
+                </OverlayTrigger>
               )}
               <div className="col-3  mb-3">
                 {!User?.DriverDocuments?.find(
@@ -852,18 +869,21 @@ export const Account = (prop) => {
               {!User?.DriverDocuments?.find(
                 (x) => x.Document === DocumentType.Aadhar
               ) && (
-                <div className="col-1 mb-3">
-                  <input
-                    type="file"
-                    name="AadharFile"
-                    id="AadharFile"
-                    onChange={(e) => getUpload(e, DocumentType.Aadhar)}
-                    className="form-control d-none"
-                  />
-                  <label htmlFor="AadharFile" role={"button"}>
-                    <Upload />
-                  </label>
-                </div>
+                <OverlayTrigger placement="top" overlay={renderZipTooltip}>
+                  <div className="col-1 mb-3">
+                    <input
+                      type="file"
+                      name="AadharFile"
+                      id="AadharFile"
+                      disabled={eKycPassword==null}
+                      onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+                      className="form-control d-none"
+                    />
+                    <label htmlFor="AadharFile" role={"button"}>
+                      <Upload />
+                    </label>
+                  </div>
+                </OverlayTrigger>
               )}
             </div>
             {prop.NewUser && (
