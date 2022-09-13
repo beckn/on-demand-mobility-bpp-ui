@@ -1,15 +1,11 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState, useCallback } from "react";
 import "./SwitchButton.css";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import LocationIcon from "./location.png";
-import { OfflineIcon } from "../../../../shared/icons/Offline";
-import { MarkerIcon } from "../../../../shared/icons/Marker";
 import { CustomSwitch } from "./CustomSwitch";
 import { CustomModal } from "../Modal/Modal";
 import { AlertModal } from "../Modal/alert";
-import { MapPin } from "react-feather";
+import NavigateButton from "../Navigate/NavigateButton";
 import { getCookie } from "../../../../core/CookiesHandler";
 import { LocalKey } from "../../../../core/constant";
 import {
@@ -24,6 +20,7 @@ import {
   AlertModalContent,
   RideRequest,
 } from "./ModalContent";
+
 import Geocode from "react-geocode";
 Geocode.setApiKey("AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo");
 Geocode.setLocationType("ROOFTOP");
@@ -49,10 +46,14 @@ const SwitchButton = ({ latitude, longitude }) => {
   const [alertModalShow, setAlertModal] = useState(false);
   const [modalShow, setModalShow] = useState(true);
   const [rideModalShow, setRideModalShow] = useState(value);
-  const [tripId, setTripId] = useState(undefined);
+  const [trip, setTrip] = useState(undefined);
+
   const [driverAddress, setDriverAddress] = useState("NA");
   const [pickupAddress, setPickupAddress] = useState("NA");
-  const [rideStatus, setRideStatus] = useState(false);
+  const [rideStatus, setRideStatus] = useState({
+    accept: false,
+    reject: false,
+  });
   const handleSwitch = async () => {
     if (latitude == null || longitude == null) {
       //alert("please enable your location")
@@ -63,36 +64,37 @@ const SwitchButton = ({ latitude, longitude }) => {
 
       if (!value) {
         const loginDetails = await getDriverOnline(User.Id);
-        const rideData = await getTrips(loginDetails.Id);
-        setTripId(rideData.Id);
-        console.log({ rideData });
-        const driverLocation = await coordinateToAddress({
+        const rideData = await getTrips(loginDetails.Id, {
           latitude,
           longitude,
         });
+        setTrip(rideData);
+        console.log({ rideData });
+        const driverLocation = await coordinateToAddress({
+          latitude: rideData?.TripStops[0].Lat,
+          longitude: rideData?.TripStops[0].Lng,
+        });
         setDriverAddress(driverLocation);
         const address = await coordinateToAddress({
-          latitude: rideData.Lat,
-          longitude: rideData.Lng,
+          latitude: rideData?.TripStops[1].Lat,
+          longitude: rideData?.TripStops[1].Lng,
         });
         setPickupAddress(address);
         setRideModalShow(!rideModalShow);
-        console.log({ tripId });
       }
-
-      console.log("location", latitude, longitude);
     }
   };
 
-  const handleAccept = useCallback(async () => {
-    const res = await acceptRide(tripId);
-    console.log({ res });
+  const handleAccept = useCallback(async (id) => {
+    setRideModalShow(false);
+    const res = await acceptRide(id);
+    setRideStatus({ accept: true, reject: false });
   }, []);
 
-  const handleReject = useCallback(async () => {
-    const res = await rejectRide(tripId);
+  const handleReject = useCallback(async (id) => {
+    const res = await rejectRide(id);
     console.log({ res });
-    setRideStatus(true);
+    setRideStatus({ accept: false, reject: true });
   }, []);
 
   console.log({ driverAddress, pickupAddress });
@@ -105,22 +107,36 @@ const SwitchButton = ({ latitude, longitude }) => {
       {<CustomSwitch isOn={value} handleToggle={handleSwitch} />}
 
       <CustomModal show={modalShow} onHide={() => setModalShow(false)}>
-        <OfflineModalContent></OfflineModalContent>
+        <OfflineModalContent />
       </CustomModal>
-      <CustomModal show={rideModalShow} onHide={() => setRideModalShow(false)}>
-        <RideRequest
-          onAccept={handleAccept}
-          onReject={handleReject}
-          reject={rideStatus}
-          address={{
-            driverAddress,
-            pickupAddress,
-          }}
-        ></RideRequest>
-      </CustomModal>
+      {rideModalShow && (
+        <CustomModal
+          show={rideModalShow}
+          onHide={() => setRideModalShow(false)}
+        >
+          <RideRequest
+            onAccept={handleAccept}
+            onReject={handleReject}
+            rideStatus={rideStatus}
+            trip={trip}
+            address={{
+              driverAddress,
+              pickupAddress,
+            }}
+          />
+        </CustomModal>
+      )}
       <AlertModal show={alertModalShow} onHide={() => setAlertModal(false)}>
         <AlertModalContent />
       </AlertModal>
+      {rideStatus.accept && (
+        <div className="fixed-bottom">
+          <NavigateButton
+            location={{ driverAddress, pickupAddress }}
+            trip={trip}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -2,4 +2,4 @@ export const UserFields = `{"User":["Name","LongName", "DateOfBirth","Id","Addre
 export const VehicleFields = `{"Vehicles":["Id","Tags","VehicleNumber","Approved","UserId"],"VehicleDocument":["Id","ValidFrom","ValidTo","DocumentNumber","Document","ImageUrl","VerificationStatus"]}`;
 export const DeploymentPurposesFields = `{"DeploymentPurpose":["Name","Id"]}`;
 export const TariffCardFields = `{"TariffCard":["Id","FromKms","ToKms","PricePerKm","DeploymentPurposeId"]}`;
-export const TripIdFields = `{"Trips":[], "TripStop":["Name","Id","DistanceFromLastStop"] }`;
+export const TripIdFields = `{"Trips":[], "TripStop":["Name","Id","DistanceFromLastStop","Lat","Lng"] }`;
