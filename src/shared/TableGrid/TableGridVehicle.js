@@ -2,6 +2,17 @@ import { useEffect } from "react";
 import { getKeyValueFromString } from "../../core/common.functions";
 import { verificationKeys } from "../constant";
 
+const getKey = (c, v) => {
+  const type =
+    typeof c[v.Key] === "object"
+      ? v.Field.Name
+        ? c[v.Key].find((x) => x[v.Field.Name] === v.Field.Value)[v.Field.Key]
+        : c[v.Key][v.Field.Key]
+      : c[v?.Key];
+
+  return type;
+};
+
 const TableGridVehicle = (props) => {
   console.log("propsVehicle", props);
 
@@ -27,14 +38,8 @@ const TableGridVehicle = (props) => {
                   (x) => x.Name !== "Action"
                 ).map((v, i) => {
                   let typeString = c.Tags;
-                  let type =
-                    typeof c[v.Key] === "object"
-                      ? v.Field.Name
-                        ? c[v.Key].find(
-                            (x) => x[v.Field.Name] === v.Field.Value
-                          )[v.Field.Key]
-                        : c[v.Key][v.Field.Key]
-                      : c[v.Key];
+
+                  let type = getKey(c, v);
                   return (
                     <td key={i}>
                       {type ? type : getKeyValueFromString(v.Key, typeString)}
