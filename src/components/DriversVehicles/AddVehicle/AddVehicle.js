@@ -290,9 +290,10 @@ export const AddVehicle = (props) => {
       return {
         ...upInfo,
         VehicleNumber: props.vehicleEdit.VehicleNumber,
-        ValidFrom: props.vehicleEdit.VehicleDocuments?.find(
-          (x) => x.Document === DocumentType.RC
-        ).ValidFrom,
+        ValidFrom:
+          props.vehicleEdit.VehicleDocuments?.find(
+            (x) => x.Document === DocumentType.RC
+          )?.ValidFrom || "",
         ValidTo: props.vehicleEdit.VehicleDocuments?.find(
           (x) => x.Document === DocumentType.RC
         ).ValidTo,

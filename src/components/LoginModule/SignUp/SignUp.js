@@ -73,7 +73,6 @@ export const SignInPassword = () => {
         },
       },
     };
-
     userAction(path, data).then((res) => {
       navigateTo(AppRoutes.adminDashboard);
     });
@@ -87,10 +86,13 @@ export const SignInPassword = () => {
             <Col lg="3" className="p-0">
               <LeftSection />
             </Col>
-            <Col lg="9" className="d-flex align-items-center">
+            <Col
+              lg="9"
+              className="d-flex align-items-center justify-content-center"
+            >
               <div className="w-100">
-                <div className="row w-100 justify-content-center">
-                  <div className="col-10">
+                <div className="row mt-3 w-100 justify-content-center">
+                  <div className="col-12 col-lg-6">
                     <h1 className="mb-4">
                       Welcome <br /> to the Taxi Admin App
                     </h1>
@@ -102,14 +104,24 @@ export const SignInPassword = () => {
                   )}
                 >
                   <div className="row w-100 justify-content-center">
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="text"
                         {...register("FirstName", {
                           required: "First name is required",
+                          pattern: {
+                            value: /^[a-zA-Z][\sa-zA-Z]*/,
+                            message: "Can use upper and lower letters, and spaces but must not start with a space",
+                          },
                           maxLength: {
                             value: 20,
                             message: "Character limit exceeded",
+                          },
+                          minLength: {
+                            value: 20,
+                            message: "Please enter Character",
+                            value: 2,
+                            message: "Please enter Valid FirstName",
                           },
                         })}
                         className={`form-control ${
@@ -121,16 +133,26 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.FirstName} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <input
                         type="text"
                         name="LastName"
                         id="LastName"
                         {...register("LastName", {
                           required: "Last name is required",
+                          pattern: {
+                            value: /^[a-zA-Z][\sa-zA-Z]*/,
+                            message: "Can use upper and lower letters, and spaces but must not start with a space",
+                          },
                           maxLength: {
                             value: 20,
                             message: "Character limit exceeded",
+                          },
+                          minLength: {
+                            value: 20,
+                            message: "Please enter Character",
+                            value: 2,
+                            message: "Please enter Valid LastName",
                           },
                         })}
                         className={`form-control ${
@@ -140,7 +162,7 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.LastName} />
                     </div>
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <select
                         name="Company"
                         id="Company"
@@ -164,7 +186,7 @@ export const SignInPassword = () => {
                       </select>
                       <ErrorMessage fieldError={errors?.Company} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <select
                         name="Role"
                         id="Role"
@@ -187,13 +209,17 @@ export const SignInPassword = () => {
                       </select>
                       <ErrorMessage fieldError={errors?.Role} />
                     </div>
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="text"
                         name="PhoneNumber"
                         id="PhoneNumber"
                         {...register("PhoneNumber", {
                           required: "Number is required",
+                          pattern: {
+                            value: /^[0-9\b]+$/,
+                            message: "Please Not The Enter spaces",
+                          },
                           maxLength: {
                             value: 10,
                             message: "Please enter valid number",
@@ -211,11 +237,15 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.PhoneNumber} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <input
                         type="email"
                         {...register("Email", {
                           required: "Email is required",
+                          pattern: {
+                            value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            message: "Please Enter valid Email Address",
+                          },
                         })}
                         id="Email"
                         //value={Name}
@@ -226,13 +256,17 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.Email} />
                     </div>
-                    <div className="col-5 mb-4">
+                    <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="password"
                         name="Password1"
                         id="Password1"
                         {...register("Password1", {
                           required: "Password is required",
+                          pattern: {
+                            value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                            message: "Please Enter Valid Password Format",
+                          },
                         })}
                         className={`form-control ${
                           errors?.PhoneNumber ? "is-invalid" : ""
@@ -241,13 +275,17 @@ export const SignInPassword = () => {
                       />
                       <ErrorMessage fieldError={errors?.Password1} />
                     </div>
-                    <div className="col-5  mb-4">
+                    <div className="col-5  mb-4 col-12 col-lg-6">
                       <input
                         type="password"
                         name="Password2"
                         id="Password2"
                         {...register("Password2", {
                           required: "Password is required",
+                          pattern: {
+                            value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                            message: "Please Enter Valid Password Format",
+                          },
                           validate: (val) => {
                             if (watch("Password1") !== val) {
                               return "Your passwords do no match";
@@ -263,7 +301,7 @@ export const SignInPassword = () => {
                     </div>
                   </div>
                   <div className="row w-100 justify-content-center">
-                    <div className="col-5 d-grid">
+                    <div className="col-5 mb-3 d-grid col-12 col-lg-6">
                       <a
                         href={AppRoutes.admin}
                         role="button"
@@ -273,15 +311,15 @@ export const SignInPassword = () => {
                         cancel
                       </a>
                     </div>
-                    <div className="col-5 d-grid">
+                    <div className="col-5 mb-3 d-grid col-12 col-lg-6">
                       <button className="btn btn-primary" type="submit">
                         submit
                       </button>
                     </div>
                   </div>
                 </form>
-                <div className="row w-100 justify-content-center">
-                  <div className="col-10">
+                <div className="row w-100 justify-content-left">
+                  <div className="col-10 col-12 col-lg-6">
                     <p className="mt-5">
                       Existing User?{" "}
                       <Link to={AppRoutes.admin} className="link-primary">

@@ -98,13 +98,13 @@ export const Agents = (prop) => {
           >
             <Tab
               eventKey="agents"
-              title="Total Agents"
+              title="Total Operators"
               className="main-tab-content"
             >
               <div className="row mb-5">
                 <div className="col arrow-right">
                   <div>
-                    <h4 className="fs-6 fw-normal">Total Agents</h4>
+                    <h4 className="fs-6 fw-normal">Total Operators</h4>
                     <p className="fs-2 fw-semibold text-center">
                       {agentStats.totalAgent || 0}
                     </p>
@@ -115,7 +115,7 @@ export const Agents = (prop) => {
                 </div>
                 <div className="col line-right">
                   <div>
-                    <h4 className="fs-6 fw-normal">Verified Agents</h4>
+                    <h4 className="fs-6 fw-normal">Verified Operators</h4>
                     <p className="fs-2 fw-semibold text-center">
                       {agentStats.agentVerified || 0}
                     </p>
@@ -124,7 +124,7 @@ export const Agents = (prop) => {
                 </div>
                 <div className="col">
                   <h4 className="fs-6 fw-normal text-center">
-                    Agent Verification Pending
+                    Operator Verification Pending
                   </h4>
                   <p className="fs-2 fw-semibold text-center">
                     {agentStats.agentsPending || 0}

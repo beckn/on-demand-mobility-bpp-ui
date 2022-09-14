@@ -16,7 +16,7 @@ const roleMap = {
   VECHICLES_OWNER: "OWNER",
   DRIVER: "Driver",
   ADMIN: "Admin",
-  AGENT: "Agent",
+  AGENT: "Operator",
 };
 const appHeader = (props) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
