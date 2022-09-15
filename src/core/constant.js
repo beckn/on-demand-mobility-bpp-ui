@@ -53,4 +53,7 @@ export const NoLoader = [
   "user/cities/search",
   "user/pin_codes/search",
   "user/states/search",
+  "trips/show",
 ];
+
+export const NoLoaderPath = "trips/show";
