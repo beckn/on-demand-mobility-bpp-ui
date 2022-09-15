@@ -1,123 +1,144 @@
 /* eslint-disable no-undef */
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./SwitchButton.css";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import LocationIcon from "./location.png";
-import { OfflineIcon } from "../../../../shared/icons/Offline";
-import { MarkerIcon } from "../../../../shared/icons/Marker";
 import { CustomSwitch } from "./CustomSwitch";
 import { CustomModal } from "../Modal/Modal";
 import { AlertModal } from "../Modal/alert";
-import { MapPin } from "react-feather";
+import NavigateButton from "../Navigate/NavigateButton";
+import { getCookie } from "../../../../core/CookiesHandler";
+import { LocalKey } from "../../../../core/constant";
+import {
+  getUserVehicles,
+  getDriverOnline,
+  getTrips,
+  acceptRide,
+  rejectRide,
+} from "./Driver.Services";
+import {
+  OfflineModalContent,
+  AlertModalContent,
+  RideRequest,
+} from "./ModalContent";
 
+import Geocode from "react-geocode";
+Geocode.setApiKey("AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo");
+Geocode.setLocationType("ROOFTOP");
+
+const coordinateToAddress = async ({ latitude, longitude }) => {
+  const response = await Geocode.fromLatLng(latitude, longitude).then(
+    (response) => {
+      const address = response.results[0].formatted_address;
+      console.log(address);
+      return address;
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+  const formatResponse = response.split(",");
+  return formatResponse[0] + formatResponse[1] + formatResponse[2];
+};
 const { Title } = Modal;
-const SwitchButton = ({latitude, longitude}) => {
+const SwitchButton = ({ latitude, longitude }) => {
+  const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const [value, setValue] = useState(false);
   const [alertModalShow, setAlertModal] = useState(false);
   const [modalShow, setModalShow] = useState(true);
   const [rideModalShow, setRideModalShow] = useState(value);
-  const lat=null;
-  const long=null;
-  const handleSwitch = () => {
-    if(latitude==null || longitude==null){
+  const [trip, setTrip] = useState(undefined);
+
+  const [driverAddress, setDriverAddress] = useState("NA");
+  const [pickupAddress, setPickupAddress] = useState("NA");
+  const [rideStatus, setRideStatus] = useState({
+    accept: false,
+    reject: false,
+  });
+  const handleSwitch = async () => {
+    if (latitude == null || longitude == null) {
       //alert("please enable your location")
       setAlertModal(!alertModalShow);
-    }
-    else{
+    } else {
       setValue(!value);
       value && setModalShow(!modalShow);
-      !value && setRideModalShow(!rideModalShow);
-      console.log("location", latitude, longitude);
+
+      if (!value) {
+        const loginDetails = await getDriverOnline(User.Id);
+        const rideData = await getTrips(loginDetails.Id, {
+          latitude,
+          longitude,
+        });
+        setTrip(rideData);
+        console.log({ rideData });
+        const driverLocation = await coordinateToAddress({
+          latitude: rideData?.TripStops[0].Lat,
+          longitude: rideData?.TripStops[0].Lng,
+        });
+        setDriverAddress(driverLocation);
+        const address = await coordinateToAddress({
+          latitude: rideData?.TripStops[1].Lat,
+          longitude: rideData?.TripStops[1].Lng,
+        });
+        setPickupAddress(address);
+        setRideModalShow(!rideModalShow);
+      }
     }
-   
   };
+
+  const handleAccept = useCallback(async (id) => {
+    setRideModalShow(false);
+    const res = await acceptRide(id);
+    setRideStatus({ accept: true, reject: false });
+  }, []);
+
+  const handleReject = useCallback(async (id) => {
+    const res = await rejectRide(id);
+    console.log({ res });
+    setRideStatus({ accept: false, reject: true });
+  }, []);
+
+  console.log({ driverAddress, pickupAddress });
   return (
     <div className="">
       <div>
-        <h2 className="title">Bharat Ganapathy</h2>
-        <h3 className="text">Driver - Beckn One</h3>
+        <h2 className="title">{User.LongName || ""}</h2>
+        <h3 className="text">{User?.Company?.Name || ""}</h3>
       </div>
-      {
-        <CustomSwitch isOn={value} handleToggle={handleSwitch} />
-      }
-      
+      {<CustomSwitch isOn={value} handleToggle={handleSwitch} />}
+
       <CustomModal show={modalShow} onHide={() => setModalShow(false)}>
-        <OfflineModalContent></OfflineModalContent>
+        <OfflineModalContent />
       </CustomModal>
-      <CustomModal show={rideModalShow} onHide={() => setRideModalShow(false)}>
-        <RideRequest></RideRequest>
-      </CustomModal>
-      < AlertModal show={alertModalShow} onHide={() => setAlertModal(false)}>
-        <AlertModalContent></AlertModalContent>
-      </ AlertModal>
+      {rideModalShow && (
+        <CustomModal
+          show={rideModalShow}
+          onHide={() => setRideModalShow(false)}
+        >
+          <RideRequest
+            onAccept={handleAccept}
+            onReject={handleReject}
+            rideStatus={rideStatus}
+            trip={trip}
+            address={{
+              driverAddress,
+              pickupAddress,
+            }}
+          />
+        </CustomModal>
+      )}
+      <AlertModal show={alertModalShow} onHide={() => setAlertModal(false)}>
+        <AlertModalContent />
+      </AlertModal>
+      {rideStatus.accept && (
+        <div className="fixed-bottom">
+          <NavigateButton
+            location={{ driverAddress, pickupAddress }}
+            trip={trip}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 export default SwitchButton;
-
-const OfflineModalContent = () => {
-  return (
-    <div className="d-flex justify-content-center p-2">
-      <span className="p-2">
-        <OfflineIcon />
-      </span>
-      <div className="p-2">
-        <Title id="contained-modal-title-vcenter">You’re Offline</Title>
-        <p>You’re currently offline. Go online to recieve trip requests. </p>
-      </div>
-    </div>
-  );
-};
-
-const RideRequest = () => {
-  return (
-    <div className="d-flex flex-column justify-content-center align-items-center p-3 ">
-      <Title id="contained-modal-title-vcenter">New Ride Request!</Title>
-      <span className="p-2">
-        <MarkerIcon />
-      </span>
-      <div className="d-flex">
-        <p>5 min away </p>
-
-        <ul>
-          <span className="dot"></span>2.5 kms
-        </ul>
-      </div>
-      <div>
-        <span className="d-flex mt-3 align-left">
-          <MapPin color="#80BC48" />
-          Raja Dinkar Kelkar Museum
-        </span>
-        <span className="d-flex mt-3">
-          <MapPin color="#D22323" />
-          Shaniwar wada
-        </span>
-      </div>
-      <button
-        type="button"
-        class="w-100 btn btn-primary btn-lg btn-block mt-3 accept-button"
-      >
-        Accept
-      </button>
-      <button type="button" class="btn decline-button">
-        Decline
-      </button>
-    </div>
-  );
-};
-
-const AlertModalContent = () => {
-  return (
-    <div className="d-flex justify-content-center p-2">
-      <span className="p-2">
-       <img src={LocationIcon} className="locationicon"/>
-      </span>
-      <div className="p-2 alertdata">
-      <Title id="contained-modal-title-vcenter">Your Location Is Not Enabled</Title>
-        <p>Please enable your location to receive trip requests. </p>
-      </div>
-    </div>
-  );
-};
