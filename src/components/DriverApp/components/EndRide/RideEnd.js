@@ -23,8 +23,8 @@ function RideEnd() {
           <p className="Mpin">{EndRideData.LocationPin}</p>
         </div>
       </div>
-      <CustomMap customHeight={"450px"} />
-      <button className="End fixed-bottom">End Ride</button>
+      {/* <CustomMap customHeight={"450px"} /> */}
+      <button className="End fixed-bottom">Search Another Ride</button>
     </div>
   );
 }
