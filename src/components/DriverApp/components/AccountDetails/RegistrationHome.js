@@ -67,7 +67,7 @@ function RegistrationHome({ Flag, User }) {
     });
   };
 
-  const SubmitButton = () => {
+  const NextButton = () => {
     if (name && mobileno && email ) {
       return (
         <button
@@ -90,7 +90,7 @@ function RegistrationHome({ Flag, User }) {
       );
     }
   };
-  
+
   const logout = () => {
     userLogout("logout").then((res) => {
       console.log("User Logout", res);
@@ -123,68 +123,71 @@ function RegistrationHome({ Flag, User }) {
             />
         </div>
 
-        <div className="top-padding">
-          <span className="bold-text">Name :</span>
-          <span className="top-padding4 ">
-            <input
-              placeholder="Enter your Name"
-              value={name}
-              disabled={isVerified}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              className="top-padding4"
-            />
-          </span>
-        </div>
-
-        <div className="top-padding">
-          <span className="bold-text">Email ID :</span>
-          <span className="top-padding4 align-left">
-            <input
-              placeholder="Enter Your Email ID"
-              type="text"
-              value={email}
-              disabled={isVerified}
-              onChange={(e) => setEmail(e.target.value)}
-              className="top-padding4"
-            />
-          </span>
-        </div>
-
-        <div className="top-padding">
-          <span className="bold-text">Mobile Number :</span>
-          <span className="top-padding4 align-left">
-            <input
-              placeholder="Enter Your Mobile Number"
-              type="text"
-              value={mobileno}
-              disabled={isVerified}
-              onChange={(e) => setMobileNo(e.target.value)}
-              className="top-padding4"
-            />
-          </span>
-        </div>
-
-        <div className="top-padding">
-          <span className="bold-text">Date Of Birth :</span>
-          <span className="top-padding4 align-left">
-            <input
-              placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
-              type="text"
-              value={dob}
-              disabled={isVerified}
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              className="top-padding4"
-            />
-          </span>
-          
-        </div>
-
-        {!isVerified && (
-          <div className="top-padding2">
-            <SubmitButton />
+          <div className="top-padding">
+            <span className="bold-text">Name :</span>
+            <span className="top-padding4 ">
+              <input
+                placeholder="Enter your Name"
+                value={name}
+                disabled={isVerified}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                className="top-padding4"
+              />
+            </span>
           </div>
-        )}
+
+          <div className="top-padding">
+            <span className="bold-text">Email ID :</span>
+            <span className="top-padding4 align-left">
+              <input
+                placeholder="Enter Your Email ID"
+                type="text"
+                value={email}
+                disabled={isVerified}
+                onChange={(e) => setEmail(e.target.value)}
+                className="top-padding4"
+              />
+            </span>
+          </div>
+
+          <div className="top-padding">
+            <span className="bold-text">Mobile Number :</span>
+            <span className="top-padding4 align-left">
+              <input
+                placeholder="Enter Your Mobile Number"
+                type="text"
+                pattern="^[0-9\b]+$"
+                title="Please Not Enter spaces"
+                value={mobileno}
+                disabled={isVerified}
+                onChange={(e) => setMobileNo(e.target.value)}
+                className="top-padding4"
+              />
+            </span>
+          </div>
+
+          <div className="top-padding">
+            <span className="bold-text">Date Of Birth :</span>
+            <span className="top-padding4 align-left">
+              <input
+                placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
+                type="text"
+                value={dob}
+                disabled={isVerified}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                className="top-padding4"
+              />
+            </span>
+            
+          </div>
+
+          {!isVerified && (
+            <div className="top-padding2">
+              <NextButton />
+            </div>
+          )}
+        
       </div>
     </div>
   );
@@ -262,82 +265,110 @@ function RegistrationSubmit({ User }) {
 
   return (
     <>
-      <div className="Registration-body">
+      <div className="Registrationsubmit">
         <div className="top-padding">
-          <span className="bold-text">Aadhaar Card:</span>
-          <span className="upload-btn-wrapper top-padding4">
-            <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
-              <img src={Upload} className="AccountIcon" />
-            </label>
+          <span className="bold-text">Aadhaar Card :</span>
+          <div className="top-padding4">
+            <span className="upload-btn-wrapper">
+              <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
+                <img src={Upload} className="AccountIcon" />
+              </label>
+              <input
+                type="file"
+                id="AadharFile"
+                name="AadharFile"
+                onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+              />
+            </span>
             <input
-              type="file"
-              id="AadharFile"
-              name="AadharFile"
-              onChange={(e) => getUpload(e, DocumentType.Aadhaar)}
+              placeholder="Enter your E-KYC Zip password."
+              type="text"
+              className="align-left top-padding4"
+              value={eKycPassword}
+              disabled={User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Aadhar
+              )}
+              onChange={(e) => setEKycPassword(e.target.value)}
             />
-          </span>
-          <input
-            placeholder="Enter your E-KYC Zip password."
-            type="text"
-            className="align-left top-padding4"
-            value={eKycPassword}
-            disabled={User?.DriverDocuments?.find(
-              (x) => x.Document === DocumentType.Aadhar
-            )}
-            onChange={(e) => setEKycPassword(e.target.value)}
-          />
+          </div>
         </div>
 
-        <div className="top-padding">
-          <span className="bold-text">PAN Number:</span>
-          <span className="upload-btn-wrapper top-padding4">
-            <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
-              <img src={Upload} className="AccountIcon" />
-            </label>
-            <input
-              type="file"
-              name="PanFile"
-              id="PanFile"
-              onChange={(e) => getUpload(e, DocumentType.Pan)}
-            />
-          </span>
-          <input
-            placeholder="Enter your PAN Number"
-            type="text"
-            className="align-left bold-text top-padding4"
-            value={PanNumber}
-            disabled={User?.DriverDocuments?.find(
-              (x) => x.Document === DocumentType.Pan
-            )}
-            onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
-          />
-        </div>
+        <span className="mt-1 mb-0 small">
+        {
+          User?.DriverDocuments?.find(
+            (x) => x.Document === DocumentType.Aadhar
+          )?.VerificationStatus
+        }
+        </span>
 
         <div className="top-padding">
-          <span className="bold-text">Driving License:</span>
-          <span className="upload-btn-wrapper top-padding4">
-            <label className="uploadbtn" htmlFor="LicenseFile" role={"button"}>
-              <img src={Upload} className="AccountIcon" />
-            </label>
+          <span className="bold-text">PAN Number :</span>
+          <div className="top-padding4">          
+            <span className="upload-btn-wrapper">
+              <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
+                <img src={Upload} className="AccountIcon" />
+              </label>
+              <input
+                type="file"
+                name="PanFile"
+                id="PanFile"
+                onChange={(e) => getUpload(e, DocumentType.Pan)}
+              />
+            </span>
             <input
-              type="file"
-              name="LicenseFile"
-              id="LicenseFile"
-              onChange={(e) => getUpload(e, DocumentType.License)}
+              placeholder="Enter your PAN Number"
+              type="text"
+              className="align-left bold-text top-padding4"
+              value={PanNumber}
+              disabled={User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Pan
+              )}
+              onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
             />
-          </span>
-          <input
-            placeholder="Enter your Driving License Number"
-            type="text"
-            className="align-left bold-text top-padding4"
-            value={LicenseNumber}
-            disabled={User?.DriverDocuments?.find(
-              (x) => x.Document === DocumentType.Licence
-            )}
-            onChange={(e) => setLicenseNumber(e.target.value)}
-          />
+          </div>
         </div>
 
+        <span className="mt-1 mb-0 small">
+        {
+          User?.DriverDocuments?.find(
+            (x) => x.Document === DocumentType.Pan
+          )?.VerificationStatus
+        }
+        </span>
+
+        <div className="top-padding">
+          <span className="bold-text">Driving License :</span>
+          <div className="top-padding4"> 
+            <span className="upload-btn-wrapper">
+              <label className="uploadbtn" htmlFor="LicenseFile" role={"button"}>
+                <img src={Upload} className="AccountIcon" />
+              </label>
+              <input
+                type="file"
+                name="LicenseFile"
+                id="LicenseFile"
+                onChange={(e) => getUpload(e, DocumentType.Licence)}
+              />
+            </span>
+            <input
+              placeholder="Enter your Driving License Number"
+              type="text"
+              className="align-left bold-text top-padding4"
+              value={LicenseNumber}
+              disabled={User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Licence
+              )}
+              onChange={(e) => setLicenseNumber(e.target.value)}
+            />
+          </div>
+        </div>
+        <span className="mt-1 mb-0 small">
+        {
+          User?.DriverDocuments?.find(
+            (x) => x.Document === DocumentType.Licence
+          )?.VerificationStatus
+        }
+        </span>
         <div className="top-padding2">
           <SubmitButton />
         </div>

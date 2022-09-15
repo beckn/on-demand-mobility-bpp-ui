@@ -219,7 +219,7 @@ export const SignInPassword = () => {
                           required: "Number is required",
                           pattern: {
                             value: /^[0-9\b]+$/,
-                            message: "Please Not The Enter spaces",
+                            message: "Please Not Enter spaces",
                           },
                           maxLength: {
                             value: 10,

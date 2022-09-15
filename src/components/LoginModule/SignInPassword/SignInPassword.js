@@ -50,9 +50,9 @@ export const Login = (props) => {
               <div className="w-100">
                 <div className="row w-100 justify-content-center">
                   <div className="col-6 mb-5 col-12 col-lg-6 ">
-                    <h1>
+                    <h2>
                       Welcome <br /> to the Taxi Admin App
-                    </h1>
+                    </h2>
                   </div>
                 </div>
                 <form
