@@ -39,7 +39,7 @@ const getItemValue = (item, code) => {
 };
 
 const renderImageTooltip = props => (
-  <Tooltip {...props}>Please fill required Information and then Upload File In JPG or PNG Format</Tooltip>
+  <Tooltip {...props}>Please fill required Information and Date of Birth and then Upload File In JPG or PNG Format </Tooltip>
 );
 
 const renderZipTooltip = props => (
@@ -168,6 +168,8 @@ const PersonalDetailsForm = ({
                 error: errors?.FirstName,
               })}
               placeholder="First Name"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="don't use special character and but must not start with a space"
             />
             <ErrorMessage fieldError={errors?.FirstName} />
           </div>
@@ -182,6 +184,8 @@ const PersonalDetailsForm = ({
                 error: errors?.LastName,
               })}
               placeholder="Last Name"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="don't use special character and but must not start with a space"
             />
             <ErrorMessage fieldError={errors?.LastName} />
           </div>
