@@ -1,42 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { UserFields } from "../../../../core/fieldsSet";
+import { userSave } from "./Registration.Services";
 import "./Registration_css.css";
+import Userimg from './dummy-image.jpg';
 import Upload from "./upload.png";
 import Modal from "react-bootstrap/Modal";
 import Success from "./success.png";
 import DriverAppHeader from "../Header/Header";
+import { LogOut } from "react-feather";
 import DriverAppFooter from "../NavFooter/NavFooter";
-import { getCookie } from "../../../../core/CookiesHandler";
-import { LocalKey } from "../../../../core/constant";
+import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
+import { LocalKey, DocumentType, AppRoutes } from "../../../../core/constant";
+import { uploadFile } from "../../../Account/Account.Services";
+import { userLogout } from "../../../LoginModule/Login.services";
 
 export default function Registration() {
+  const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
+  console.log({ User });
   const [flag, setFlag] = useState(false);
 
   return (
     <div>
       <DriverAppHeader title={"Account"} />
       <div>
-        {flag ? <RegistrationSubmit /> : <RegistrationHome Flag={setFlag} />}
+        {flag ? (
+          <RegistrationSubmit User={User} />
+        ) : (
+          <RegistrationHome Flag={setFlag} User={User} />
+        )}
       </div>
-      <DriverAppFooter />
+      <DriverAppFooter/>
     </div>
   );
 }
-
-function RegistrationHome({ Flag }) {
-  const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
-  console.log({ User });
+const getDocumentDetails = (user, type) => {
+  return (
+    user?.DriverDocuments?.find((x) => x.Document === type)?.DocumentNumber ||
+    ""
+  );
+};
+function RegistrationHome({ Flag, User }) {
   const [name, setName] = useState(User.LongName || "");
   const [mobileno, setMobileNo] = useState(User.PhoneNumber || "");
   const [email, setEmail] = useState(User.Name || "");
-  const [sex, setSex] = useState("Male" || "");
-  const [age, setAge] = useState(32 || "");
+  const [dob, setDateOfBirth] = useState(User.DateOfBirth || "");
+  const isVerified = User?.Approved === "Y" ? true : false;
+  console.log("ver",isVerified);
+  const IsStore = User  ? true : false;
 
-  function SubmitButton() {
-    if (name && mobileno && email && sex && age) {
+  const getUpload = () => {
+    let userId = User.Id;
+    const user = {
+      Id: userId,
+      LongName: name,
+      Name: email,
+      PhoneNumber: mobileno,
+      DateOfBirth: dob,
+    };
+
+    const userData = {
+      Users: [{ ...user }],
+    };
+    
+     userSave("users/save/", userData, UserFields, IsStore, "driver").then((res) => {
+      
+    });
+  };
+
+  const SubmitButton = () => {
+    if (name && mobileno && email ) {
       return (
         <button
           type="button"
-          onClick={() => Flag(true)}
+          onClick={(e) => {
+            e.preventDefault();
+            Flag(true);
+            getUpload();
+          }}
           className="btn btn-secondary coloract"
         >
           Next
@@ -49,17 +89,47 @@ function RegistrationHome({ Flag }) {
         </button>
       );
     }
-  }
-
+  };
+  
+  const logout = () => {
+    userLogout("logout").then((res) => {
+      console.log("User Logout", res);
+      removeCookie(LocalKey.saveApi);
+      removeCookie(LocalKey.saveUser);
+      // navigate(AppRoutes.admin);
+      window.location.href = AppRoutes.admin;
+    });
+  };
+  const [file, setFile] = useState();
+    function handleChange(e) {
+        console.log(e.target.files);
+        setFile(URL.createObjectURL(e.target.files[0]));
+    }
   return (
     <div>
-      <div class="Registration-body">
+      <div className="Registration-body">
+        <div className="logout" onClick={logout}>
+          <LogOut />
+          LogOut
+        </div>
+
+        <div className="imgcenter">
+          {/* <input type="file" onChange={handleChange} />
+          <img src={file} className="profileimg"/> */}
+            <img
+              src={Userimg}
+              alt="Driver Image"
+              className="profileimg"
+            />
+        </div>
+
         <div className="top-padding">
           <span className="bold-text">Name :</span>
-          <span class="top-padding4 ">
+          <span className="top-padding4 ">
             <input
               placeholder="Enter your Name"
               value={name}
+              disabled={isVerified}
               onChange={(e) => setName(e.target.value)}
               type="text"
               className="top-padding4"
@@ -69,11 +139,12 @@ function RegistrationHome({ Flag }) {
 
         <div className="top-padding">
           <span className="bold-text">Email ID :</span>
-          <span class="top-padding4 align-left">
+          <span className="top-padding4 align-left">
             <input
               placeholder="Enter Your Email ID"
               type="text"
               value={email}
+              disabled={isVerified}
               onChange={(e) => setEmail(e.target.value)}
               className="top-padding4"
             />
@@ -82,11 +153,12 @@ function RegistrationHome({ Flag }) {
 
         <div className="top-padding">
           <span className="bold-text">Mobile Number :</span>
-          <span class="top-padding4 align-left">
+          <span className="top-padding4 align-left">
             <input
               placeholder="Enter Your Mobile Number"
               type="text"
               value={mobileno}
+              disabled={isVerified}
               onChange={(e) => setMobileNo(e.target.value)}
               className="top-padding4"
             />
@@ -94,47 +166,82 @@ function RegistrationHome({ Flag }) {
         </div>
 
         <div className="top-padding">
-          <span className="bold-text">Sex :</span>
-          <span class="top-padding4 align-left">
+          <span className="bold-text">Date Of Birth :</span>
+          <span className="top-padding4 align-left">
             <input
-              placeholder="Enter Your Sex"
+              placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
               type="text"
-              value={sex}
-              onChange={(e) => setSex(e.target.value)}
+              value={dob}
+              disabled={isVerified}
+              onChange={(e) => setDateOfBirth(e.target.value)}
               className="top-padding4"
             />
           </span>
+          
         </div>
 
-        <div className="top-padding">
-          <span className="bold-text">Age :</span>
-          <span class="top-padding4 align-left">
-            <input
-              placeholder="Enter Your Age"
-              type="text"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              className="top-padding4"
-            />
-          </span>
-        </div>
-
-        <div className="top-padding2">
-          <SubmitButton />
-        </div>
+        {!isVerified && (
+          <div className="top-padding2">
+            <SubmitButton />
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
-function RegistrationSubmit() {
+function RegistrationSubmit({ User }) {
   const [showModal, setShowModal] = useState(false);
-  const [panno, setPanNo] = useState("");
-  const [drivinglicense, setDrivingLicense] = useState("");
-  const [aadharno, setAadhaarNo] = useState("");
+  const [eKycPassword, setEKycPassword] = useState("");
+  const [PanNumber, setPanNumber] = useState("");
+  const [LicenseNumber, setLicenseNumber] = useState("");
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = () => {
+    document.title = `taxi BPP - Account Information`;
+    if (User && User?.DriverDocuments) {
+      let LicenceNo = User?.DriverDocuments?.find(
+        (x) => x.Document === DocumentType.Licence
+      )?.DocumentNumber;
+      let PanNumber = User?.DriverDocuments?.find(
+        (x) => x.Document === DocumentType.Pan
+      )?.DocumentNumber;
+      setLicenseNumber(LicenceNo?.toUpperCase());
+      setPanNumber(PanNumber?.toUpperCase());
+    }
+  };
+
+  const getUpload = (e, type) => {
+    let file = e.target.files[0];
+    let formData = new FormData();
+    let number = type === DocumentType.Licence ? LicenseNumber : PanNumber;
+    let userId = User.Id;
+    if (type === DocumentType.Licence || type === DocumentType.Pan) {
+      formData.append("ADDRESS_LINE_1", User?.AddressLine1 || "");
+      formData.append("ADDRESS_LINE_2", User?.AddressLine2 || "");
+      formData.append("ADDRESS_LINE_3", User?.AddressLine3 || "");
+      formData.append("CITY_NAME", User?.City?.Name || "");
+      formData.append("STATE_NAME", User?.City?.State.Name || "");
+      formData.append("EMAIL", User.Name);
+      formData.append("PHONE_NUMBER", User.PhoneNumber);
+      formData.append("DATE_OF_BIRTH", User.DateOfBirth);
+    }
+
+    formData.append("DOCUMENT", type);
+    formData.append("FILE", file);
+    formData.append("DRIVER_ID", userId);
+    formData.append("DOCUMENT_NUMBER", number);
+    type === DocumentType.Aadhar && formData.append("PASSWORD", eKycPassword);
+
+    uploadFile("driver_documents/save", formData, "", true).then((res) => {
+      console.log(`uploadData`, res.data.DriverDocument);
+    });
+  };
 
   function SubmitButton() {
-    if (panno && drivinglicense && aadharno) {
+    if (PanNumber && LicenseNumber && eKycPassword) {
       return (
         <button
           onClick={() => setShowModal(true)}
@@ -152,57 +259,82 @@ function RegistrationSubmit() {
       );
     }
   }
+
   return (
     <>
-      <div class="Registration-body">
+      <div className="Registration-body">
         <div className="top-padding">
           <span className="bold-text">Aadhaar Card:</span>
-          <span class="upload-btn-wrapper top-padding4">
-            <button class="uploadbtn">
+          <span className="upload-btn-wrapper top-padding4">
+            <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
               <img src={Upload} className="AccountIcon" />
-            </button>
-            <input type="file" name="myfile" />
+            </label>
+            <input
+              type="file"
+              id="AadharFile"
+              name="AadharFile"
+              onChange={(e) => getUpload(e, DocumentType.Aadhaar)}
+            />
           </span>
           <input
-            placeholder="Enter your Aadhaar Card No."
+            placeholder="Enter your E-KYC Zip password."
             type="text"
             className="align-left top-padding4"
-            value={aadharno}
-            onChange={(e) => setAadhaarNo(e.target.value)}
+            value={eKycPassword}
+            disabled={User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Aadhar
+            )}
+            onChange={(e) => setEKycPassword(e.target.value)}
           />
         </div>
 
         <div className="top-padding">
           <span className="bold-text">PAN Number:</span>
-          <span class="upload-btn-wrapper top-padding4">
-            <button class="uploadbtn">
+          <span className="upload-btn-wrapper top-padding4">
+            <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
               <img src={Upload} className="AccountIcon" />
-            </button>
-            <input type="file" name="myfile" />
+            </label>
+            <input
+              type="file"
+              name="PanFile"
+              id="PanFile"
+              onChange={(e) => getUpload(e, DocumentType.Pan)}
+            />
           </span>
           <input
             placeholder="Enter your PAN Number"
             type="text"
             className="align-left bold-text top-padding4"
-            value={panno}
-            onChange={(e) => setPanNo(e.target.value)}
+            value={PanNumber}
+            disabled={User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Pan
+            )}
+            onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
           />
         </div>
 
         <div className="top-padding">
           <span className="bold-text">Driving License:</span>
-          <span class="upload-btn-wrapper top-padding4">
-            <button class="uploadbtn">
+          <span className="upload-btn-wrapper top-padding4">
+            <label className="uploadbtn" htmlFor="LicenseFile" role={"button"}>
               <img src={Upload} className="AccountIcon" />
-            </button>
-            <input type="file" name="myfile" />
+            </label>
+            <input
+              type="file"
+              name="LicenseFile"
+              id="LicenseFile"
+              onChange={(e) => getUpload(e, DocumentType.License)}
+            />
           </span>
           <input
             placeholder="Enter your Driving License Number"
             type="text"
             className="align-left bold-text top-padding4"
-            value={drivinglicense}
-            onChange={(e) => setDrivingLicense(e.target.value)}
+            value={LicenseNumber}
+            disabled={User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Licence
+            )}
+            onChange={(e) => setLicenseNumber(e.target.value)}
           />
         </div>
 
@@ -211,13 +343,12 @@ function RegistrationSubmit() {
         </div>
 
         <Modal
-          className="popup1"
-          size="sm"
           show={showModal}
           onHide={() => setShowModal(false)}
+          centered
         >
           <div>
-            <button class="close" onClick={() => setShowModal(false)}>
+            <button className="close" onClick={() => setShowModal(false)}>
               ×
             </button>
           </div>

@@ -18,3 +18,10 @@
 .profileicon{
   padding-left: 10px;
 }
+.fixed-bottom1{
+  position: fixed;
+  right: 0;
+  bottom: 15px;
+  left: 0;
+  z-index: 1030;
+}

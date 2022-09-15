@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import DriverAppFooter from "./components/DriverApp/components/NavFooter/NavFooter";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
 import { Vehicles } from "./components/Vechicles/Vehicles";
@@ -11,7 +12,6 @@ import { AppRoutes, LocalKey, NoHeader } from "./core/constant";
 import ErrorBoundary from "./shared/ErrorBoundary";
 const AppHeader = React.lazy(() => import("./components/AppHeader"));
 const MenuBar = React.lazy(() => import("./components/AppHeader/MenuBar"));
-
 const Login = React.lazy(() => import("./components/LoginModule/Login"));
 const SignUp = React.lazy(() => import("./components/LoginModule/SignUp"));
 const SignInPassword = React.lazy(() =>
@@ -85,6 +85,7 @@ function App() {
               ></Route>
               <Route path="/*" element={<PageNotFound />}></Route>
             </Routes>
+            {/*<DriverAppFooter/>*/}
             {/* {isLogin && <AppFooter />} */}
           </Suspense>
         </ErrorBoundary>

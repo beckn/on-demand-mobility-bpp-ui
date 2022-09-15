@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { usePosition } from "../hooks/usePosition";
+import React, { useState,useEffect,useRef } from "react";
+//import { usePosition } from "../hooks/usePosition";
 import { CarIcon } from "../../../shared/icons/Car";
 import {
   useJsApiLoader,
   GoogleMap,
   Marker,
   Autocomplete,
+  DirectionsService,
   DirectionsRenderer,
 } from "@react-google-maps/api";
 const containerStyle = {
@@ -17,12 +18,13 @@ const center = {
   lat: 0,
   lng: -180,
 };
-function CustomMap() {
+function CustomMap({latitude, longitude}) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
+    libraries:['places'],
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
   });
-
+  
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
@@ -33,22 +35,23 @@ function CustomMap() {
     setMap(null);
   }, []);
 
-  const { latitude, longitude, error } = usePosition();
   const position = {
     lat: latitude || 25.55,
     lng: longitude || 84.77,
   };
+
   console.log("location", latitude, longitude);
   return (
     <div>
       {isLoaded && (
+        <div>
         <GoogleMap
           center={position}
           zoom={8}
           mapContainerStyle={{
             top: "85px",
             width: "100%",
-            height: "450px",
+            height: "calc(100vh - 230px)",
           }}
           options={{
             zoomControl: false,
@@ -60,8 +63,9 @@ function CustomMap() {
           onUnmount={onUnmount}
         >
           {/* Child components, such as markers, info windows, etc. */}
-          <Marker position={position} />
+          {<Marker position={position} />}
         </GoogleMap>
+        </div>
       )}
     </div>
   );

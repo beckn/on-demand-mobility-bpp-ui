@@ -1,18 +1,40 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { RideCompletedData, RideStartedData } from "../DriveData";
+import "./RideCompleted.css";
+import Rectanglebar from '../Navigate/Rectangle-bar.png';
 
-
-function RideCompleted() {
+function RideStarted() {
   const [smShow, setSmShow] = useState(false);
 
   return (
     <>
-      <Button onClick={() => setSmShow(true)} className="me-2 fixed-bottom">
-      {RideCompletedData.Button}
+      {
+        smShow ? 
+          <div className="bottomModal">
+            <div className="rectangle-bar" onClick={() => setSmShow(!smShow)}>
+              <button class="recbar">
+                <img
+                  src={Rectanglebar}
+                  alt="Rectangle bar"
+                />
+              </button>                  
+           </div>
+            <div className="titlle" id="example-modal-sizes-title-sm">
+             Ride Completed
+            </div>
+            <div>
+              <div className="titlle-text" id="example-modal-sizes-title-sm">
+                You have reached the destination
+              </div>
+            </div>
+          </div>:
+          <div></div>
+      }
+      <Button onClick={() => setSmShow(!smShow)} className="me-2-C fixed-bottom">
+        Collect Payment
       </Button>
-      <Modal
+      {/*<Modal
         className="popup"
         size="md"
         show={smShow}
@@ -20,16 +42,14 @@ function RideCompleted() {
         aria-labelledby="example-modal-sizes-title-sm"
       >
           <Modal.Title className="titlle" id="example-modal-sizes-title-sm">
-          {RideCompletedData.tittle}
+            {RideStartedData.title}
           </Modal.Title>
         <Modal.Body>
-        <div>
-        <h6 className="h6">{RideCompletedData.subtitle}</h6>
-        </div>
+          <h6 className="h5">{RideStartedData.subtitle}</h6>
         </Modal.Body>
-      </Modal>
+  </Modal>*/}
     </>
   );
 }
 
-export default RideCompleted
+export default RideStarted
