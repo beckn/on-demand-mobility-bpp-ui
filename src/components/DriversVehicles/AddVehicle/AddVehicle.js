@@ -142,6 +142,8 @@ const VehicleInfoForm = ({
             disabled={isDisabled}
             id="VehicleNumber"
             placeholder="Enter Vehicle Number"
+            pattern="^[A-Z]{2}[-][0-9]{1,2}[-][A-Z]{1,2}[-][0-9]{3,4}$"
+            title="Invalid format"
           />
           <ErrorMessage fieldError={errors?.VehicleNumber} />
         </div>
@@ -156,6 +158,9 @@ const VehicleInfoForm = ({
             id="Make"
             disabled={isDisabled}
             placeholder="Enter Vehicle Make"
+            pattern="^[a-zA-Z][\sa-zA-Z]*"
+            title="Invalid format"
+                        
           />
           <ErrorMessage fieldError={errors?.Make} />
         </div>
@@ -173,6 +178,8 @@ const VehicleInfoForm = ({
               disabled={isDisabled}
               id="NameOfModel"
               placeholder="Enter Vehicle Model"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="Invalid format"
             />
             <ErrorMessage fieldError={errors?.NameOfModel} />
           </div>
