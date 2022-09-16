@@ -9,7 +9,7 @@ export const CustomSwitch = ({ isOn, handleToggle }) => {
           id={`react-switch-new`}
         />
         <span className="slider round" />
-        <h3 className="textav">{isOn ? "Available" : "Busy"}</h3>
+        <h3 className="textav">{isOn ? "Available" : "Offline"}</h3>
       </label>
     </>
   );

@@ -14,13 +14,16 @@ export const getUserVehicles = async (UserId) => {
 };
 export const getDriverOnline = async (UserId, position) => {
   let path = "authorized_drivers/login";
-  const assignedVehicle = await getUserVehicles(UserId);
+  const vehicleData = await getUserVehicles(UserId);
+  const assignedVehicle = vehicleData.Vehicles.filter(
+    (vehicle) => vehicle.Approved === "Y"
+  );
   //const trips = getTrips();
-  console.log(assignedVehicle.Vehicles[0]);
+  console.log({ assignedVehicle });
   const payload = {
     AuthorizedDriver: {
       Vehicle: {
-        Id: assignedVehicle.Vehicles[0].Id,
+        Id: assignedVehicle[0].Id,
       },
       Driver: {
         Id: UserId,
@@ -32,7 +35,8 @@ export const getDriverOnline = async (UserId, position) => {
 
 export const getTrips = async (id, location) => {
   const assignedTripPath = `/trips/search?q=DRIVER_LOGIN_ID:${id}+AND+STATUS:Confirmed&maxRecords=1`;
-  //const syncDriveLocation = await updateDriverLocation(id, location);
+  const path = `driver_logins/updateLocation/${id}`;
+  //const syncDriveLocation = await updateDriverLocation(path, location);
   const tripsData1 = await getRequestData(assignedTripPath, TripIdFields).then(
     (res) => res.data.Trips
   );
@@ -58,25 +62,27 @@ export const endRide = (tripId) => {
   return getRequestData(path);
 };
 
-// export const updateDriverLocation = async (driverId, location) => {
-//   const baseUrl = "https://taxi.becknprotocol.io/";
-//   const path = `driver_logins/updateLocation/${driverId}`;
-//   const ApiKey = JSON.parse(getCookie("saveApi"))["ApiKey"];
-//   console.log({ ApiKey });
-//   const res = await fetch(baseUrl + path, {
-//     method: "GET",
-//     headers: {
-//       "Content-type": "application/json",
-//       "Access-Control-Allow-Origin": "*",
-//       withCredentials: true,
-//       mode: "no-cors",
-//       ApiKey,
-//       "X-Lat": location.lat || 2.3,
-//       "X-Lng": location.lng || 4.5,
-//     },
-//   }).then((res) => res.json());
-//   return res;
-// };
+export const updateDriverLocation = async (driverId, location) => {
+  const baseUrl = "https://taxi.becknprotocol.io/";
+  const path = `driver_logins/updateLocation/${driverId}`;
+  const ApiKey = JSON.parse(getCookie("saveApi"))["ApiKey"];
+  console.log({ ApiKey });
+  const res = await fetch(baseUrl + path, {
+    method: "GET",
+    headers: {
+      "Content-type": "application/json",
+      //"Access-Control-Allow-Origin": "*",
+      "access-control-allow-credentials": true,
+      "access-control-allow-origin": "*",
+      //withCredentials: true,
+      //mode: "no-cors",
+      ApiKey,
+      "X-Lat": location.latitude || 2.3,
+      "X-Lng": location.longitude || 4.5,
+    },
+  }).then((res) => res.json());
+  return res;
+};
 
 export const getTripStatus = (tripId) => {
   const path = `trips/show/${tripId}`;

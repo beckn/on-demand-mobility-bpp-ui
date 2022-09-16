@@ -3,7 +3,7 @@ import { config } from "../config/config.js";
 import { spinnerService } from "@simply007org/react-spinners";
 import { toast } from "react-toastify";
 // import { getErrorMessage } from 'utils/functionUtils/commonFunctions';
-import { AppRoutes, LocalKey, NoLoader } from "./constant.js";
+import { AppRoutes, LocalKey, NoLoader, NoLoaderPath } from "./constant.js";
 import { removeCookie, setCookie } from "./CookiesHandler.js";
 import { setUser } from "./common.functions.js";
 import { UserFields } from "./fieldsSet.js";
@@ -61,7 +61,14 @@ const successHandler = (response) => {
 
 const requestHandler = (request) => {
   if (isHandlerEnabled(request)) {
-    if (request.url && !NoLoader.includes(request.url.split("?")[0]))
+    const URL = request.url;
+    const isShowLoader = URL.includes(NoLoaderPath);
+    console.log({ isShowLoader, URL });
+    if (
+      request.url &&
+      !NoLoader.includes(request.url.split("?")[0]) &&
+      !isShowLoader
+    )
       spinnerService.show(LocalKey.spinnerKey);
     // Modify request here
     if (
@@ -131,14 +138,16 @@ export const userSave = (path, data, fieldsList, IsStoreUpdate, roleType) => {
   return postRequestData(path, data, fieldsList).then((res) => {
     console.log("userUpdate", res.data.Users[0]);
     roleType === "agent" && makeAgent(res.data.Users[0].Id);
-    IsStoreUpdate && getUser(res.data.Users[0].Id);
+    IsStoreUpdate && getUser(res.data.Users[0].Id, roleType);
     return res;
   });
 };
 
-export const getUser = async (UserId) => {
+export const getUser = async (UserId, roleType) => {
   let userUrl = `users/show/${UserId}`;
   const getUser = await getRequestData(userUrl, UserFields);
   setUser(getUser.data.User);
-  getUser && window.location.reload();
+  if (roleType != "driver") {
+    getUser && window.location.reload();
+  }
 };
