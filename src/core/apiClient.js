@@ -131,14 +131,16 @@ export const userSave = (path, data, fieldsList, IsStoreUpdate, roleType) => {
   return postRequestData(path, data, fieldsList).then((res) => {
     console.log("userUpdate", res.data.Users[0]);
     roleType === "agent" && makeAgent(res.data.Users[0].Id);
-    IsStoreUpdate && getUser(res.data.Users[0].Id);
+    IsStoreUpdate && getUser(res.data.Users[0].Id, roleType);
     return res;
   });
 };
 
-export const getUser = async (UserId) => {
+export const getUser = async (UserId, roleType) => {
   let userUrl = `users/show/${UserId}`;
   const getUser = await getRequestData(userUrl, UserFields);
   setUser(getUser.data.User);
-  getUser && window.location.reload();
+  if (roleType != "driver") {
+    getUser && window.location.reload();
+  }
 };
