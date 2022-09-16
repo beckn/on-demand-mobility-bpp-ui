@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { UserFields } from "../../../../core/fieldsSet";
+import { userSave } from "../../../../core/apiClient";
 import "./Registration_css.css";
+import Userimg from "./dummy-image.jpg";
 import Upload from "./upload.png";
 import Modal from "react-bootstrap/Modal";
 import Success from "./success.png";
@@ -26,7 +29,7 @@ export default function Registration() {
           <RegistrationHome Flag={setFlag} User={User} />
         )}
       </div>
-      <DriverAppFooter/>
+      <DriverAppFooter />
     </div>
   );
 }
@@ -40,16 +43,40 @@ function RegistrationHome({ Flag, User }) {
   const [name, setName] = useState(User.LongName || "");
   const [mobileno, setMobileNo] = useState(User.PhoneNumber || "");
   const [email, setEmail] = useState(User.Name || "");
-  const [sex, setSex] = useState("Male" || "");
-  const [age, setAge] = useState(32 || "");
+  const [dob, setDateOfBirth] = useState(User.DateOfBirth || "");
   const isVerified = User?.Approved === "Y" ? true : false;
-  console.log("ver",isVerified);
-  const SubmitButton = () => {
-    if (name && mobileno && email && sex && age) {
+  console.log("ver", isVerified);
+  const IsStore = User ? true : false;
+
+  const getUpload = () => {
+    let userId = User.Id;
+    const user = {
+      Id: userId,
+      LongName: name,
+      Name: email,
+      PhoneNumber: mobileno,
+      DateOfBirth: dob,
+    };
+
+    const userData = {
+      Users: [{ ...user }],
+    };
+
+    userSave("users/save/", userData, UserFields, IsStore, "driver").then(
+      (res) => {}
+    );
+  };
+
+  const NextButton = () => {
+    if (name && mobileno && email) {
       return (
         <button
           type="button"
-          onClick={() => Flag(true)}
+          onClick={(e) => {
+            e.preventDefault();
+            Flag(true);
+            getUpload();
+          }}
           className="btn btn-secondary coloract"
         >
           Next
@@ -63,6 +90,7 @@ function RegistrationHome({ Flag, User }) {
       );
     }
   };
+
   const logout = () => {
     userLogout("logout").then((res) => {
       console.log("User Logout", res);
@@ -72,12 +100,23 @@ function RegistrationHome({ Flag, User }) {
       window.location.href = AppRoutes.admin;
     });
   };
+  const [file, setFile] = useState();
+  function handleChange(e) {
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
   return (
     <div>
       <div className="Registration-body">
         <div className="logout" onClick={logout}>
           <LogOut />
           LogOut
+        </div>
+
+        <div className="imgcenter">
+          {/* <input type="file" onChange={handleChange} />
+          <img src={file} className="profileimg"/> */}
+          <img src={Userimg} alt="Driver Image" className="profileimg" />
         </div>
 
         <div className="top-padding">
@@ -114,6 +153,8 @@ function RegistrationHome({ Flag, User }) {
             <input
               placeholder="Enter Your Mobile Number"
               type="text"
+              pattern="^[0-9\b]+$"
+              title="Please Not Enter spaces"
               value={mobileno}
               disabled={isVerified}
               onChange={(e) => setMobileNo(e.target.value)}
@@ -123,30 +164,14 @@ function RegistrationHome({ Flag, User }) {
         </div>
 
         <div className="top-padding">
-          <span className="bold-text">
-            {isVerified ? "Driving License :" : "Sex :"}
-          </span>
+          <span className="bold-text">Date Of Birth :</span>
           <span className="top-padding4 align-left">
             <input
-              placeholder={isVerified ? "Driving License" : "Enter Your Sex"}
+              placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
               type="text"
-              value={getDocumentDetails(User, DocumentType.Licence)}
+              value={dob}
               disabled={isVerified}
-              onChange={(e) => setSex(e.target.value)}
-              className="top-padding4"
-            />
-          </span>
-        </div>
-
-        <div className="top-padding">
-          <span className="bold-text">{isVerified ? "Pan no :" : "Age :"}</span>
-          <span className="top-padding4 align-left">
-            <input
-              placeholder={isVerified ? "Pan no." : "Enter Your Age"}
-              type="text"
-              value={getDocumentDetails(User, DocumentType.Pan)}
-              disabled={isVerified}
-              onChange={(e) => setAge(e.target.value)}
+              onChange={(e) => setDateOfBirth(e.target.value)}
               className="top-padding4"
             />
           </span>
@@ -154,7 +179,7 @@ function RegistrationHome({ Flag, User }) {
 
         {!isVerified && (
           <div className="top-padding2">
-            <SubmitButton />
+            <NextButton />
           </div>
         )}
       </div>
@@ -190,7 +215,6 @@ function RegistrationSubmit({ User }) {
     let formData = new FormData();
     let number = type === DocumentType.Licence ? LicenseNumber : PanNumber;
     let userId = User.Id;
-
     if (type === DocumentType.Licence || type === DocumentType.Pan) {
       formData.append("ADDRESS_LINE_1", User?.AddressLine1 || "");
       formData.append("ADDRESS_LINE_2", User?.AddressLine2 || "");
@@ -232,91 +256,121 @@ function RegistrationSubmit({ User }) {
       );
     }
   }
+
   return (
     <>
-      <div className="Registration-body">
+      <div className="Registrationsubmit">
         <div className="top-padding">
-          <span className="bold-text">Aadhaar Card:</span>
-          <span className="upload-btn-wrapper top-padding4">
-            <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
-              <img src={Upload} className="AccountIcon" />
-            </label>
+          <span className="bold-text">Aadhaar Card :</span>
+          <div className="top-padding4">
+            <span className="upload-btn-wrapper">
+              <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
+                <img src={Upload} className="AccountIcon" />
+              </label>
+              <input
+                type="file"
+                id="AadharFile"
+                name="AadharFile"
+                onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+              />
+            </span>
             <input
-              type="file"
-              id="AadharFile"
-              name="AadharFile"
-              onChange={(e) => getUpload(e, DocumentType.Aadhaar)}
+              placeholder="Enter your E-KYC Zip password."
+              type="text"
+              className="align-left top-padding4"
+              value={eKycPassword}
+              disabled={User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Aadhar
+              )}
+              onChange={(e) => setEKycPassword(e.target.value)}
             />
-          </span>
-          <input
-            placeholder="Enter your E-KYC Zip password."
-            type="text"
-            className="align-left top-padding4"
-            value={eKycPassword}
-            disabled={User?.DriverDocuments?.find(
+          </div>
+        </div>
+
+        <span className="mt-1 mb-0 small">
+          {
+            User?.DriverDocuments?.find(
               (x) => x.Document === DocumentType.Aadhar
-            )}
-          />
-        </div>
+            )?.VerificationStatus
+          }
+        </span>
 
         <div className="top-padding">
-          <span className="bold-text">PAN Number:</span>
-          <span className="upload-btn-wrapper top-padding4">
-            <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
-              <img src={Upload} className="AccountIcon" />
-            </label>
+          <span className="bold-text">PAN Number :</span>
+          <div className="top-padding4">
+            <span className="upload-btn-wrapper">
+              <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
+                <img src={Upload} className="AccountIcon" />
+              </label>
+              <input
+                type="file"
+                name="PanFile"
+                id="PanFile"
+                onChange={(e) => getUpload(e, DocumentType.Pan)}
+              />
+            </span>
             <input
-              type="file"
-              name="PanFile"
-              id="PanFile"
-              onChange={(e) => getUpload(e, DocumentType.Pan)}
+              placeholder="Enter your PAN Number"
+              type="text"
+              className="align-left bold-text top-padding4"
+              value={PanNumber}
+              disabled={User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Pan
+              )}
+              onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
             />
-          </span>
-          <input
-            placeholder="Enter your PAN Number"
-            type="text"
-            className="align-left bold-text top-padding4"
-            value={PanNumber}
-            disabled={User?.DriverDocuments?.find(
-              (x) => x.Document === DocumentType.Pan
-            )}
-            onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
-          />
+          </div>
         </div>
 
+        <span className="mt-1 mb-0 small">
+          {
+            User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)
+              ?.VerificationStatus
+          }
+        </span>
+
         <div className="top-padding">
-          <span className="bold-text">Driving License:</span>
-          <span className="upload-btn-wrapper top-padding4">
-            <label className="uploadbtn" htmlFor="LicenseFile" role={"button"}>
-              <img src={Upload} className="AccountIcon" />
-            </label>
+          <span className="bold-text">Driving License :</span>
+          <div className="top-padding4">
+            <span className="upload-btn-wrapper">
+              <label
+                className="uploadbtn"
+                htmlFor="LicenseFile"
+                role={"button"}
+              >
+                <img src={Upload} className="AccountIcon" />
+              </label>
+              <input
+                type="file"
+                name="LicenseFile"
+                id="LicenseFile"
+                onChange={(e) => getUpload(e, DocumentType.Licence)}
+              />
+            </span>
             <input
-              type="file"
-              name="LicenseFile"
-              id="LicenseFile"
-              onChange={(e) => getUpload(e, DocumentType.License)}
+              placeholder="Enter your Driving License Number"
+              type="text"
+              className="align-left bold-text top-padding4"
+              value={LicenseNumber}
+              disabled={User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Licence
+              )}
+              onChange={(e) => setLicenseNumber(e.target.value)}
             />
-          </span>
-          <input
-            placeholder="Enter your Driving License Number"
-            type="text"
-            className="align-left bold-text top-padding4"
-            value={LicenseNumber}
-            disabled={User?.DriverDocuments?.find(
+          </div>
+        </div>
+        <span className="mt-1 mb-0 small">
+          {
+            User?.DriverDocuments?.find(
               (x) => x.Document === DocumentType.Licence
-            )}
-          />
-        </div>
-
+            )?.VerificationStatus
+          }
+        </span>
         <div className="top-padding2">
           <SubmitButton />
         </div>
 
-        <Modal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          centered
-        >
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <div>
             <button className="close" onClick={() => setShowModal(false)}>
               ×

@@ -3,11 +3,32 @@
 }
 
 .Registration-body{
-    padding-right: 2%;
-    padding-left: 2%;
+    padding-right: 4%;
+    padding-left: 4%;
     position: absolute;
     width: 100%;
     top: 88px;
+}
+
+.Registrationsubmit{
+  padding-right: 4%;
+  padding-left: 4%;
+  position: absolute;
+  width: 100%;
+  top: 14%;
+}
+
+.profileimg{
+  border-radius: 50%;
+  border-color: #000000;
+  height: 30%;
+  width: 150px;
+}
+
+.imgcenter{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
 .btn-secondary{
@@ -69,10 +90,10 @@ input {
 }
  
 .upload-btn-wrapper {
-    position: relative;
+    position: absolute;
     overflow: hidden;
     display: inline-block;
-    float: right;
+    left: 90%;
     
   }
   .align-left{
