@@ -44,7 +44,7 @@ function RegistrationHome({ Flag, User }) {
   const [mobileno, setMobileNo] = useState(User.PhoneNumber || "");
   const [email, setEmail] = useState(User.Name || "");
   const [dob, setDateOfBirth] = useState(User.DateOfBirth || "");
-  const isVerified = User?.Approved === "N" ? true : false;
+  const isVerified = User?.Approved === "Y" ? true : false;
   console.log("ver", isVerified);
   const IsStore = User ? true : false;
   const isDataChange = !(
