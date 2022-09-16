@@ -9,6 +9,7 @@
 }
 .homeicon {
     padding-left: 10px;
+    cursor: pointer;
 
 }
 .caricon {
@@ -17,6 +18,7 @@
 }
 .profileicon{
   padding-left: 10px;
+  cursor: pointer;
 }
 .fixed-bottom1{
   position: fixed;
