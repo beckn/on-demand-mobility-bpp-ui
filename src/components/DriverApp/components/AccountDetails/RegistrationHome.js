@@ -44,10 +44,16 @@ function RegistrationHome({ Flag, User }) {
   const [mobileno, setMobileNo] = useState(User.PhoneNumber || "");
   const [email, setEmail] = useState(User.Name || "");
   const [dob, setDateOfBirth] = useState(User.DateOfBirth || "");
-  const isVerified = User?.Approved === "Y" ? true : false;
+  const isVerified = User?.Approved === "N" ? true : false;
   console.log("ver", isVerified);
   const IsStore = User ? true : false;
-
+  const isDataChange = !(
+    name === User.LongName &&
+    mobileno === User.PhoneNumber &&
+    email === User.Name &&
+    dob === User.DateOfBirth
+  );
+  console.log({ isDataChange });
   const getUpload = () => {
     let userId = User.Id;
     const user = {
@@ -75,7 +81,7 @@ function RegistrationHome({ Flag, User }) {
           onClick={(e) => {
             e.preventDefault();
             Flag(true);
-            getUpload();
+            isDataChange && getUpload();
           }}
           className="btn btn-secondary coloract"
         >
@@ -91,15 +97,6 @@ function RegistrationHome({ Flag, User }) {
     }
   };
 
-  const logout = () => {
-    userLogout("logout").then((res) => {
-      console.log("User Logout", res);
-      removeCookie(LocalKey.saveApi);
-      removeCookie(LocalKey.saveUser);
-      // navigate(AppRoutes.admin);
-      window.location.href = AppRoutes.admin;
-    });
-  };
   const [file, setFile] = useState();
   function handleChange(e) {
     console.log(e.target.files);
@@ -108,10 +105,10 @@ function RegistrationHome({ Flag, User }) {
   return (
     <div>
       <div className="Registration-body">
-        <div className="logout" onClick={logout}>
+        {/* <div className="logout" onClick={logout}>
           <LogOut />
           LogOut
-        </div>
+        </div> */}
 
         <div className="imgcenter">
           {/* <input type="file" onChange={handleChange} />
