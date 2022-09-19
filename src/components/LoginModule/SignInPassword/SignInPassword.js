@@ -39,22 +39,31 @@ export const Login = (props) => {
     <DarkLayout>
       <section>
         <Container fluid className="vh-100">
+        <Link
+             to={AppRoutes.admin}
+              role="button"
+             className="link-primary">
+             <span>&#60;</span>
+              back
+            </Link>
+             {/* <span >
+            <button><span>&#60;</span> Back</button>
+         </span>  */}
           <Row className="vh-100">
             <Col lg="3" className="p-0">
               <LeftSection />
             </Col>
             <Col
               lg="9"
-              className="d-flex align-items-center justify-content-center"
-            >
+              className="d-flex align-items-center justify-content-center" >
               <div className="w-100">
-                <div className="row w-100 justify-content-center">
-                  <div className="col-6 mb-5 col-12 col-lg-6 ">
+                <div className="row w-100 justify-content-center ">
+                  <div className="mb-4 col-9 col-lg-6 mx-md-n6  ">
                     <h2>
-                      Welcome <br /> to the Taxi Admin App
+                      Welcome to<br/>the  Taxi Admin App
                     </h2>
                   </div>
-                </div>
+                </div> 
                 <form
                   onSubmit={(e) => {
                     handleSubmit(e);
@@ -76,11 +85,11 @@ export const Login = (props) => {
                       <div className="row">
                         <div className="col mb-3 ">
                           <input
-                            type="password"
-                            className="form-control"
+                            type="password "
+                            className="form-control bi bi-eye-slash"
                             value={Password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter Password"
+                            placeholder="Enter Password "
                           />
                         </div>
                       </div>
@@ -99,22 +108,16 @@ export const Login = (props) => {
                           </Link>
                         </div>
                       </div>
-                      <div className="row">
-                        <button type="submit" className="btn btn-primary">
+                      <div className="row mb-5  btn-lg btn-block" >
+                        <button type="submit" className="btn btn-primary mb-5 mt-1 ">
                           Sign In
                         </button>
-                        <Link
-                          to={AppRoutes.admin}
-                          role="button"
-                          className="link-primary"
-                        >
-                          Cancel
-                        </Link>
                       </div>
-                      <div className="row mt-5">
-                        <div className="col-12 col-lg-6">
-                          New User?{" "}
-                          <Link to={AppRoutes.signUp} className="link-primary">
+                      <div className="row">
+                        <div className="col-12 pt-5 d-flex justify-content-end">
+                          New User? {" "} 
+
+                           <Link to={AppRoutes.signUp} className="link-primary">
                             Sign Up
                           </Link>
                         </div>
