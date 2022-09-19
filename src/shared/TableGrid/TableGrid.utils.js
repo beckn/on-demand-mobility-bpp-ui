@@ -15,3 +15,15 @@ export const getFilteredData = (data = [], tableType, Status) => {
 
   return filteredData;
 };
+
+export const getKey = (c, { Key, Field, Name }) => {
+  const type =
+    typeof c[Key] === "object"
+      ? Field.Name
+        ? c?.[Key].find((x) => x?.[Field.Name] === Field.Value)?.[Field.Key] ||
+          ""
+        : c?.[Key]?.[Field.Key] || ""
+      : c?.[Key] || "";
+
+  return type;
+};

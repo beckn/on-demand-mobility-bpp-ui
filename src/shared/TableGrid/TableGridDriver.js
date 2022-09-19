@@ -1,6 +1,6 @@
 import { verificationKeys } from "../constant";
 import React, { useMemo } from "react";
-import { getFilteredData } from "./TableGrid.utils";
+import { getFilteredData, getKey } from "./TableGrid.utils";
 
 const TableGridDriver = (props) => {
   const { ColumnsData: passedColumnsData } = props.GridData;
@@ -28,14 +28,7 @@ const TableGridDriver = (props) => {
                 {props.GridData?.ColumnsHead?.filter(
                   (x) => x.Name !== "Action"
                 ).map((v, i) => {
-                  let type =
-                    typeof c[v.Key] === "object"
-                      ? v.Field.Name
-                        ? c[v.Key].find(
-                            (x) => x[v.Field.Name] === v.Field.Value
-                          )[v.Field.Key]
-                        : c[v.Key][v.Field.Key]
-                      : c[v.Key];
+                  let type = getKey(c, v);
                   return <td key={i}>{type}</td>;
                 })}
                 <td>
