@@ -74,7 +74,7 @@ function RegistrationHome({ Flag, User }) {
   };
 
   const NextButton = () => {
-    if (name && mobileno && email) {
+    if (name && mobileno && email && dob) {
       return (
         <button
           type="button"

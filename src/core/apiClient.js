@@ -91,7 +91,7 @@ axiosInstance.interceptors.response.use(
 );
 
 // Get data request
-export const getRequestData = (paths, fieldsList) => {
+export const getRequestData = (paths, fieldsList, location) => {
   let data = {
     data: {},
   };
@@ -101,6 +101,18 @@ export const getRequestData = (paths, fieldsList) => {
       ...data.data,
       headers: {
         IncludedModelFields: encodedHeader,
+      },
+    };
+  }
+  if (location) {
+    data = {
+      ...data.data,
+      headers: {
+        ...(fieldsList && {
+          IncludedModelFields: data.headers.IncludedModelFields,
+        }),
+        "X-Lat": location.latitude || 2.3,
+        "X-Lng": location.longitude || 4.5,
       },
     };
   }

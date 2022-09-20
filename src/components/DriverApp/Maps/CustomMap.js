@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { CarIcon } from "../../../shared/icons/Car";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
-function CustomMap({ latitude, longitude }) {
+function CustomMap({ latitude, longitude, mapType = "start" }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
@@ -20,11 +20,14 @@ function CustomMap({ latitude, longitude }) {
   }, []);
 
   const position = {
-    lat: latitude || 25.55,
-    lng: longitude || 84.77,
+    lat: latitude || 12.903561,
+    lng: longitude || 77.5939631,
   };
-
-  console.log("location", latitude, longitude);
+  const mapHeight =
+    mapType === "end"
+      ? " -webkit-calc(100vh - 530px)"
+      : " -webkit-calc(100vh - 230px)";
+  console.log("location", latitude, longitude, mapHeight, mapType);
   return (
     <div>
       {isLoaded && (
@@ -35,7 +38,7 @@ function CustomMap({ latitude, longitude }) {
             mapContainerStyle={{
               top: "85px",
               width: "100%",
-              height: "calc(100vh - 230px)",
+              height: mapHeight,
             }}
             options={{
               zoomControl: false,

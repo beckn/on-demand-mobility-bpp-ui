@@ -2,7 +2,8 @@ import LocationIcon from "./location.png";
 import Modal from "react-bootstrap/Modal";
 import { OfflineIcon } from "../../../../shared/icons/Offline";
 import { MarkerIcon } from "../../../../shared/icons/Marker";
-import { MapPin } from "react-feather";
+import { LocationIcon as MapPin } from "../../../../shared/icons/Location";
+import { round } from "../../utils/utils";
 
 const { Title } = Modal;
 
@@ -45,16 +46,16 @@ export const RideRequest = ({
 
         <ul>
           <span className="dot"></span>
-          {trip?.TripStops[1]?.DistanceFromLastStop} kms
+          {round(trip?.TripStops[1]?.DistanceFromLastStop)} kms
         </ul>
       </div>
-      <div>
-        <span title="pickup point" className="d-flex mt-3 align-left">
-          <MapPin color="#80BC48" />
+      <div className="d-flex flex-column w-100 justify-content-end p-2">
+        <span title="pickup point" className="d-flex mt-3 align-left gap-4">
+          <MapPin fill="#80BC48" />
           {address.driverAddress}
         </span>
-        <span title="destination point" className="d-flex mt-3">
-          <MapPin color="#D22323" />
+        <span title="destination point" className="d-flex mt-3 gap-4">
+          <MapPin fill="#D22323" />
           {address.pickupAddress}
         </span>
       </div>
@@ -83,10 +84,11 @@ export const RideRequest = ({
 export const AlertModalContent = () => {
   return (
     <div className="d-flex justify-content-center p-2">
-      <span className="p-2">
-        <img src={LocationIcon} className="locationicon" />
+      <span className="p-2 text-address">
+        {/* <img src={LocationIcon} className="locationicon" /> */}
+        <MapPin fill="#D22323" />
       </span>
-      <div className="p-2 alertdata">
+      <div className="p-2 alertdata text-address">
         <Title id="contained-modal-title-vcenter">
           Your Location Is Not Enabled
         </Title>

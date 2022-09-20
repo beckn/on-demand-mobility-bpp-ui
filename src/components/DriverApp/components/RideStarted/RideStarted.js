@@ -10,6 +10,8 @@ import { MapPin } from "react-feather";
 import { LocationIcon } from "../../../../shared/icons/Location";
 import { startRide, endRide } from "../SwitchButton/Driver.Services";
 import RideEnd from "../EndRide/RideEnd";
+import Address from "../Address/Address";
+import { round } from "../../utils/utils";
 
 function RideStarted({ trip, location }) {
   console.log({ trip, location });
@@ -125,20 +127,13 @@ function RideStartedExpand({ rideDetail, setRideDetail, location, trip }) {
                 <hr className="hr-RS" />
               </div>
 
-              <div className="loc-RS">
-                <span className="SourceAddress-RS">
-                  <LocationIcon />
-                  <p className="sub-RS">{location.driverAddress}</p>
-                </span>
-                <span className="MapPin-RS">
-                  <MapPin color="#D22323" className="map-RS" />
-                  <p className="dest-RS">{location.pickupAddress}</p>
-                </span>
-              </div>
+              <Address location={location} />
 
               <hr className="hrs-RS" />
               <h6 className="hd-RS">{ReadyStartData.TotalRide} :</h6>
-              <h6 className="rs-RS">{trip.Price || ReadyStartData.Amount}</h6>
+              <h6 className="rs-RS">
+                Rs. {round(trip.SellingPrice || ReadyStartData.Amount)}
+              </h6>
               <p className="ps-RS">{ReadyStartData.Colletion}</p>
               <hr className="Cancelridehr-RS" />
             </div>

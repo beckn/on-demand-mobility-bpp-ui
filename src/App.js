@@ -23,7 +23,6 @@ const SignInPhone = React.lazy(() =>
 const Registration = React.lazy(() =>
   import("./components/DriverApp/components/AccountDetails/RegistrationHome")
 );
-const Dashboard = React.lazy(() => import("./components/Dashboard/Dashboard"));
 const DriverDashboard = React.lazy(() =>
   import("./components/DriverApp/DriverDashboard")
 );
@@ -31,7 +30,9 @@ const PageNotFound = React.lazy(() =>
   import("./shared/PageNotFound/PageNotFound")
 );
 let isLogin = !NoHeader.includes(window.location.pathname);
-
+const RideEnd = React.lazy(() =>
+  import("./components/DriverApp/components/EndRide/RideEnd")
+);
 function App() {
   return (
     <>
@@ -80,6 +81,14 @@ function App() {
                 element={
                   <AuthGuard>
                     <DriverDashboard />
+                  </AuthGuard>
+                }
+              ></Route>
+              <Route
+                path={AppRoutes.endRide}
+                element={
+                  <AuthGuard>
+                    <RideEnd />
                   </AuthGuard>
                 }
               ></Route>

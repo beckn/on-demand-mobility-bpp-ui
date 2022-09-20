@@ -3,11 +3,17 @@ import { AppRoutes, LocalKey } from "./constant";
 import { getCookie, setCookie } from "./CookiesHandler";
 
 export const setValue = (propertyPath, value, obj) => {
-  let properties = Array.isArray(propertyPath) ? propertyPath : propertyPath.split(".");
+  let properties = Array.isArray(propertyPath)
+    ? propertyPath
+    : propertyPath.split(".");
 
   // Not yet at the last property so keep digging
   if (properties.length > 1) {
-    if (!obj.hasOwnProperty(properties[0]) || typeof obj[properties[0]] !== "object") obj[properties[0]] = {};
+    if (
+      !obj.hasOwnProperty(properties[0]) ||
+      typeof obj[properties[0]] !== "object"
+    )
+      obj[properties[0]] = {};
     return setValue(properties.slice(1), value, obj[properties[0]]);
   } else {
     // We set the value to the last property
@@ -17,10 +23,16 @@ export const setValue = (propertyPath, value, obj) => {
 };
 
 export const getValue = (propertyPath, obj) => {
-  let properties = Array.isArray(propertyPath) ? propertyPath : propertyPath.split(".");
+  let properties = Array.isArray(propertyPath)
+    ? propertyPath
+    : propertyPath.split(".");
   // Not yet at the last property so keep digging
   if (properties.length > 1) {
-    if (!obj.hasOwnProperty(properties[0]) || typeof obj[properties[0]] !== "object") obj[properties[0]] = {};
+    if (
+      !obj.hasOwnProperty(properties[0]) ||
+      typeof obj[properties[0]] !== "object"
+    )
+      obj[properties[0]] = {};
     return setValue(properties.slice(1), obj[properties[0]]);
   } else {
     // We set the value to the last property
@@ -29,17 +41,32 @@ export const getValue = (propertyPath, obj) => {
 };
 
 export const isAuthenticated = () => {
-  if (getCookie(LocalKey.saveApi)) window.location.href = AppRoutes.driverDashboard;
+  if (getCookie(LocalKey.saveApi))
+    window.location.href = AppRoutes.driverDashboard;
 };
 
 export const getAddress = function getAddress(address) {
   // console.log('getaddress', address.AddressLine1);
   let userAddress = [];
-  if (address.AddressLine1 && (address.City.State ? address.City.State.Name : address.State_Addr) && address.City.Name && (address.PinCode ? address.PinCode.PinCode : address.PinCode)) {
-    userAddress = [address.AddressLine1, address.AddressLine2, address.AddressLine3, address.City.State ? address.City.State.Name : address.State_Addr, address.City.Name, address.PinCode.PinCode ? address.PinCode.PinCode : address.PinCode];
+  if (
+    address.AddressLine1 &&
+    (address.City.State ? address.City.State.Name : address.State_Addr) &&
+    address.City.Name &&
+    (address.PinCode ? address.PinCode.PinCode : address.PinCode)
+  ) {
+    userAddress = [
+      address.AddressLine1,
+      address.AddressLine2,
+      address.AddressLine3,
+      address.City.State ? address.City.State.Name : address.State_Addr,
+      address.City.Name,
+      address.PinCode.PinCode ? address.PinCode.PinCode : address.PinCode,
+    ];
   }
 
-  let getAddress = userAddress.length ? userAddress.filter((add) => add).join(", ") : userAddress;
+  let getAddress = userAddress.length
+    ? userAddress.filter((add) => add).join(", ")
+    : userAddress;
   return getAddress;
 };
 
@@ -49,6 +76,10 @@ export const setApiKey = (key) => {
 
 export const setUser = (user) => {
   setCookie(LocalKey.saveUser, JSON.stringify(user), "/");
+};
+
+export const setActiveRide = (ride) => {
+  setCookie(LocalKey.saveActiveRide, JSON.stringify(ride), "/");
 };
 
 export const getStingToObject = (String) => {

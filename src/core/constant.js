@@ -7,12 +7,14 @@ export const AppRoutes = {
   driverDashboard: "/driver-dashboard",
   addVehicle: "/add-vehicles",
   accountRegistration: "/account-Registration",
+  endRide: "/ride-end",
 };
 
 export const LocalKey = {
   saveApi: "saveApi",
   saveUser: "saveUser",
   spinnerKey: "taxiSpinner",
+  saveActiveRide: "saveActiveRide",
 };
 
 export const NoHeader = [

@@ -20,26 +20,11 @@ import {
   AlertModalContent,
   RideRequest,
 } from "./ModalContent";
+import { toast } from "react-toastify";
+import { useAddress } from "../../hooks/useAddress";
 
-import Geocode from "react-geocode";
-Geocode.setApiKey("AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo");
-Geocode.setLocationType("ROOFTOP");
-
-const coordinateToAddress = async ({ latitude, longitude }) => {
-  const response = await Geocode.fromLatLng(latitude, longitude).then(
-    (response) => {
-      const address = response.results[0].formatted_address;
-      console.log(address);
-      return address;
-    },
-    (error) => {
-      console.error(error);
-    }
-  );
-  const formatResponse = response.split(",");
-  return formatResponse[0] + formatResponse[1] + formatResponse[2];
-};
 const { Title } = Modal;
+
 const SwitchButton = ({ latitude, longitude }) => {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const [value, setValue] = useState(false);
@@ -47,9 +32,8 @@ const SwitchButton = ({ latitude, longitude }) => {
   const [modalShow, setModalShow] = useState(true);
   const [rideModalShow, setRideModalShow] = useState(value);
   const [trip, setTrip] = useState(undefined);
+  const { driverAddress, pickupAddress } = useAddress(trip);
 
-  const [driverAddress, setDriverAddress] = useState("NA");
-  const [pickupAddress, setPickupAddress] = useState("NA");
   const [rideStatus, setRideStatus] = useState({
     accept: false,
     reject: false,
@@ -61,26 +45,24 @@ const SwitchButton = ({ latitude, longitude }) => {
     } else {
       setValue(!value);
       value && setModalShow(!modalShow);
-
-      if (!value) {
-        const loginDetails = await getDriverOnline(User.Id);
-        const rideData = await getTrips(loginDetails.Id, {
-          latitude,
-          longitude,
-        });
-        setTrip(rideData);
-        console.log({ rideData });
-        const driverLocation = await coordinateToAddress({
-          latitude: rideData?.TripStops[0].Lat,
-          longitude: rideData?.TripStops[0].Lng,
-        });
-        setDriverAddress(driverLocation);
-        const address = await coordinateToAddress({
-          latitude: rideData?.TripStops[1].Lat,
-          longitude: rideData?.TripStops[1].Lng,
-        });
-        setPickupAddress(address);
-        setRideModalShow(!rideModalShow);
+      try {
+        if (!value) {
+          const loginDetails = await getDriverOnline(User.Id);
+          const rideData = await getTrips(loginDetails.Id, {
+            latitude,
+            longitude,
+          });
+          if (rideData) {
+            setTrip(rideData);
+            console.log({ rideData });
+            setRideModalShow(!rideModalShow);
+          } else {
+            toast.error("Oops..!  No Trips Found in your area");
+            setValue(false);
+          }
+        }
+      } catch (err) {
+        console.log(" I am the error", err);
       }
     }
   };
