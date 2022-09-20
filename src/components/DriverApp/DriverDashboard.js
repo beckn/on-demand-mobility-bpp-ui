@@ -39,7 +39,7 @@ function DriverDashboard() {
             <NavigateButton />
           </div>*/}
         </div>
-        <DriverAppFooter />
+        <DriverAppFooter title="Home" />
       </div>
     </div>
   );

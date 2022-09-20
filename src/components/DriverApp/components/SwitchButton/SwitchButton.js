@@ -20,26 +20,31 @@ import {
   AlertModalContent,
   RideRequest,
 } from "./ModalContent";
+import { toast } from "react-toastify";
 
 import Geocode from "react-geocode";
 Geocode.setApiKey("AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo");
 Geocode.setLocationType("ROOFTOP");
 
+//to get address from lat and lng
 const coordinateToAddress = async ({ latitude, longitude }) => {
   const response = await Geocode.fromLatLng(latitude, longitude).then(
     (response) => {
-      const address = response.results[0].formatted_address;
-      console.log(address);
-      return address;
+      return response;
     },
     (error) => {
       console.error(error);
     }
   );
-  const formatResponse = response.split(",");
+  const address = response?.results[0]?.formatted_address;
+  if (!address) {
+    return response?.plus_code?.compound_code;
+  }
+  const formatResponse = address.split(",");
   return formatResponse[0] + formatResponse[1] + formatResponse[2];
 };
 const { Title } = Modal;
+
 const SwitchButton = ({ latitude, longitude }) => {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const [value, setValue] = useState(false);
@@ -61,26 +66,29 @@ const SwitchButton = ({ latitude, longitude }) => {
     } else {
       setValue(!value);
       value && setModalShow(!modalShow);
-
-      if (!value) {
-        const loginDetails = await getDriverOnline(User.Id);
-        const rideData = await getTrips(loginDetails.Id, {
-          latitude,
-          longitude,
-        });
-        setTrip(rideData);
-        console.log({ rideData });
-        const driverLocation = await coordinateToAddress({
-          latitude: rideData?.TripStops[0].Lat,
-          longitude: rideData?.TripStops[0].Lng,
-        });
-        setDriverAddress(driverLocation);
-        const address = await coordinateToAddress({
-          latitude: rideData?.TripStops[1].Lat,
-          longitude: rideData?.TripStops[1].Lng,
-        });
-        setPickupAddress(address);
-        setRideModalShow(!rideModalShow);
+      try {
+        if (!value) {
+          const loginDetails = await getDriverOnline(User.Id);
+          const rideData = await getTrips(loginDetails.Id, {
+            latitude,
+            longitude,
+          });
+          setTrip(rideData);
+          console.log({ rideData });
+          const driverLocation = await coordinateToAddress({
+            latitude: rideData?.TripStops[0].Lat,
+            longitude: rideData?.TripStops[0].Lng,
+          });
+          setDriverAddress(driverLocation || "NA");
+          const address = await coordinateToAddress({
+            latitude: rideData?.TripStops[1].Lat,
+            longitude: rideData?.TripStops[1].Lng,
+          });
+          setPickupAddress(address);
+          setRideModalShow(!rideModalShow);
+        }
+      } catch (err) {
+        console.log(" I am the error", err);
       }
     }
   };

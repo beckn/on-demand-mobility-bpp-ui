@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { UserFields } from "../../../../core/fieldsSet";
-import { userSave } from "./Registration.Services";
+import { userSave } from "../../../../core/apiClient";
 import "./Registration_css.css";
-import Userimg from './dummy-image.jpg';
+import Userimg from "./dummy-image.jpg";
 import Upload from "./upload.png";
 import Modal from "react-bootstrap/Modal";
 import Success from "./success.png";
@@ -29,7 +29,7 @@ export default function Registration() {
           <RegistrationHome Flag={setFlag} User={User} />
         )}
       </div>
-      <DriverAppFooter/>
+      <DriverAppFooter title="Account" />
     </div>
   );
 }
@@ -45,9 +45,15 @@ function RegistrationHome({ Flag, User }) {
   const [email, setEmail] = useState(User.Name || "");
   const [dob, setDateOfBirth] = useState(User.DateOfBirth || "");
   const isVerified = User?.Approved === "Y" ? true : false;
-  console.log("ver",isVerified);
-  const IsStore = User  ? true : false;
-
+  console.log("ver", isVerified);
+  const IsStore = User ? true : false;
+  const isDataChange = !(
+    name === User.LongName &&
+    mobileno === User.PhoneNumber &&
+    email === User.Name &&
+    dob === User.DateOfBirth
+  );
+  console.log({ isDataChange });
   const getUpload = () => {
     let userId = User.Id;
     const user = {
@@ -61,21 +67,21 @@ function RegistrationHome({ Flag, User }) {
     const userData = {
       Users: [{ ...user }],
     };
-    
-     userSave("users/save/", userData, UserFields, IsStore, "driver").then((res) => {
-      
-    });
+
+    userSave("users/save/", userData, UserFields, IsStore, "driver").then(
+      (res) => {}
+    );
   };
 
   const NextButton = () => {
-    if (name && mobileno && email ) {
+    if (name && mobileno && email && dob) {
       return (
         <button
           type="button"
           onClick={(e) => {
             e.preventDefault();
             Flag(true);
-            getUpload();
+            isDataChange && getUpload();
           }}
           className="btn btn-secondary coloract"
         >
@@ -91,103 +97,88 @@ function RegistrationHome({ Flag, User }) {
     }
   };
 
-  const logout = () => {
-    userLogout("logout").then((res) => {
-      console.log("User Logout", res);
-      removeCookie(LocalKey.saveApi);
-      removeCookie(LocalKey.saveUser);
-      // navigate(AppRoutes.admin);
-      window.location.href = AppRoutes.admin;
-    });
-  };
   const [file, setFile] = useState();
-    function handleChange(e) {
-        console.log(e.target.files);
-        setFile(URL.createObjectURL(e.target.files[0]));
-    }
+  function handleChange(e) {
+    console.log(e.target.files);
+    setFile(URL.createObjectURL(e.target.files[0]));
+  }
   return (
     <div>
       <div className="Registration-body">
-        <div className="logout" onClick={logout}>
+        {/* <div className="logout" onClick={logout}>
           <LogOut />
           LogOut
-        </div>
+        </div> */}
 
         <div className="imgcenter">
           {/* <input type="file" onChange={handleChange} />
           <img src={file} className="profileimg"/> */}
-            <img
-              src={Userimg}
-              alt="Driver Image"
-              className="profileimg"
-            />
+          <img src={Userimg} alt="Driver Image" className="profileimg" />
         </div>
 
-          <div className="top-padding">
-            <span className="bold-text">Name :</span>
-            <span className="top-padding4 ">
-              <input
-                placeholder="Enter your Name"
-                value={name}
-                disabled={isVerified}
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                className="top-padding4"
-              />
-            </span>
-          </div>
+        <div className="top-padding">
+          <span className="bold-text">Name :</span>
+          <span className="top-padding4 ">
+            <input
+              placeholder="Enter your Name"
+              value={name}
+              disabled={isVerified}
+              onChange={(e) => setName(e.target.value)}
+              type="text"
+              className="top-padding4"
+            />
+          </span>
+        </div>
 
-          <div className="top-padding">
-            <span className="bold-text">Email ID :</span>
-            <span className="top-padding4 align-left">
-              <input
-                placeholder="Enter Your Email ID"
-                type="text"
-                value={email}
-                disabled={isVerified}
-                onChange={(e) => setEmail(e.target.value)}
-                className="top-padding4"
-              />
-            </span>
-          </div>
+        <div className="top-padding">
+          <span className="bold-text">Email ID :</span>
+          <span className="top-padding4 align-left">
+            <input
+              placeholder="Enter Your Email ID"
+              type="text"
+              value={email}
+              disabled={isVerified}
+              onChange={(e) => setEmail(e.target.value)}
+              className="top-padding4"
+            />
+          </span>
+        </div>
 
-          <div className="top-padding">
-            <span className="bold-text">Mobile Number :</span>
-            <span className="top-padding4 align-left">
-              <input
-                placeholder="Enter Your Mobile Number"
-                type="text"
-                pattern="^[0-9\b]+$"
-                title="Please Not Enter spaces"
-                value={mobileno}
-                disabled={isVerified}
-                onChange={(e) => setMobileNo(e.target.value)}
-                className="top-padding4"
-              />
-            </span>
-          </div>
+        <div className="top-padding">
+          <span className="bold-text">Mobile Number :</span>
+          <span className="top-padding4 align-left">
+            <input
+              placeholder="Enter Your Mobile Number"
+              type="text"
+              pattern="^[0-9\b]+$"
+              title="Please Not Enter spaces"
+              value={mobileno}
+              disabled={isVerified}
+              onChange={(e) => setMobileNo(e.target.value)}
+              className="top-padding4"
+            />
+          </span>
+        </div>
 
-          <div className="top-padding">
-            <span className="bold-text">Date Of Birth :</span>
-            <span className="top-padding4 align-left">
-              <input
-                placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
-                type="text"
-                value={dob}
-                disabled={isVerified}
-                onChange={(e) => setDateOfBirth(e.target.value)}
-                className="top-padding4"
-              />
-            </span>
-            
-          </div>
+        <div className="top-padding">
+          <span className="bold-text">Date Of Birth :</span>
+          <span className="top-padding4 align-left">
+            <input
+              placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
+              type="text"
+              value={dob}
+              disabled={isVerified}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              className="top-padding4"
+            />
+          </span>
+        </div>
 
-          {!isVerified && (
-            <div className="top-padding2">
-              <NextButton />
-            </div>
-          )}
-        
+        {!isVerified && (
+          <div className="top-padding2">
+            <NextButton />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -294,16 +285,16 @@ function RegistrationSubmit({ User }) {
         </div>
 
         <span className="mt-1 mb-0 small">
-        {
-          User?.DriverDocuments?.find(
-            (x) => x.Document === DocumentType.Aadhar
-          )?.VerificationStatus
-        }
+          {
+            User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Aadhar
+            )?.VerificationStatus
+          }
         </span>
 
         <div className="top-padding">
           <span className="bold-text">PAN Number :</span>
-          <div className="top-padding4">          
+          <div className="top-padding4">
             <span className="upload-btn-wrapper">
               <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
                 <img src={Upload} className="AccountIcon" />
@@ -329,18 +320,21 @@ function RegistrationSubmit({ User }) {
         </div>
 
         <span className="mt-1 mb-0 small">
-        {
-          User?.DriverDocuments?.find(
-            (x) => x.Document === DocumentType.Pan
-          )?.VerificationStatus
-        }
+          {
+            User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)
+              ?.VerificationStatus
+          }
         </span>
 
         <div className="top-padding">
           <span className="bold-text">Driving License :</span>
-          <div className="top-padding4"> 
+          <div className="top-padding4">
             <span className="upload-btn-wrapper">
-              <label className="uploadbtn" htmlFor="LicenseFile" role={"button"}>
+              <label
+                className="uploadbtn"
+                htmlFor="LicenseFile"
+                role={"button"}
+              >
                 <img src={Upload} className="AccountIcon" />
               </label>
               <input
@@ -363,21 +357,17 @@ function RegistrationSubmit({ User }) {
           </div>
         </div>
         <span className="mt-1 mb-0 small">
-        {
-          User?.DriverDocuments?.find(
-            (x) => x.Document === DocumentType.Licence
-          )?.VerificationStatus
-        }
+          {
+            User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Licence
+            )?.VerificationStatus
+          }
         </span>
         <div className="top-padding2">
           <SubmitButton />
         </div>
 
-        <Modal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          centered
-        >
+        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <div>
             <button className="close" onClick={() => setShowModal(false)}>
               ×
