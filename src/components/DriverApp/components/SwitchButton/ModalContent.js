@@ -49,7 +49,7 @@ export const RideRequest = ({
           {round(trip?.TripStops[1]?.DistanceFromLastStop)} kms
         </ul>
       </div>
-      <div>
+      <div className="d-flex flex-column w-100 justify-content-end p-2">
         <span title="pickup point" className="d-flex mt-3 align-left gap-4">
           <MapPin fill="#80BC48" />
           {address.driverAddress}
@@ -84,11 +84,11 @@ export const RideRequest = ({
 export const AlertModalContent = () => {
   return (
     <div className="d-flex justify-content-center p-2">
-      <span className="p-2">
+      <span className="p-2 text-address">
         {/* <img src={LocationIcon} className="locationicon" /> */}
         <MapPin fill="#D22323" />
       </span>
-      <div className="p-2 alertdata">
+      <div className="p-2 alertdata text-address">
         <Title id="contained-modal-title-vcenter">
           Your Location Is Not Enabled
         </Title>

@@ -37,11 +37,17 @@ function RideEnd() {
         {/* <h6 className="tm">{EndRideData.Time}</h6> */}
 
         <div className="mx-3">
-          <span title="pickup point" className="d-flex mt-3 align-left gap-4">
+          <span
+            title="pickup point"
+            className="d-flex mt-3 align-left gap-4 text-address"
+          >
             <MapPin fill="#80BC48" />
             {location.driverAddress}
           </span>
-          <span title="destination point" className="d-flex mt-3 gap-4">
+          <span
+            title="destination point"
+            className="d-flex mt-3 gap-4 text-address"
+          >
             <MapPin fill="#D22323" />
             {location.pickupAddress}
           </span>

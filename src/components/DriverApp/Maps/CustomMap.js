@@ -25,7 +25,9 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
   };
 
   const mapHeight =
-    mapType === "end" ? "-webkit-calc(100vh - 530px)" : "-webkit-calc(100vh - 230px)";
+    mapType === "end"
+      ? " -webkit-calc(100vh - 530px)"
+      : " -webkit-calc(100vh - 230px)";
   console.log("location", latitude, longitude, mapHeight, mapType);
   return (
     <div>

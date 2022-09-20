@@ -177,3 +177,10 @@
     top: 34%;
     position: fixed;
 }
+
+.text-address {
+    white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 45ch;
+  }
