@@ -41,7 +41,7 @@ const coordinateToAddress = async ({ latitude, longitude }) => {
     return response?.plus_code?.compound_code;
   }
   const formatResponse = address.split(",");
-  return formatResponse[0] + formatResponse[1] + formatResponse[2];
+  return formatResponse[0] + formatResponse[1];
 };
 const { Title } = Modal;
 
