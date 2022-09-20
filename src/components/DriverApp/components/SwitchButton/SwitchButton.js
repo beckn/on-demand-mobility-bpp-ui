@@ -21,28 +21,8 @@ import {
   RideRequest,
 } from "./ModalContent";
 import { toast } from "react-toastify";
+import { useAddress } from "../../hooks/useAddress";
 
-import Geocode from "react-geocode";
-Geocode.setApiKey("AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo");
-Geocode.setLocationType("ROOFTOP");
-
-//to get address from lat and lng
-const coordinateToAddress = async ({ latitude, longitude }) => {
-  const response = await Geocode.fromLatLng(latitude, longitude).then(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      console.error(error);
-    }
-  );
-  const address = response?.results[0]?.formatted_address;
-  if (!address) {
-    return response?.plus_code?.compound_code;
-  }
-  const formatResponse = address.split(",");
-  return formatResponse[0] + formatResponse[1];
-};
 const { Title } = Modal;
 
 const SwitchButton = ({ latitude, longitude }) => {
@@ -52,9 +32,8 @@ const SwitchButton = ({ latitude, longitude }) => {
   const [modalShow, setModalShow] = useState(true);
   const [rideModalShow, setRideModalShow] = useState(value);
   const [trip, setTrip] = useState(undefined);
+  const { driverAddress, pickupAddress } = useAddress(trip);
 
-  const [driverAddress, setDriverAddress] = useState("NA");
-  const [pickupAddress, setPickupAddress] = useState("NA");
   const [rideStatus, setRideStatus] = useState({
     accept: false,
     reject: false,
@@ -73,19 +52,14 @@ const SwitchButton = ({ latitude, longitude }) => {
             latitude,
             longitude,
           });
-          setTrip(rideData);
-          console.log({ rideData });
-          const driverLocation = await coordinateToAddress({
-            latitude: rideData?.TripStops[0].Lat,
-            longitude: rideData?.TripStops[0].Lng,
-          });
-          setDriverAddress(driverLocation || "NA");
-          const address = await coordinateToAddress({
-            latitude: rideData?.TripStops[1].Lat,
-            longitude: rideData?.TripStops[1].Lng,
-          });
-          setPickupAddress(address);
-          setRideModalShow(!rideModalShow);
+          if (rideData) {
+            setTrip(rideData);
+            console.log({ rideData });
+            setRideModalShow(!rideModalShow);
+          } else {
+            toast.error("Oops..!  No Trips Found in your area");
+            setValue(false);
+          }
         }
       } catch (err) {
         console.log(" I am the error", err);
