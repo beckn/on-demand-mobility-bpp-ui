@@ -48,7 +48,7 @@ function RideStarted({ trip, location }) {
           <div>
             <div className="titlle-text" id="example-modal-sizes-title-sm">
               {!isTripEnded
-                ? "You are on your way\n towards the drop locations"
+                ? <span>You are on your way towards <br/> the drop locations</span>
                 : "You have reached the destination."}
             </div>
           </div>

@@ -26,4 +26,6 @@
   bottom: 15px;
   left: 0;
   z-index: 1030;
+  height: 5%;
+  background-color: white;
 }

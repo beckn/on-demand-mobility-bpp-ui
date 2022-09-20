@@ -40,7 +40,8 @@ function NavigateButton({ location, trip }) {
 
   return (
     <>
-      <RideStarted location={location} trip={ride} />
+      {/* <RideStarted location={location} trip={ride} /> */}
+      <Pickup location={location} trip={ride} />
     </>
   );
 }
