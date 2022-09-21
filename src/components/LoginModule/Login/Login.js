@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
