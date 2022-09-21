@@ -45,15 +45,6 @@ export const getTrips = async (id, location) => {
   return tripsData1;
 };
 
-var callback = (data, error) => {
-  // consume data
-  if (error) {
-    console.error(error);
-    return;
-  }
-  return data;
-};
-
 export const acceptRide = (tripId, position) => {
   const path = `trips/accept/${tripId}`;
   return getRequestData(path);
