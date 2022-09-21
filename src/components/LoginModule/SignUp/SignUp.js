@@ -202,8 +202,9 @@ export const SignInPassword = () => {
                         </option>
                         {Roles &&
                           Roles.map((x) => (
+            
                             <option value={x.Id} key={x.Id}>
-                              {x.Name}
+                              {x.Name==="AGENT" ? "OPERATOR":x.Name}
                             </option>
                           ))}
                       </select>
