@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-//import { usePosition } from "../hooks/usePosition";
 import { CarIcon } from "../../../shared/icons/Car";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 

@@ -160,29 +160,7 @@ export const SignInPassword = () => {
                       </select>
                       <ErrorMessage fieldError={errors?.Company} />
                     </div>
-                    {/* <div className="col-5  mb-4 col-12 col-lg-6">
-                      <select
-                        name="Role"
-                        id="Role"
-                        {...register("Role", {
-                          required: "Select Role",
-                        })}
-                        className={`form-control ${
-                          errors?.Company ? "is-invalid" : ""
-                        }`}
-                      >
-                        <option value="" selected disabled>
-                          Select your role*
-                        </option>
-                        {Roles &&
-                          Roles.map((x) => (
-                            <option value={x.Id} key={x.Id}>
-                              {x.Name}
-                            </option>
-                          ))}
-                      </select>
-                      <ErrorMessage fieldError={errors?.Role} />
-                    </div> */}
+                    
                     <div className="col-5 mb-4 col-12 col-lg-6">
                       <input
                         type="text"
