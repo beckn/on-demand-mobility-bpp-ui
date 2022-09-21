@@ -83,12 +83,12 @@ export const RideRequest = ({
 
 export const AlertModalContent = () => {
   return (
-    <div className="d-flex justify-content-center p-2">
-      <span className="p-2 text-address">
+    <div className="d-flex justify-content-center align-items-center p-2">
+      <span className="p-2">
         {/* <img src={LocationIcon} className="locationicon" /> */}
         <MapPin fill="#D22323" />
       </span>
-      <div className="p-2 alertdata text-address">
+      <div className="p-2 alertdata">
         <Title id="contained-modal-title-vcenter">
           Your Location Is Not Enabled
         </Title>

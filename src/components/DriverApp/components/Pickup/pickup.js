@@ -20,15 +20,11 @@ function NavigateButton({ trip, location }) {
     setSmShow({ status: !smShow.status, data: res.Trip });
   };
   const handleEndRide = () => {
-    //!isTripEnded && (await endRide(trip.Id).then((response) => response.data));
-    //setSmShow({ status: !smShow.status, data: res.Trip });
-    //isTripEnded && window.location.reload();
-    
     setRideStatus(true);
     console.log("RideStatus",rideStatus);
   };
   const status = smShow.data ? smShow.data.DisplayStatus : "Not Confirmed";
-  //const isTripEnded = trip.DisplayStatus === "Ended" ? true : false;
+  
   return (
     <>
       {

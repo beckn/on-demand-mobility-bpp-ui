@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { LocationIcon as MapPin } from "../../../../shared/icons/Location";
 import DriverAppFooter from "../NavFooter/NavFooter";
@@ -20,6 +20,12 @@ function RideEnd() {
     distance,
   } = JSON.parse(getCookie(LocalKey.saveActiveRide)) || null;
   console.log({ rideSummary, distance });
+
+  useEffect(() => {
+    if (rideSummary && location) {
+      navigate(AppRoutes.driverDashboard);
+    }
+  }, []);
   return (
     <>
       <div className="m-3">
