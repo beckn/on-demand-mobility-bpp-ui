@@ -51,7 +51,7 @@ export const SignInPassword = () => {
       Password1,
       Password2,
       FirstName,
-      LastName,
+      LastName = " ",
       PhoneNumber,
       Company,
       Role,
@@ -131,40 +131,11 @@ export const SignInPassword = () => {
                         }`}
                         name="FirstName"
                         id="FirstName"
-                        placeholder="First Name*"
+                        placeholder="Full Name*"
                       />
                       <ErrorMessage fieldError={errors?.FirstName} />
                     </div>
-                    <div className="col-5  mb-4 col-12 col-lg-6">
-                      <input
-                        type="text"
-                        name="LastName"
-                        id="LastName"
-                        {...register("LastName", {
-                          required: "Last name is required",
-                          pattern: {
-                            value: /^[a-zA-Z][\sa-zA-Z]*/,
-                            message:
-                              "Can use upper and lower letters, and spaces but must not start with a space",
-                          },
-                          maxLength: {
-                            value: 20,
-                            message: "Character limit exceeded",
-                          },
-                          minLength: {
-                            value: 20,
-                            message: "Please enter Character",
-                            value: 2,
-                            message: "Please enter Valid LastName",
-                          },
-                        })}
-                        className={`form-control ${
-                          errors?.LastName ? "is-invalid" : ""
-                        }`}
-                        placeholder="Last Name*"
-                      />
-                      <ErrorMessage fieldError={errors?.LastName} />
-                    </div>
+
                     <div className="col-5 mb-4 col-12 col-lg-6">
                       <select
                         name="Company"
@@ -173,7 +144,7 @@ export const SignInPassword = () => {
                           required: "Select Company",
                         })}
                         //defaultValue={Company}
-                        className={`form-control ${
+                        className={`form-control${
                           errors?.Company ? "is-invalid" : ""
                         }`}
                       >
@@ -306,6 +277,11 @@ export const SignInPassword = () => {
                   </div>
                   <div className="row w-100 justify-content-center">
                     <div className="col-5 mb-3 d-grid col-12 col-lg-6">
+                      <button className="btn btn-primary" type="submit">
+                        submit
+                      </button>
+                    </div>
+                    <div className="col-5 mb-3 d-grid col-12 col-lg-6">
                       <a
                         href={AppRoutes.admin}
                         role="button"
@@ -315,11 +291,6 @@ export const SignInPassword = () => {
                         cancel
                       </a>
                     </div>
-                    <div className="col-5 mb-3 d-grid col-12 col-lg-6">
-                      <button className="btn btn-primary" type="submit">
-                        submit
-                      </button>
-                    </div>
                   </div>
                 </form>
                 <div className="row w-100 justify-content-left">
@@ -327,7 +298,7 @@ export const SignInPassword = () => {
                     <p className="mt-5">
                       Existing User?{" "}
                       <Link
-                        to={AppRoutes.adminDashboard}
+                        to={AppRoutes.signInPassword}
                         className="link-primary"
                       >
                         Sign In
