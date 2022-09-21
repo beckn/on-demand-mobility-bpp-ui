@@ -85,19 +85,19 @@ export const Login = (props) => {
                         </div>
                       </div>
                       <div className="row mb-3">
-                        <div className="col col-6 ">
+                        <div className="col ">
                           <Link to="#" className="link-primary">
                             Forgot Password
                           </Link>
                         </div>
-                        <div className="col text-end ">
+                        {/* <div className="col text-end ">
                           <Link
                             to={AppRoutes.signInOtp}
                             className="link-primary"
                           >
                             Sign in with Mobile
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="row btn-lg btn-block">
                         <button type="submit" className="btn btn-primary">
