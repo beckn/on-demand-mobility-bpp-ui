@@ -111,7 +111,8 @@ export const SignInPassword = () => {
                           required: "First name is required",
                           pattern: {
                             value: /^[a-zA-Z][\sa-zA-Z]*/,
-                            message: "Can use upper and lower letters, and spaces but must not start with a space",
+                            message:
+                              "Can use upper and lower letters, and spaces but must not start with a space",
                           },
                           maxLength: {
                             value: 20,
@@ -142,7 +143,8 @@ export const SignInPassword = () => {
                           required: "Last name is required",
                           pattern: {
                             value: /^[a-zA-Z][\sa-zA-Z]*/,
-                            message: "Can use upper and lower letters, and spaces but must not start with a space",
+                            message:
+                              "Can use upper and lower letters, and spaces but must not start with a space",
                           },
                           maxLength: {
                             value: 20,
@@ -203,7 +205,7 @@ export const SignInPassword = () => {
                         {Roles &&
                           Roles.map((x) => (
                             <option value={x.Id} key={x.Id}>
-                              {x.Name}
+                              {x.Name === "AGENT" ? "OPERATOR" : x.Name}
                             </option>
                           ))}
                       </select>
@@ -243,7 +245,8 @@ export const SignInPassword = () => {
                         {...register("Email", {
                           required: "Email is required",
                           pattern: {
-                            value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            value:
+                              /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                             message: "Please Enter valid Email Address",
                           },
                         })}
