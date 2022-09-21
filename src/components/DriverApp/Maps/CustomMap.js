@@ -4,7 +4,7 @@ import { CarIcon } from "../../../shared/icons/Car";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
 const defaultStyle = {
-  top: "155px",
+  top: "140px",
   width: "100%",
   position: "absolute",
   bottom: "45px",
