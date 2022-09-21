@@ -4,6 +4,7 @@
   width: 60px;
   height: 34px;
   right: 2%;  
+  top: 70px;
 }
 
 .switch input {
@@ -65,7 +66,7 @@ input:checked + .slider:before {
   display: flex;
   position: fixed;
   left: 12px;
-  top: 94px;
+  top: 70px;
 
 }
 
@@ -74,7 +75,7 @@ font-weight: 275;
 font-size: 14px;
 line-height: 22px;
 position: fixed;
-top:130px;
+top:105px;
 left: 15px;
 }
 .textav{
@@ -82,7 +83,7 @@ font-weight: 300;
 font-size: 14px;
 line-height: 22px;
 position: fixed;
-top: 130px;
+top: 105px;
 left: inherit;
 } 
 

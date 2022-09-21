@@ -32,7 +32,7 @@ export const SignInPhone = (props) => {
               <div className="row w-100 justify-content-center">
                 <div className="col-6 col-12 col-lg-6">
                   <Title>
-                    Welcome <br /> to the Taxi Admin App
+                    Welcome <br /> to the Taxi Driver App
                   </Title>
                   <FormContainer>
                     <input

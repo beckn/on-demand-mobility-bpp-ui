@@ -48,10 +48,10 @@ export const Login = (props) => {
               className="d-flex align-items-center justify-content-center"
             >
               <div className="w-100">
-                <div className="row w-100 justify-content-center">
-                  <div className="col-6 mb-5 col-12 col-lg-6 ">
+                <div className="row w-100 justify-content-center p-3">
+                  <div className="col-6 mb-3 col-12 col-lg-6 ">
                     <h2>
-                      Welcome <br /> to the Taxi Admin App
+                      Welcome to<br />the Taxi Driver App
                     </h2>
                   </div>
                 </div>
@@ -84,13 +84,13 @@ export const Login = (props) => {
                           />
                         </div>
                       </div>
-                      <div className="row mb-3 ">
+                      <div className="row mb-3">
                         <div className="col col-6 ">
                           <Link to="#" className="link-primary">
                             Forgot Password
                           </Link>
                         </div>
-                        <div className="col text-end">
+                        <div className="col text-end ">
                           <Link
                             to={AppRoutes.signInOtp}
                             className="link-primary"
@@ -99,11 +99,13 @@ export const Login = (props) => {
                           </Link>
                         </div>
                       </div>
-                      <div className="row">
+                      <div className="row btn-lg btn-block">
                         <button type="submit" className="btn btn-primary">
                           Sign In
                         </button>
-                        <Link
+                      </div>
+                      <div className='row mb-3'>
+                      <Link
                           to={AppRoutes.admin}
                           role="button"
                           className="link-primary"
@@ -112,9 +114,9 @@ export const Login = (props) => {
                         </Link>
                       </div>
                       <div className="row mt-5">
-                        <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6 ">
                           New User?{" "}
-                          <Link to={AppRoutes.signUp} className="link-primary">
+                          <Link to={AppRoutes.signUp} className="link-primary d-lg-block">
                             Sign Up
                           </Link>
                         </div>

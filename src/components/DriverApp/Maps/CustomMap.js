@@ -3,6 +3,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { CarIcon } from "../../../shared/icons/Car";
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
+const defaultStyle = {
+  top: "140px",
+  width: "100%",
+  position: "absolute",
+  bottom: "45px",
+};
+const customStyle = {
+  top: "85px",
+  width: "100%",
+  //height: "-webkit-calc(100vh - 530px)",
+  height: "30vh",
+};
+
 function CustomMap({ latitude, longitude, mapType = "start" }) {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -23,11 +36,11 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
     lat: latitude || 12.903561,
     lng: longitude || 77.5939631,
   };
-  const mapHeight =
-    mapType === "end"
-      ? " -webkit-calc(100vh - 530px)"
-      : " -webkit-calc(100vh - 230px)";
-  console.log("location", latitude, longitude, mapHeight, mapType);
+  // const mapHeight =
+  //   mapType === "end"
+  //     ? " -webkit-calc(100vh - 530px)"
+  //     : " -webkit-calc(100vh - 230px)";
+  console.log("location", latitude, longitude);
   return (
     <div>
       {isLoaded && (
@@ -35,11 +48,7 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
           <GoogleMap
             center={position}
             zoom={8}
-            mapContainerStyle={{
-              top: "85px",
-              width: "100%",
-              height: mapHeight,
-            }}
+            mapContainerStyle={mapType === "end" ? customStyle : defaultStyle}
             options={{
               zoomControl: false,
               streetViewControl: false,

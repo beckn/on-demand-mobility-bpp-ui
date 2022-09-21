@@ -38,13 +38,11 @@ export const getTrips = async (id, location) => {
   const newPath = `/trips/next/1`;
   const path = `driver_logins/updateLocation/${id}`;
   const syncDriveLocation = await updateDriverLocation(path, location);
-  const tripsData1 = await getRequestData(
-    assignedTripPath,
-    TripIdFields,
-    location
-  ).then((res) => res.data.Trips);
+  const tripsData1 = await getRequestData(newPath, TripIdFields, location).then(
+    (res) => res.data.Trips
+  );
 
-  return tripsData1[0];
+  return tripsData1;
 };
 
 export const acceptRide = (tripId, position) => {
