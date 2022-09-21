@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import "./SwitchButton.css";
 import Modal from "react-bootstrap/Modal";
 import { CustomSwitch } from "./CustomSwitch";
@@ -31,6 +31,8 @@ const SwitchButton = ({ latitude, longitude }) => {
   const [alertModalShow, setAlertModal] = useState(false);
   const [modalShow, setModalShow] = useState(true);
   const [rideModalShow, setRideModalShow] = useState(value);
+  const [driverLoginId, setDriverLoginId] = useState();
+
   const [trip, setTrip] = useState(undefined);
   const { driverAddress, pickupAddress } = useAddress(trip);
 
@@ -48,21 +50,12 @@ const SwitchButton = ({ latitude, longitude }) => {
       try {
         if (!value) {
           const loginDetails = await getDriverOnline(User.Id);
-          const rideData = await getTrips(loginDetails.Id, {
-            latitude,
-            longitude,
-          });
-          if (rideData) {
-            setTrip(rideData);
-            console.log({ rideData });
-            setRideModalShow(!rideModalShow);
-          } else {
-            toast.error("Oops..!  No Trips Found in your area");
-            setValue(false);
-          }
+          loginDetails && setDriverLoginId(loginDetails.Id);
         }
       } catch (err) {
         console.log(" I am the error", err);
+        toast.error("Something Went wrong");
+        setValue(false);
       }
     }
   };
@@ -78,6 +71,50 @@ const SwitchButton = ({ latitude, longitude }) => {
     console.log({ res });
     setRideStatus({ accept: false, reject: true });
   }, []);
+
+  useEffect(() => {
+    let isTripAssigned = false;
+    let rideData;
+    let timerRef;
+    if (value && driverLoginId) {
+      timerRef = setInterval(async () => {
+        // do stuff here
+        rideData = await getTrips(driverLoginId, {
+          latitude,
+          longitude,
+        });
+        if (rideData.length === 1) {
+          isTripAssigned = true;
+          setTrip(rideData[0]);
+          console.log({ rideData });
+          setRideModalShow(!rideModalShow);
+        } else {
+          //toast.error("Oops..!  No Trips Found in your area");
+          toast.info("Looking for ride", {
+            autoClose: 2000,
+          });
+        }
+      }, 4000);
+
+      // cancel after 1 min
+
+      setTimeout(myStopFunction, isTripAssigned ? null : 1 * 60 * 1000);
+
+      // clears the interval
+
+      function myStopFunction() {
+        clearInterval(timerRef);
+        if (!isTripAssigned) {
+          toast.error("No trips found in this location");
+          setValue(false);
+        }
+      }
+    }
+    return () => {
+      console.log("I am getting cleaned");
+      clearInterval(timerRef);
+    };
+  }, [driverLoginId, value]);
 
   console.log({ driverAddress, pickupAddress });
   return (
