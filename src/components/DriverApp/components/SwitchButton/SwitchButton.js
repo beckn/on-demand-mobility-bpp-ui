@@ -73,12 +73,19 @@ const SwitchButton = ({ latitude, longitude }) => {
   }, []);
 
   useEffect(() => {
-    let isTripAssigned = false;
     let rideData;
     let timerRef;
+    let counter = 0;
     if (value && driverLoginId) {
       timerRef = setInterval(async () => {
         // do stuff here
+        counter = counter + 1;
+        console.log({ counter });
+        if (counter === 8) {
+          clearInterval(timerRef);
+          toast.error("No trips found in this location");
+          setValue(false);
+        }
         rideData = await getTrips(driverLoginId, {
           latitude,
           longitude,
@@ -88,6 +95,7 @@ const SwitchButton = ({ latitude, longitude }) => {
           setTrip(rideData[0]);
           console.log({ rideData });
           setRideModalShow(!rideModalShow);
+          clearInterval(timerRef);
         } else {
           //toast.error("Oops..!  No Trips Found in your area");
           toast.info("Looking for ride", {
@@ -95,20 +103,6 @@ const SwitchButton = ({ latitude, longitude }) => {
           });
         }
       }, 4000);
-
-      // cancel after 1 min
-
-      setTimeout(myStopFunction, isTripAssigned ? null : 1 * 60 * 1000);
-
-      // clears the interval
-
-      function myStopFunction() {
-        clearInterval(timerRef);
-        if (!isTripAssigned) {
-          toast.error("No trips found in this location");
-          setValue(false);
-        }
-      }
     }
     return () => {
       console.log("I am getting cleaned");

@@ -314,7 +314,7 @@ function RegistrationSubmit({ User }) {
               disabled={User?.DriverDocuments?.find(
                 (x) => x.Document === DocumentType.Pan
               )}
-              onChange={(e) => setPanNumber(e.target.value.toLowerCase())}
+              onChange={(e) => setPanNumber(e.target.value)}
             />
           </div>
         </div>
