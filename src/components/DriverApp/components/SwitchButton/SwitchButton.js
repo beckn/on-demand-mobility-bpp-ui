@@ -91,7 +91,6 @@ const SwitchButton = ({ latitude, longitude }) => {
           longitude,
         });
         if (rideData.length === 1) {
-          isTripAssigned = true;
           setTrip(rideData[0]);
           console.log({ rideData });
           setRideModalShow(!rideModalShow);
