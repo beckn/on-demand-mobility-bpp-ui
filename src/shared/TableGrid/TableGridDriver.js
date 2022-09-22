@@ -10,7 +10,6 @@ const TableGridDriver = (props) => {
       getFilteredData(passedColumnsData, props.tableType, props.Status) || [],
     [passedColumnsData]
   );
-
   return (
     <>
       {ColumnsData.length !== 0 ? (
@@ -32,7 +31,7 @@ const TableGridDriver = (props) => {
                   return <td key={i}>{type}</td>;
                 })}
                 <td>
-                  {props.Status === "N" && c.VehicleDocuments && (
+                  {props.Status === "N" && c.DriverDocuments && (
                     <button
                       className="btn btn-sm btn-link"
                       name={verificationKeys.verifyDriver}
