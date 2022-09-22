@@ -1,0 +1,9 @@
+.row1{
+    flex-shrink: 0;
+    padding-right: calc(var(--bs-gutter-x) * 0); 
+    margin-top: var(--bs-gutter-y);
+    margin-right: 1%;
+}
+.datewidth{
+    width: 24%;
+}

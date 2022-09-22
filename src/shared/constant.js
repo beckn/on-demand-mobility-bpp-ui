@@ -160,11 +160,11 @@ export const VehicleGrid = {
       Name: "Verification Status",
       Key: "Approved",
     },
-    {
-      Name: "Date of Register",
-      Field: { Name: "Document", Value: "RC", Key: "ValidFrom" },
-      Key: "VehicleDocuments",
-    },
+    // {
+    //   Name: "Date of Register",
+    //   Field: { Name: "Document", Value: "RC", Key: "ValidFrom" },
+    //   Key: "VehicleDocuments",
+    // },
     {
       Name: "Action",
       Key: "",

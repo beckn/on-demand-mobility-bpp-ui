@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { Upload } from "react-feather";
 import { useForm } from "react-hook-form";
+import "./AddVehicle.css";
 import { toast } from "react-toastify";
 import {
   getKeyValueFromString,
@@ -290,21 +291,22 @@ export const AddVehicle = (props) => {
       return {
         ...upInfo,
         VehicleNumber: props.vehicleEdit.VehicleNumber,
-        ValidFrom: props.vehicleEdit.VehicleDocuments?.find(
-          (x) => x.Document === DocumentType.RC
-        ).ValidFrom,
+        ValidFrom:
+          props.vehicleEdit.VehicleDocuments?.find(
+            (x) => x.Document === DocumentType.RC
+          )?.ValidFrom || "",
         ValidTo: props.vehicleEdit.VehicleDocuments?.find(
           (x) => x.Document === DocumentType.RC
-        ).ValidTo,
+        )?.ValidTo || "",
         RcNumber: props.vehicleEdit.VehicleDocuments?.find(
           (x) => x.Document === DocumentType.RC
-        ).DocumentNumber,
+        )?.DocumentNumber || "",
         InsuranceNumber: props.vehicleEdit.VehicleDocuments?.find(
           (x) => x.Document === DocumentType.INSURANCE
-        ).DocumentNumber,
+        )?.DocumentNumber || "",
         FitnessNumber: props.vehicleEdit.VehicleDocuments?.find(
           (x) => x.Document === DocumentType.FITNESS
-        ).DocumentNumber,
+        )?.DocumentNumber || "",
       };
     });
   }, [props.vehicleEdit]);
@@ -366,8 +368,53 @@ export const AddVehicle = (props) => {
           <hr />
           <div className="row">
             <div className="row">
-              <div className="row w-100 justify-content-left">
-                <div className="col-4  mb-3">
+              <div className="row w-100">
+                <div className="col-5 row1">
+                  <input
+                    type="text"
+                    name="RcDoc.DOCUMENT_NUMBER"
+                    id="RcNumber"
+                    defaultValue={
+                      documentsInfo.RcDoc.DOCUMENT_NUMBER || RcNumber
+                    }
+                    onChange={(e) => setDocumentValue(e)}
+                    className="form-control"
+                    placeholder="Enter Vehicle R.C. Number"
+                  />
+                  {/* {!isEmpty(newVehicleInfo) && (
+                    <p>
+                      {newVehicleInfo.VehicleDocuments?.find(
+                        (x) => x.Document === DocumentType.RC
+                      ).Verified === "Y"
+                        ? "Verified"
+                        : "R.C. Verification Pending"}
+                    </p>
+                  )} */}
+                  {!isEmpty(newVehicleInfo) && (
+                    <p className="mt-1 mb-3 small ps-2">
+                      {newVehicleInfo.VehicleDocuments?.find(
+                        (x) => x.Document === DocumentType.RC
+                      )?.VerificationStatus}
+                    </p>
+                  )}
+                </div>
+                <div className={`col-1 align-self-center ${
+                          newVehicleInfo.VehicleDocuments?.find(
+                            (x) => x.Document === DocumentType.RC
+                          )?.VerificationStatus ? "mb-5" : "mb-3"
+                        }`} >
+                  <input
+                    type="file"
+                    name="RcDoc.FILE"
+                    id="RcFile"
+                    className="form-control d-none"
+                    onChange={(e) => setDocumentValue(e)}
+                  />
+                  <label htmlFor="RcFile" role={"button"}>
+                    <Upload />
+                  </label>
+                </div>
+                <div className="col-2 mb-3 datewidth">
                   <ReactDatePicker
                     showMonthDropdown
                     showYearDropdown
@@ -385,7 +432,7 @@ export const AddVehicle = (props) => {
                     }
                   />
                 </div>
-                <div className="col-4  mb-3">
+                <div className="col-2 mb-3 datewidth">
                   <ReactDatePicker
                     showMonthDropdown
                     showYearDropdown
@@ -402,45 +449,12 @@ export const AddVehicle = (props) => {
                       setDocumentValue(date, "RcDoc.VALID_TO")
                     }
                   />
-                </div>
-                <div className="col-3">
-                  <input
-                    type="text"
-                    name="RcDoc.DOCUMENT_NUMBER"
-                    id="RcNumber"
-                    defaultValue={
-                      documentsInfo.RcDoc.DOCUMENT_NUMBER || RcNumber
-                    }
-                    onChange={(e) => setDocumentValue(e)}
-                    className="form-control"
-                    placeholder="Enter Vehicle R.C. Number"
-                  />
-                  {!isEmpty(newVehicleInfo) && (
-                    <p>
-                      {newVehicleInfo.VehicleDocuments?.find(
-                        (x) => x.Document === DocumentType.RC
-                      ).Verified === "Y"
-                        ? "Verified"
-                        : "R.C. Verification Pending"}
-                    </p>
-                  )}
-                </div>
-                <div className="col-1 mb-5 align-self-center">
-                  <input
-                    type="file"
-                    name="RcDoc.FILE"
-                    id="RcFile"
-                    className="form-control d-none"
-                    onChange={(e) => setDocumentValue(e)}
-                  />
-                  <label htmlFor="RcFile" role={"button"}>
-                    <Upload />
-                  </label>
+                
                 </div>
               </div>
             </div>
             <div className="row w-100 justify-content-left">
-              <div className="col-3 mb-3">
+              <div className="col-5">
                 <input
                   type="text"
                   name="InsDoc.DOCUMENT_NUMBER"
@@ -452,7 +466,7 @@ export const AddVehicle = (props) => {
                   className="form-control"
                   placeholder="Enter Vehicle Insurance Number"
                 />
-                {!isEmpty(newVehicleInfo) && (
+                {/* {!isEmpty(newVehicleInfo) && (
                   <p>
                     {newVehicleInfo.VehicleDocuments?.find(
                       (x) => x.Document === DocumentType.INSURANCE
@@ -460,9 +474,20 @@ export const AddVehicle = (props) => {
                       ? "Verified"
                       : "Insurance Verification Pending"}
                   </p>
+                )} */}
+                {!isEmpty(newVehicleInfo) && (
+                  <p className="mt-1 mb-3 small ps-2">
+                    {newVehicleInfo.VehicleDocuments?.find(
+                      (x) => x.Document === DocumentType.INSURANCE
+                    )?.VerificationStatus}
+                  </p>
                 )}
               </div>
-              <div className="col-1 mb-5 align-self-center">
+              <div className={`col-1 align-self-center ${
+                          newVehicleInfo.VehicleDocuments?.find(
+                            (x) => x.Document === DocumentType.INSURANCE
+                          )?.VerificationStatus ? "mb-5" : "mb-4"
+                        }`}  >
                 <input
                   type="file"
                   name="InsDoc.FILE"
@@ -474,7 +499,7 @@ export const AddVehicle = (props) => {
                   <Upload />
                 </label>
               </div>
-              <div className="col-3 mb-3">
+              <div className="col-5">
                 <input
                   type="text"
                   name="FitDoc.DOCUMENT_NUMBER"
@@ -486,7 +511,7 @@ export const AddVehicle = (props) => {
                   className="form-control"
                   placeholder="Enter Vehicle Fitness Certificate Number"
                 />
-                {!isEmpty(newVehicleInfo) && (
+                {/* {!isEmpty(newVehicleInfo) && (
                   <p>
                     {newVehicleInfo.VehicleDocuments?.find(
                       (x) => x.Document === DocumentType.FITNESS
@@ -494,9 +519,20 @@ export const AddVehicle = (props) => {
                       ? "Verified"
                       : "Fitness Verification Pending"}
                   </p>
-                )}
+                )} */}
+                {!isEmpty(newVehicleInfo) && (
+                  <p className="mt-1 mb-3 small ps-2">
+                    {newVehicleInfo.VehicleDocuments?.find(
+                      (x) => x.Document === DocumentType.FITNESS
+                    )?.VerificationStatus}
+                  </p>
+                )} 
               </div>
-              <div className="col-1 mb-5 align-self-center">
+              <div className={`col-1 align-self-center ${
+                          newVehicleInfo.VehicleDocuments?.find(
+                            (x) => x.Document === DocumentType.FITNESS
+                          )?.VerificationStatus ? "mb-5" : "mb-4"
+                        }`} >
                 <input
                   type="file"
                   name="FitDoc.FILE"

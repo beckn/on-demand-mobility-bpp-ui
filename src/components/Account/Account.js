@@ -38,12 +38,17 @@ const getItemValue = (item, code) => {
   return `${item[code]}`;
 };
 
-const renderImageTooltip = props => (
-  <Tooltip {...props}>Please fill required Information and then Upload File In JPG or PNG Format</Tooltip>
+const renderImageTooltip = (props) => (
+  <Tooltip {...props}>
+    Please fill required Information and Date of Birth and then Upload File In
+    JPG or PNG Format{" "}
+  </Tooltip>
 );
 
-const renderZipTooltip = props => (
-  <Tooltip {...props}>Please fill required Information and then Upload File In Zip Format</Tooltip>
+const renderZipTooltip = (props) => (
+  <Tooltip {...props}>
+    Please fill required Information and then Upload File In Zip Format
+  </Tooltip>
 );
 
 const renderItem = (item, isHighlighted, styles, code) => {
@@ -168,6 +173,8 @@ const PersonalDetailsForm = ({
                 error: errors?.FirstName,
               })}
               placeholder="First Name"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="don't use special character and but must not start with a space"
             />
             <ErrorMessage fieldError={errors?.FirstName} />
           </div>
@@ -182,6 +189,8 @@ const PersonalDetailsForm = ({
                 error: errors?.LastName,
               })}
               placeholder="Last Name"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="don't use special character and but must not start with a space"
             />
             <ErrorMessage fieldError={errors?.LastName} />
           </div>
@@ -424,13 +433,13 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
         <div className="col-4 mb-3">
           <input
             type="text"
-            {...register("AddressLine1", )}
+            {...register("AddressLine1")}
             id="AddressLine1"
             disabled={isAddressEdit}
             className="form-control"
             placeholder="Apartment, unit, suite, or floor #"
             pattern="()\s+((?:[\w+\s*-])+)[\,]\s+([a-zA-Z]+)\s+([0-9a-zA-Z]+)"
-           title="Invalid Charatar"
+            title="Invalid Charatar"
           />
 
           <ErrorMessage fieldError={errors?.AddressLine1} />
@@ -763,20 +772,23 @@ export const Account = (prop) => {
                   {!User?.DriverDocuments?.find(
                     (x) => x.Document === "Licence"
                   ) && (
-                    <OverlayTrigger placement="top" overlay={renderImageTooltip}>
-                    <div className="col-1  mb-3">
-                      <input
-                        type="file"
-                        name="LicenseFile"
-                        id="LicenseFile"
-                        disabled={LicenseNumber==""}
-                        className="form-control d-none"
-                        onChange={(e) => getUpload(e, DocumentType.Licence)}
-                      />
-                      <label htmlFor="LicenseFile" role={"button"}>
-                        <Upload />
-                      </label>
-                    </div>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={renderImageTooltip}
+                    >
+                      <div className="col-1  mb-3">
+                        <input
+                          type="file"
+                          name="LicenseFile"
+                          id="LicenseFile"
+                          disabled={LicenseNumber == ""}
+                          className="form-control d-none"
+                          onChange={(e) => getUpload(e, DocumentType.Licence)}
+                        />
+                        <label htmlFor="LicenseFile" role={"button"}>
+                          <Upload />
+                        </label>
+                      </div>
                     </OverlayTrigger>
                   )}
                 </>
@@ -786,7 +798,7 @@ export const Account = (prop) => {
                   type="text"
                   name="PanNumber"
                   id="PanNumber"
-                  pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/" 
+                  pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/"
                   title="Invalid PAN No."
                   defaultValue={PanNumber}
                   disabled={User?.DriverDocuments?.find(
@@ -812,7 +824,7 @@ export const Account = (prop) => {
                       name="PanFile"
                       id="PanFile"
                       className="form-control d-none"
-                      disabled={PanNumber==""}
+                      disabled={PanNumber == ""}
                       onChange={(e) => getUpload(e, DocumentType.Pan)}
                     />
                     <label htmlFor="PanFile" role={"button"}>
@@ -834,7 +846,7 @@ export const Account = (prop) => {
                     className="form-control"
                     placeholder="E-Kyc Aadhar File Password"
                     pattern="^[0-9]{8}$"
-                      title="Invalid Ekyc Password format"
+                    title="Invalid Ekyc Password format"
                   />
                 ) : (
                   <>
@@ -875,7 +887,7 @@ export const Account = (prop) => {
                       type="file"
                       name="AadharFile"
                       id="AadharFile"
-                      disabled={eKycPassword==null}
+                      disabled={eKycPassword == null}
                       onChange={(e) => getUpload(e, DocumentType.Aadhar)}
                       className="form-control d-none"
                     />

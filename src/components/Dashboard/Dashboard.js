@@ -221,7 +221,7 @@ export const Dashboard = () => {
                     <Tab.Pane eventKey="home">
                       {!isNewFarePolicy ? (
                         <div className="nested-tabs">
-                          {tabKey === "FarePolicy" && (
+                          {/* {tabKey === "FarePolicy" && (
                             <button
                               className="ms-auto btn btn-icon shift-down py-0"
                               onClick={() => toggleAddEditPolicy(true)}
@@ -229,7 +229,7 @@ export const Dashboard = () => {
                               <Plus size={24} />
                               <span>New</span>
                             </button>
-                          )}
+                          )} */}
                           <Tabs
                             activeKey={tabKey}
                             onSelect={(k) => setTabKey(k)}
