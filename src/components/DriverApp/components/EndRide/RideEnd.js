@@ -22,7 +22,8 @@ function RideEnd() {
   console.log({ rideSummary, distance });
 
   useEffect(() => {
-    if (rideSummary && location) {
+    if (!rideSummary) {
+      removeCookie(LocalKey.saveActiveRide);
       navigate(AppRoutes.driverDashboard);
     }
   }, []);
@@ -36,7 +37,7 @@ function RideEnd() {
         <div className="d-flex mt-5 justify-content-between px-3">
           <h6>{formatDate(rideSummary.CreatedAt)}</h6>
           <h6>
-            Total Distance : <b>{round(distance) || 0} Kms</b>
+            Distance : <b>{round(distance) || 0} Kms</b>
           </h6>
         </div>
 

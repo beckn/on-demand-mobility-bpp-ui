@@ -81,7 +81,7 @@ const SwitchButton = ({ latitude, longitude }) => {
         // do stuff here
         counter = counter + 1;
         console.log({ counter });
-        if (counter === 8) {
+        if (counter === 20) {
           clearInterval(timerRef);
           toast.error("No trips found in this location");
           setValue(false);
@@ -141,7 +141,7 @@ const SwitchButton = ({ latitude, longitude }) => {
       <AlertModal show={alertModalShow} onHide={() => setAlertModal(false)}>
         <AlertModalContent />
       </AlertModal>
-      {rideStatus.accept && (
+      {rideStatus.accept && value && (
         <div className="fixed-bottom">
           <NavigateButton
             location={{ driverAddress, pickupAddress }}
