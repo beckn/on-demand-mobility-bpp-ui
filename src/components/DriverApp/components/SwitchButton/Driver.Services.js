@@ -1,4 +1,3 @@
-import { update } from "lodash";
 import {
   getRequestData,
   postRequestData,
@@ -6,6 +5,9 @@ import {
 } from "../../../../core/apiClient";
 import { TripIdFields } from "../../../../core/fieldsSet";
 import { getCookie } from "../../../../core/CookiesHandler";
+import { setActiveRide } from "../../../../core/common.functions";
+import { round } from "../../utils/utils";
+
 // export getDriverOnline = ()
 export const getUserVehicles = async (UserId) => {
   let userUrl = `users/show/${UserId}/vehicles`;
@@ -68,7 +70,13 @@ export const updateDriverLocation = async (driverId, location) => {
   return getRequestData(path, undefined, location);
 };
 
-export const getTripStatus = (tripId) => {
-  const path = `trips/show/${tripId}`;
-  return getRequestData(path);
+export const getTripStatus = async (trip, location) => {
+  const path = `trips/show/${trip.Id}`;
+  const res = await getRequestData(path).then((res) => res.data.Trip);
+  setActiveRide({
+    res,
+    location,
+    distance: trip?.TripStops[1]?.DistanceFromLastStop,
+  });
+  return res;
 };

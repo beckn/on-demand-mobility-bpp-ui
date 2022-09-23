@@ -141,7 +141,7 @@ const SwitchButton = ({ latitude, longitude }) => {
       <AlertModal show={alertModalShow} onHide={() => setAlertModal(false)}>
         <AlertModalContent />
       </AlertModal>
-      {rideStatus.accept && (
+      {rideStatus.accept && value && (
         <div className="fixed-bottom">
           <NavigateButton
             location={{ driverAddress, pickupAddress }}
