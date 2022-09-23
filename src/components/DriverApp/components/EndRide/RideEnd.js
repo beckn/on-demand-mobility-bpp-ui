@@ -22,7 +22,7 @@ function RideEnd() {
   console.log({ rideSummary, distance });
 
   useEffect(() => {
-    if (rideSummary && location) {
+    if (!rideSummary) {
       removeCookie(LocalKey.saveActiveRide);
       navigate(AppRoutes.driverDashboard);
     }
