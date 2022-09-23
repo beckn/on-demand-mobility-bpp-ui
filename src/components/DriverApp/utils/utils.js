@@ -1,4 +1,4 @@
 export function round(num, dp = 2) {
   var numToFixedDp = Number(num).toFixed(dp);
-  return Number(numToFixedDp);
+  return Math.round(Number(numToFixedDp || 0));
 }

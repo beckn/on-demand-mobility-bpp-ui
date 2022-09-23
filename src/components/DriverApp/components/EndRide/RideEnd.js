@@ -9,11 +9,16 @@ import { EndRideData } from "../DriveData";
 import "./RideEnd.css";
 import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { round } from "../../utils/utils";
+import { usePosition } from "../../hooks/usePosition";
+
 const formatDate = (date) => {
   return date.split(" ")[0] || "NA";
 };
 function RideEnd() {
   const navigate = useNavigate();
+
+  const { latitude, longitude, error } = usePosition();
+
   const {
     res: rideSummary,
     location,
@@ -59,7 +64,7 @@ function RideEnd() {
             {location.pickupAddress}
           </span>
         </div>
-        <CustomMap mapType="end" />
+        <CustomMap mapType="end" latitude={latitude} longitude={longitude} />
         <button className="End fixed-bottom" onClick={() => navigate(-1)}>
           Search Another Ride
         </button>
