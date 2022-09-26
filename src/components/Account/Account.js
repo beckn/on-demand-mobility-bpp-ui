@@ -221,6 +221,8 @@ const PersonalDetailsForm = ({
                 error: errors?.Name,
               })}
               placeholder="Email"
+              pattern='^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$'
+              title="Please Enter valid Email Address"
             />
             <ErrorMessage fieldError={errors?.Name} />
           </div>
