@@ -100,7 +100,7 @@ export const Login = (props) => {
                         </div>
                       </div>
                       <div className="row">
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" disabled={!Name || !Password} className="btn btn-primary">
                           Sign In
                         </button>
                         <Link
