@@ -307,7 +307,9 @@ export const Dashboard = () => {
                                       icon={<DriverIcon className="w-50" />}
                                       cardTitle="Driver Verification Pending"
                                       count={drivers.driversPending}
-                                      handleClick={(e) => {}}
+                                      handleClick={(e) => {
+                                        navigateToScreen("drivers", "Tvehicle")
+                                      }}
                                       userRole={userRole}
                                     />
                                   </div>
@@ -316,7 +318,9 @@ export const Dashboard = () => {
                                       icon={<VehicleIcon className="w-50" />}
                                       cardTitle="Vehicle Verification Pending"
                                       count={vehicles.vehiclesPending}
-                                      handleClick={(e) => {}}
+                                      handleClick={(e) => {
+                                        navigateToScreen("drivers", "Tvehicle")
+                                      }}
                                       userRole={userRole}
                                     />
                                   </div>
