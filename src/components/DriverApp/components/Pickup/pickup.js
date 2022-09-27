@@ -23,7 +23,7 @@ function NavigateButton({ trip, location }) {
         <div className="bottomModal-P">
           <div className="rectangle-bar-P">
             <button class="recbar-P">
-              <img src={Rectanglebar} alt="Rectangle bar" />
+              {/* <img src={Rectanglebar} alt="Rectangle bar" /> */}
             </button>
           </div>
           <div className="nevigate-body-P">
@@ -58,7 +58,7 @@ function NavigateButton({ trip, location }) {
           <div className="bottomModal-P">
             <div className="rectangle-bar-P">
               <button class="recbar-P">
-                <img src={Rectanglebar} alt="Rectangle bar" />
+                {/* <img src={Rectanglebar} alt="Rectangle bar" /> */}
               </button>
             </div>
             <div className="nevigate-body-P">

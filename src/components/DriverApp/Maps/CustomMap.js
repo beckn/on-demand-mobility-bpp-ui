@@ -10,10 +10,9 @@ const defaultStyle = {
   bottom: "45px",
 };
 const customStyle = {
-  top: "85px",
+  top: "100px",
   width: "100%",
-  //height: "-webkit-calc(100vh - 530px)",
-  height: "30vh",
+  height: "20vh",
 };
 
 function CustomMap({ latitude, longitude, mapType = "start" }) {
