@@ -99,10 +99,12 @@ export const Login = (props) => {
                           </Link>
                         </div>
                       </div>
-                      <div className="row">
+                      <div className="row btn-lg btn-block">
                         <button type="submit" disabled={!Name || !Password} className="btn btn-primary">
                           Sign In
                         </button>
+                        </div>
+                        <div>
                         <Link
                           to={AppRoutes.admin}
                           role="button"
@@ -112,7 +114,7 @@ export const Login = (props) => {
                         </Link>
                       </div>
                       <div className="row mt-5">
-                        <div className="col-12 col-lg-6">
+                        <div className="col-12 col-lg-6 ">
                           New User?{" "}
                           <Link to={AppRoutes.signUp} className="link-primary">
                             Sign Up
