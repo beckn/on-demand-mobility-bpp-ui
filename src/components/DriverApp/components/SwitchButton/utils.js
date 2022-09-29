@@ -1,14 +1,12 @@
-export const coordinateToAddress = async ({ latitude, longitude }) => {
-  const response = await Geocode.fromLatLng(latitude, longitude).then(
-    (response) => {
-      const address = response.results[0].formatted_address;
-      console.log(address);
-      return address;
+export const getOriginAndDestination = (trips) => {
+  return [
+    {
+      Lat: trips?.TripStops[0].Lat,
+      Lng: trips?.TripStops[0].Lng,
     },
-    (error) => {
-      console.error(error);
-    }
-  );
-  const formatResponse = response.split(",");
-  return formatResponse[0] + formatResponse[1] + formatResponse[2];
+    {
+      Lat: trips?.TripStops[1].Lat,
+      Lng: trips?.TripStops[1].Lng,
+    },
+  ];
 };

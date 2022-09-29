@@ -10,16 +10,16 @@ import { LocalKey, DocumentType, AppRoutes } from "../../core/constant";
 import { Link, useNavigate } from "react-router-dom";
 
 function DriverDashboard() {
-  const init = () => {
-    document.title = `Driver App`;
-  };
+  const [locations, setLocations] = useState();
 
   const navigate = useNavigate();
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const isVerified = User?.Approved === "Y" ? true : false;
   console.log(isVerified);
   const { latitude, longitude, error } = usePosition();
-
+  const init = () => {
+    document.title = `Driver App`;
+  };
   useEffect(() => {
     init();
     if (!isVerified) {
@@ -32,9 +32,17 @@ function DriverDashboard() {
         <DriverAppHeader title={"Home"} />
         <div>
           <div className="radio fixed-top">
-            <SwitchButton latitude={latitude} longitude={longitude} />
+            <SwitchButton
+              latitude={latitude}
+              longitude={longitude}
+              setLocations={setLocations}
+            />
           </div>
-          <CustomMap latitude={latitude} longitude={longitude} />
+          <CustomMap
+            latitude={latitude}
+            longitude={longitude}
+            locations={locations}
+          />
           {/*<div className="fixed-bottom">
             <NavigateButton />
           </div>*/}
