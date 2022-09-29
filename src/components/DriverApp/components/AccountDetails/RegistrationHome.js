@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { UserFields } from "../../../../core/fieldsSet";
 import { userSave } from "../../../../core/apiClient";
 import "./Registration_css.css";
+import { useNavigate } from "react-router";
 import Userimg from "./dummy-image.jpg";
 import Upload from "./upload.png";
 import Modal from "react-bootstrap/Modal";
@@ -24,7 +25,7 @@ export default function Registration() {
       <DriverAppHeader title={"Account"} />
       <div>
         {flag ? (
-          <RegistrationSubmit User={User} />
+          <RegistrationSubmit />
         ) : (
           <RegistrationHome Flag={setFlag} User={User} />
         )}
@@ -184,11 +185,13 @@ function RegistrationHome({ Flag, User }) {
   );
 }
 
-function RegistrationSubmit({ User }) {
+function RegistrationSubmit() {
+  const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const [showModal, setShowModal] = useState(false);
   const [eKycPassword, setEKycPassword] = useState("");
   const [PanNumber, setPanNumber] = useState("");
   const [LicenseNumber, setLicenseNumber] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     init();
   }, []);
@@ -235,7 +238,7 @@ function RegistrationSubmit({ User }) {
   };
 
   function SubmitButton() {
-    if (PanNumber && LicenseNumber && eKycPassword) {
+    if (PanNumber && LicenseNumber) {
       return (
         <button
           onClick={() => setShowModal(true)}
@@ -369,7 +372,10 @@ function RegistrationSubmit({ User }) {
 
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <div>
-            <button className="close" onClick={() => setShowModal(false)}>
+            <button className="close" onClick={() => {
+              setShowModal(false);
+              navigate(AppRoutes.driverDashboard);}}
+            >
               ×
             </button>
           </div>

@@ -22,10 +22,10 @@ import {
 } from "./ModalContent";
 import { toast } from "react-toastify";
 import { useAddress } from "../../hooks/useAddress";
-
+import { getOriginAndDestination } from "./utils";
 const { Title } = Modal;
 
-const SwitchButton = ({ latitude, longitude }) => {
+const SwitchButton = ({ latitude, longitude, setLocations }) => {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const [value, setValue] = useState(false);
   const [alertModalShow, setAlertModal] = useState(false);
@@ -92,6 +92,7 @@ const SwitchButton = ({ latitude, longitude }) => {
         });
         if (rideData.length === 1) {
           setTrip(rideData[0]);
+          setLocations(getOriginAndDestination(rideData[0]));
           console.log({ rideData });
           setRideModalShow(!rideModalShow);
           clearInterval(timerRef);
