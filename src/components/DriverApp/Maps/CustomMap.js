@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { CarIcon } from "../../../shared/icons/Car";
-import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Marker,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
 
 const defaultStyle = {
   top: "140px",
@@ -9,18 +14,19 @@ const defaultStyle = {
   bottom: "45px",
 };
 const customStyle = {
-  top: "85px",
+  top: "100px",
   width: "100%",
-  //height: "-webkit-calc(100vh - 530px)",
-  height: "30vh",
+  height: "20vh",
 };
 
-function CustomMap({ latitude, longitude, mapType = "start" }) {
+function CustomMap({ latitude, longitude, mapType = "start", locations = [] }) {
+  const [directions, setDirections] = useState();
+  const [originPosition, destinationPosition] = locations;
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo",
   });
-
+  console.log({ originPosition, destinationPosition, locations });
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
@@ -35,6 +41,36 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
     lat: latitude || 12.903561,
     lng: longitude || 77.5939631,
   };
+  console.log({ locations });
+  useEffect(() => {}, [directions]);
+  useEffect(() => {
+    if (isLoaded && locations.length > 0) {
+      const DirectionsService = new window.google.maps.DirectionsService();
+
+      DirectionsService.route(
+        {
+          origin: new window.google.maps.LatLng(
+            originPosition?.Lat || latitude,
+            originPosition?.Lng || longitude
+          ),
+          destination: new window.google.maps.LatLng(
+            destinationPosition?.Lat || 25.624,
+            destinationPosition?.Lng || 85.04
+          ),
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            setDirections(result);
+          } else {
+            console.error(`error fetching directions ${result}`);
+          }
+        }
+      );
+    }
+    return () => {};
+  }, [isLoaded, locations]);
+
   // const mapHeight =
   //   mapType === "end"
   //     ? " -webkit-calc(100vh - 530px)"
@@ -49,8 +85,8 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
             zoom={8}
             mapContainerStyle={mapType === "end" ? customStyle : defaultStyle}
             options={{
-              zoomControl: false,
-              streetViewControl: false,
+              zoomControl: true,
+              streetViewControl: true,
               mapTypeControl: false,
               fullscreenControl: false,
             }}
@@ -58,7 +94,17 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
             onUnmount={onUnmount}
           >
             {/* Child components, such as markers, info windows, etc. */}
-            {<Marker position={position} />}
+            <Marker position={position} />
+            {directions && (
+              <DirectionsRenderer
+                directions={directions}
+                options={{
+                  polylineOptions: {
+                    strokeColor: "black",
+                  },
+                }}
+              />
+            )}
           </GoogleMap>
         </div>
       )}
@@ -66,4 +112,4 @@ function CustomMap({ latitude, longitude, mapType = "start" }) {
   );
 }
 
-export default CustomMap;
+export default React.memo(CustomMap);

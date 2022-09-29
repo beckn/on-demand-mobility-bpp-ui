@@ -23,7 +23,7 @@ export const RideCompletedData = {
 
 export const EndRideData = {
   title: "Ride Ended",
-  Subtitle: "Please collect the amount form the customer.",
+  Subtitle: "Please collect the amount from the customer.",
   Rupues: "₹ 200",
   Date: "Wednesday, 26/05 16:45",
   Distance: "45kms",

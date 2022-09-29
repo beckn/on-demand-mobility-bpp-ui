@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import "./SwitchButton.css";
 import Modal from "react-bootstrap/Modal";
 import { CustomSwitch } from "./CustomSwitch";
@@ -22,15 +22,17 @@ import {
 } from "./ModalContent";
 import { toast } from "react-toastify";
 import { useAddress } from "../../hooks/useAddress";
-
+import { getOriginAndDestination } from "./utils";
 const { Title } = Modal;
 
-const SwitchButton = ({ latitude, longitude }) => {
+const SwitchButton = ({ latitude, longitude, setLocations }) => {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   const [value, setValue] = useState(false);
   const [alertModalShow, setAlertModal] = useState(false);
   const [modalShow, setModalShow] = useState(true);
   const [rideModalShow, setRideModalShow] = useState(value);
+  const [driverLoginId, setDriverLoginId] = useState();
+
   const [trip, setTrip] = useState(undefined);
   const { driverAddress, pickupAddress } = useAddress(trip);
 
@@ -48,21 +50,12 @@ const SwitchButton = ({ latitude, longitude }) => {
       try {
         if (!value) {
           const loginDetails = await getDriverOnline(User.Id);
-          const rideData = await getTrips(loginDetails.Id, {
-            latitude,
-            longitude,
-          });
-          if (rideData) {
-            setTrip(rideData);
-            console.log({ rideData });
-            setRideModalShow(!rideModalShow);
-          } else {
-            toast.error("Oops..!  No Trips Found in your area");
-            setValue(false);
-          }
+          loginDetails && setDriverLoginId(loginDetails.Id);
         }
       } catch (err) {
         console.log(" I am the error", err);
+        toast.error("Something Went wrong");
+        setValue(false);
       }
     }
   };
@@ -78,6 +71,44 @@ const SwitchButton = ({ latitude, longitude }) => {
     console.log({ res });
     setRideStatus({ accept: false, reject: true });
   }, []);
+
+  useEffect(() => {
+    let rideData;
+    let timerRef;
+    let counter = 0;
+    if (value && driverLoginId) {
+      timerRef = setInterval(async () => {
+        // do stuff here
+        counter = counter + 1;
+        console.log({ counter });
+        if (counter === 20) {
+          clearInterval(timerRef);
+          toast.error("No trips found in this location");
+          setValue(false);
+        }
+        rideData = await getTrips(driverLoginId, {
+          latitude,
+          longitude,
+        });
+        if (rideData.length === 1) {
+          setTrip(rideData[0]);
+          setLocations(getOriginAndDestination(rideData[0]));
+          console.log({ rideData });
+          setRideModalShow(!rideModalShow);
+          clearInterval(timerRef);
+        } else {
+          //toast.error("Oops..!  No Trips Found in your area");
+          toast.info("Looking for ride", {
+            autoClose: 2000,
+          });
+        }
+      }, 4000);
+    }
+    return () => {
+      console.log("I am getting cleaned");
+      clearInterval(timerRef);
+    };
+  }, [driverLoginId, value]);
 
   console.log({ driverAddress, pickupAddress });
   return (
@@ -111,7 +142,7 @@ const SwitchButton = ({ latitude, longitude }) => {
       <AlertModal show={alertModalShow} onHide={() => setAlertModal(false)}>
         <AlertModalContent />
       </AlertModal>
-      {rideStatus.accept && (
+      {rideStatus.accept && value && (
         <div className="fixed-bottom">
           <NavigateButton
             location={{ driverAddress, pickupAddress }}

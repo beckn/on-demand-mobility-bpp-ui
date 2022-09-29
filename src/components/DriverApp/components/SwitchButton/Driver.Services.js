@@ -1,4 +1,3 @@
-import { update } from "lodash";
 import {
   getRequestData,
   postRequestData,
@@ -6,6 +5,9 @@ import {
 } from "../../../../core/apiClient";
 import { TripIdFields } from "../../../../core/fieldsSet";
 import { getCookie } from "../../../../core/CookiesHandler";
+import { setActiveRide } from "../../../../core/common.functions";
+import { round } from "../../utils/utils";
+
 // export getDriverOnline = ()
 export const getUserVehicles = async (UserId) => {
   let userUrl = `users/show/${UserId}/vehicles`;
@@ -42,53 +44,8 @@ export const getTrips = async (id, location) => {
     (res) => res.data.Trips
   );
 
-  return tripsData1[0];
+  return tripsData1;
 };
-
-var callback = (data, error) => {
-  // consume data
-  if (error) {
-    console.error(error);
-    return;
-  }
-  return data;
-};
-
-// run the request. this function will call itself max. 5 times if the request fails
-// request(5, callback);
-
-// function getrequestedTrips(retries, callback) {
-//   getRequestData(assignedTripPath, TripIdFields, location)
-//     .then((res) => res.data.Trips)
-//     .then((response) => {
-//       // request successful
-
-//       if (response.length > 0) {
-//         // server done, deliver data to script to consume
-//         callback(response);
-//       } else {
-//         // server not done yet
-//         // retry, if any retries left
-//         if (retries > 0) {
-//           request(--retries, callback);
-//         } else {
-//           // no retries left, calling callback with error
-//           callback([], "out of retries");
-//         }
-//       }
-//     })
-//     .catch((error) => {
-//       // ajax error occurred
-//       // would be better to not retry on 404, 500 and other unrecoverable HTTP errors
-//       // retry, if any retries left
-//       if (retries > 0) {
-//         request(--retries, callback);
-//       } else {
-//         // no retries left, calling callback with error
-//         callback([], error);
-//       }
-//     });
-// }
 
 export const acceptRide = (tripId, position) => {
   const path = `trips/accept/${tripId}`;
@@ -113,7 +70,13 @@ export const updateDriverLocation = async (driverId, location) => {
   return getRequestData(path, undefined, location);
 };
 
-export const getTripStatus = (tripId) => {
-  const path = `trips/show/${tripId}`;
-  return getRequestData(path);
+export const getTripStatus = async (trip, location) => {
+  const path = `trips/show/${trip.Id}`;
+  const res = await getRequestData(path).then((res) => res.data.Trip);
+  setActiveRide({
+    res,
+    location,
+    distance: trip?.TripStops[1]?.DistanceFromLastStop,
+  });
+  return res;
 };

@@ -9,11 +9,16 @@ import { EndRideData } from "../DriveData";
 import "./RideEnd.css";
 import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { round } from "../../utils/utils";
+import { usePosition } from "../../hooks/usePosition";
+
 const formatDate = (date) => {
   return date.split(" ")[0] || "NA";
 };
 function RideEnd() {
   const navigate = useNavigate();
+
+  const { latitude, longitude, error } = usePosition();
+
   const {
     res: rideSummary,
     location,
@@ -22,7 +27,8 @@ function RideEnd() {
   console.log({ rideSummary, distance });
 
   useEffect(() => {
-    if (rideSummary && location) {
+    if (!rideSummary) {
+      removeCookie(LocalKey.saveActiveRide);
       navigate(AppRoutes.driverDashboard);
     }
   }, []);
@@ -36,7 +42,7 @@ function RideEnd() {
         <div className="d-flex mt-5 justify-content-between px-3">
           <h6>{formatDate(rideSummary.CreatedAt)}</h6>
           <h6>
-            Total Distance : <b>{round(distance) || 0} Kms</b>
+            Distance : <b>{round(distance) || 0} Kms</b>
           </h6>
         </div>
 
@@ -58,7 +64,7 @@ function RideEnd() {
             {location.pickupAddress}
           </span>
         </div>
-        <CustomMap mapType="end" />
+        <CustomMap mapType="end" latitude={latitude} longitude={longitude} />
         <button className="End fixed-bottom" onClick={() => navigate(-1)}>
           Search Another Ride
         </button>

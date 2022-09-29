@@ -23,6 +23,7 @@ export const Login = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    //if (!Name || !Password) return;
     let path = "login";
     let data = {
       User: {
@@ -51,7 +52,9 @@ export const Login = (props) => {
                 <div className="row w-100 justify-content-center p-3">
                   <div className="col-6 mb-3 col-12 col-lg-6 ">
                     <h2>
-                      Welcome to<br />the Taxi Driver App
+                      Welcome to
+                      <br />
+                      the Taxi Driver App
                     </h2>
                   </div>
                 </div>
@@ -85,27 +88,31 @@ export const Login = (props) => {
                         </div>
                       </div>
                       <div className="row mb-3">
-                        <div className="col col-6 ">
+                        <div className="col ">
                           <Link to="#" className="link-primary">
                             Forgot Password
                           </Link>
                         </div>
-                        <div className="col text-end ">
+                        {/* <div className="col text-end ">
                           <Link
                             to={AppRoutes.signInOtp}
                             className="link-primary"
                           >
                             Sign in with Mobile
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="row btn-lg btn-block">
-                        <button type="submit" className="btn btn-primary">
+                        <button
+                          type="submit"
+                          className="btn btn-primary"
+                          disabled={!Name || !Password}
+                        >
                           Sign In
                         </button>
                       </div>
-                      <div className='row mb-3'>
-                      <Link
+                      <div className="row mb-3">
+                        <Link
                           to={AppRoutes.admin}
                           role="button"
                           className="link-primary"
@@ -116,7 +123,10 @@ export const Login = (props) => {
                       <div className="row mt-5">
                         <div className="col-12 col-lg-6 ">
                           New User?{" "}
-                          <Link to={AppRoutes.signUp} className="link-primary d-lg-block">
+                          <Link
+                            to={AppRoutes.signUp}
+                            className="link-primary d-lg-block"
+                          >
                             Sign Up
                           </Link>
                         </div>
