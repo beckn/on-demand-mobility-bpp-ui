@@ -170,7 +170,7 @@ export const Dashboard = () => {
                         eventKey="home"
                         disabled={user.Verified === "N"}
                       >
-                        DashBoard
+                        Dashboard
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
