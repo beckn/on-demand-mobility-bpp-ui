@@ -100,11 +100,15 @@ export const Login = (props) => {
                         </div>
                       </div>
                       <div className="row btn-lg btn-block">
-                        <button type="submit" disabled={!Name || !Password} className="btn btn-primary">
+                        <button
+                          type="submit"
+                          disabled={!Name || !Password}
+                          className="btn btn-primary"
+                        >
                           Sign In
                         </button>
-                        </div>
-                        <div>
+                      </div>
+                      <div>
                         <Link
                           to={AppRoutes.admin}
                           role="button"
