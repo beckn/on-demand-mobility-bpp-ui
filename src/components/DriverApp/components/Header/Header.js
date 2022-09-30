@@ -5,6 +5,8 @@ import { LogOut } from "react-feather";
 import { removeCookie } from "../../../../core/CookiesHandler";
 import { LocalKey, AppRoutes } from "../../../../core/constant";
 import { userLogout } from "../../../LoginModule/Login.services";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 function DriverAppHeader({ title }) {
   const navigate = useNavigate();
@@ -17,6 +19,11 @@ function DriverAppHeader({ title }) {
       window.location.href = AppRoutes.admin;
     });
   };
+  const renderlogoutTooltip = (props) => (
+    <Tooltip {...props}>
+      Logout
+    </Tooltip>
+  );
   return (
     <>
       <div className="top-bar">
@@ -28,6 +35,7 @@ function DriverAppHeader({ title }) {
           )}
         </span>
         <span class="header-push text-white">{title}</span>
+        <OverlayTrigger placement="left" overlay={renderlogoutTooltip}>
         <span class="header-push" title="logout">
           {title === "Account" && (
             <button className="back-button" onClick={logout}>
@@ -38,6 +46,7 @@ function DriverAppHeader({ title }) {
             </button>
           )}
         </span>
+        </OverlayTrigger>
       </div>
     </>
   );

@@ -14,6 +14,9 @@ import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { LocalKey, DocumentType, AppRoutes } from "../../../../core/constant";
 import { uploadFile } from "../../../Account/Account.Services";
 import { userLogout } from "../../../LoginModule/Login.services";
+import { registerLocale } from "react-datepicker";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 export default function Registration() {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
@@ -151,8 +154,11 @@ function RegistrationHome({ Flag, User }) {
             <input
               placeholder="Enter Your Mobile Number"
               type="text"
-              pattern="^[0-9\b]+$"
+              id="PhoneNumber"
+              pattern="/^(\+\d{1,3}[- ]?)?\d{10}$/"
               title="Please Not Enter spaces"
+              maxLength= "10"
+              minLength= "10"
               value={mobileno}
               disabled={isVerified}
               onChange={(e) => setMobileNo(e.target.value)}
@@ -196,6 +202,16 @@ function RegistrationSubmit() {
     init();
   }, []);
 
+  const renderImageTooltip = (props) => (
+    <Tooltip {...props}>
+      Upload JPG or PNG file
+    </Tooltip>
+  );
+  const renderZipTooltip = (props) => (
+    <Tooltip {...props}>
+     Upload Zip file
+    </Tooltip>
+  );
   const init = () => {
     document.title = `taxi BPP - Account Information`;
     if (User && User?.DriverDocuments) {
@@ -263,6 +279,7 @@ function RegistrationSubmit() {
         <div className="top-padding">
           <span className="bold-text">Aadhaar Card :</span>
           <div className="top-padding4">
+          <OverlayTrigger placement="top" overlay={renderZipTooltip}>
             <span className="upload-btn-wrapper">
               <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
                 <img src={Upload} className="AccountIcon" />
@@ -273,7 +290,9 @@ function RegistrationSubmit() {
                 name="AadharFile"
                 onChange={(e) => getUpload(e, DocumentType.Aadhar)}
               />
+             
             </span>
+            </OverlayTrigger>
             <input
               placeholder="Enter your E-KYC Zip password."
               type="text"
@@ -298,6 +317,7 @@ function RegistrationSubmit() {
         <div className="top-padding">
           <span className="bold-text">PAN Number :</span>
           <div className="top-padding4">
+          <OverlayTrigger placement="top" overlay={renderImageTooltip}>
             <span className="upload-btn-wrapper">
               <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
                 <img src={Upload} className="AccountIcon" />
@@ -309,6 +329,7 @@ function RegistrationSubmit() {
                 onChange={(e) => getUpload(e, DocumentType.Pan)}
               />
             </span>
+            </OverlayTrigger>
             <input
               placeholder="Enter your PAN Number"
               type="text"
@@ -332,6 +353,7 @@ function RegistrationSubmit() {
         <div className="top-padding">
           <span className="bold-text">Driving License :</span>
           <div className="top-padding4">
+          <OverlayTrigger placement="top" overlay={renderImageTooltip}>
             <span className="upload-btn-wrapper">
               <label
                 className="uploadbtn"
@@ -347,6 +369,7 @@ function RegistrationSubmit() {
                 onChange={(e) => getUpload(e, DocumentType.Licence)}
               />
             </span>
+            </OverlayTrigger>
             <input
               placeholder="Enter your Driving License Number"
               type="text"
