@@ -170,7 +170,7 @@ export const Dashboard = () => {
                         eventKey="home"
                         disabled={user.Verified === "N"}
                       >
-                        Home
+                        Dashboard
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -242,88 +242,75 @@ export const Dashboard = () => {
                             >
                               <div className="w-100">
                                 <div className="row justify-content-left">
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<DriverIcon className="w-50" />}
-                                      cardTitle="Total Drivers"
-                                      count={drivers.totalDriver}
-                                      handleClick={(e) =>
-                                        navigateToScreen("drivers", "Tvehicle")
-                                      }
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<VehicleIcon className="w-50" />}
-                                      cardTitle="Total Vehicles"
-                                      count={vehicles.totalVehicle}
-                                      handleClick={(e) =>
-                                        navigateToScreen("drivers", "Tvehicle")
-                                      }
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<AgentsIcon className="w-50" />}
-                                      cardTitle="Total Operators"
-                                      count={agents.totalAgent}
-                                      handleClick={(e) => {}}
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<RidesIcon className="w-50" />}
-                                      cardTitle="Total Rides"
-                                      count={0}
-                                      handleClick={(e) => {}}
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<RevenueIcon className="w-50" />}
-                                      cardTitle="Total Revenue"
-                                      count={0}
-                                      handleClick={(e) => {}}
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={
-                                        <AgentVerification className="w-50" />
-                                      }
-                                      cardTitle="Operator Verification Pending"
-                                      count={agents.agentsPending}
-                                      handleClick={(e) => {}}
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<DriverIcon className="w-50" />}
-                                      cardTitle="Driver Verification Pending"
-                                      count={drivers.driversPending}
-                                      handleClick={(e) => {
-                                        navigateToScreen("drivers", "Tvehicle")
-                                      }}
-                                      userRole={userRole}
-                                    />
-                                  </div>
-                                  <div className="col-sm-4 mb-3">
-                                    <UserStatsCard
-                                      icon={<VehicleIcon className="w-50" />}
-                                      cardTitle="Vehicle Verification Pending"
-                                      count={vehicles.vehiclesPending}
-                                      handleClick={(e) => {
-                                        navigateToScreen("drivers", "Tvehicle")
-                                      }}
-                                      userRole={userRole}
-                                    />
-                                  </div>
+                                  <UserStatsCard
+                                    icon={<DriverIcon className="w-50" />}
+                                    cardTitle="Total Drivers"
+                                    count={drivers.totalDriver}
+                                    handleClick={(e) =>
+                                      navigateToScreen("drivers", "Tvehicle")
+                                    }
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={<VehicleIcon className="w-50" />}
+                                    cardTitle="Total Vehicles"
+                                    count={vehicles.totalVehicle}
+                                    handleClick={(e) =>
+                                      navigateToScreen("drivers", "Tvehicle")
+                                    }
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={<AgentsIcon className="w-50" />}
+                                    cardTitle="Total Operators"
+                                    count={agents.totalAgent}
+                                    handleClick={(e) => {}}
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={<RidesIcon className="w-50" />}
+                                    cardTitle="Total Rides"
+                                    count={0}
+                                    handleClick={(e) => {}}
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={<RevenueIcon className="w-50" />}
+                                    cardTitle="Total Revenue"
+                                    count={0}
+                                    handleClick={(e) => {}}
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={
+                                      <AgentVerification className="w-50" />
+                                    }
+                                    cardTitle="Operator Verification Pending"
+                                    count={agents.agentsPending}
+                                    handleClick={(e) => {}}
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={<DriverIcon className="w-50" />}
+                                    cardTitle="Driver Verification Pending"
+                                    count={drivers.driversPending}
+                                    handleClick={(e) => {}}
+                                    userRole={userRole}
+                                  />
+
+                                  <UserStatsCard
+                                    icon={<VehicleIcon className="w-50" />}
+                                    cardTitle="Vehicle Verification Pending"
+                                    count={vehicles.vehiclesPending}
+                                    handleClick={(e) => {}}
+                                    userRole={userRole}
+                                  />
                                 </div>
                               </div>
                             </Tab>
