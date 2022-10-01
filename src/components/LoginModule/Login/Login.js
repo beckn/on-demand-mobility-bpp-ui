@@ -38,7 +38,7 @@ export const Login = (props) => {
               <div className="row w-100 justify-content-center">
                 <div className="col-12 col-lg-6">
                   <Title>
-                    Welcome <br /> to the {App} App
+                    Welcome <br /> to the Neo Rides
                   </Title>
                   <ButtonsContainer>
                     <Link
