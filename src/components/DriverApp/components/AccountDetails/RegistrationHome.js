@@ -14,10 +14,12 @@ import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { LocalKey, DocumentType, AppRoutes } from "../../../../core/constant";
 import { uploadFile } from "../../../Account/Account.Services";
 import { userLogout } from "../../../LoginModule/Login.services";
+import { registerLocale } from "react-datepicker";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 export default function Registration() {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
-  console.log({ User });
   const [flag, setFlag] = useState(false);
 
   return (
@@ -46,7 +48,6 @@ function RegistrationHome({ Flag, User }) {
   const [email, setEmail] = useState(User.Name || "");
   const [dob, setDateOfBirth] = useState(User.DateOfBirth || "");
   const isVerified = User?.Approved === "Y" ? true : false;
-  console.log("ver", isVerified);
   const IsStore = User ? true : false;
   const isDataChange = !(
     name === User.LongName &&
@@ -54,7 +55,6 @@ function RegistrationHome({ Flag, User }) {
     email === User.Name &&
     dob === User.DateOfBirth
   );
-  console.log({ isDataChange });
   const getUpload = () => {
     let userId = User.Id;
     const user = {
@@ -100,7 +100,6 @@ function RegistrationHome({ Flag, User }) {
 
   const [file, setFile] = useState();
   function handleChange(e) {
-    console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
   }
   return (
@@ -151,8 +150,11 @@ function RegistrationHome({ Flag, User }) {
             <input
               placeholder="Enter Your Mobile Number"
               type="text"
-              pattern="^[0-9\b]+$"
+              id="PhoneNumber"
+              pattern="/^(\+\d{1,3}[- ]?)?\d{10}$/"
               title="Please Not Enter spaces"
+              maxLength="10"
+              minLength="10"
               value={mobileno}
               disabled={isVerified}
               onChange={(e) => setMobileNo(e.target.value)}
@@ -196,6 +198,12 @@ function RegistrationSubmit() {
     init();
   }, []);
 
+  const renderImageTooltip = (props) => (
+    <Tooltip {...props}>Upload JPG or PNG file</Tooltip>
+  );
+  const renderZipTooltip = (props) => (
+    <Tooltip {...props}>Upload Zip file</Tooltip>
+  );
   const init = () => {
     document.title = `taxi BPP - Account Information`;
     if (User && User?.DriverDocuments) {
@@ -263,17 +271,23 @@ function RegistrationSubmit() {
         <div className="top-padding">
           <span className="bold-text">Aadhaar Card :</span>
           <div className="top-padding4">
-            <span className="upload-btn-wrapper">
-              <label className="uploadbtn" htmlFor="AadharFile" role={"button"}>
-                <img src={Upload} className="AccountIcon" />
-              </label>
-              <input
-                type="file"
-                id="AadharFile"
-                name="AadharFile"
-                onChange={(e) => getUpload(e, DocumentType.Aadhar)}
-              />
-            </span>
+            <OverlayTrigger placement="top" overlay={renderZipTooltip}>
+              <span className="upload-btn-wrapper">
+                <label
+                  className="uploadbtn"
+                  htmlFor="AadharFile"
+                  role={"button"}
+                >
+                  <img src={Upload} className="AccountIcon" />
+                </label>
+                <input
+                  type="file"
+                  id="AadharFile"
+                  name="AadharFile"
+                  onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+                />
+              </span>
+            </OverlayTrigger>
             <input
               placeholder="Enter your E-KYC Zip password."
               type="text"
@@ -298,17 +312,19 @@ function RegistrationSubmit() {
         <div className="top-padding">
           <span className="bold-text">PAN Number :</span>
           <div className="top-padding4">
-            <span className="upload-btn-wrapper">
-              <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
-                <img src={Upload} className="AccountIcon" />
-              </label>
-              <input
-                type="file"
-                name="PanFile"
-                id="PanFile"
-                onChange={(e) => getUpload(e, DocumentType.Pan)}
-              />
-            </span>
+            <OverlayTrigger placement="top" overlay={renderImageTooltip}>
+              <span className="upload-btn-wrapper">
+                <label className="uploadbtn" htmlFor="PanFile" role={"button"}>
+                  <img src={Upload} className="AccountIcon" />
+                </label>
+                <input
+                  type="file"
+                  name="PanFile"
+                  id="PanFile"
+                  onChange={(e) => getUpload(e, DocumentType.Pan)}
+                />
+              </span>
+            </OverlayTrigger>
             <input
               placeholder="Enter your PAN Number"
               type="text"
@@ -332,21 +348,23 @@ function RegistrationSubmit() {
         <div className="top-padding">
           <span className="bold-text">Driving License :</span>
           <div className="top-padding4">
-            <span className="upload-btn-wrapper">
-              <label
-                className="uploadbtn"
-                htmlFor="LicenseFile"
-                role={"button"}
-              >
-                <img src={Upload} className="AccountIcon" />
-              </label>
-              <input
-                type="file"
-                name="LicenseFile"
-                id="LicenseFile"
-                onChange={(e) => getUpload(e, DocumentType.Licence)}
-              />
-            </span>
+            <OverlayTrigger placement="top" overlay={renderImageTooltip}>
+              <span className="upload-btn-wrapper">
+                <label
+                  className="uploadbtn"
+                  htmlFor="LicenseFile"
+                  role={"button"}
+                >
+                  <img src={Upload} className="AccountIcon" />
+                </label>
+                <input
+                  type="file"
+                  name="LicenseFile"
+                  id="LicenseFile"
+                  onChange={(e) => getUpload(e, DocumentType.Licence)}
+                />
+              </span>
+            </OverlayTrigger>
             <input
               placeholder="Enter your Driving License Number"
               type="text"
@@ -372,9 +390,12 @@ function RegistrationSubmit() {
 
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <div>
-            <button className="close" onClick={() => {
-              setShowModal(false);
-              navigate(AppRoutes.driverDashboard);}}
+            <button
+              className="close"
+              onClick={() => {
+                setShowModal(false);
+                navigate(AppRoutes.driverDashboard);
+              }}
             >
               ×
             </button>

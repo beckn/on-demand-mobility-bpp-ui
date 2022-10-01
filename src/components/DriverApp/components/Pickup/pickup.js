@@ -11,7 +11,6 @@ import Rectanglebar from "../Navigate/Rectangle-bar.png";
 
 function NavigateButton({ trip, location }) {
   const [next, setNext] = useState(false);
-  console.log("pickup", trip, location);
 
   const handleNavigate = async () => {
     setNext(true);

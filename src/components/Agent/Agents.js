@@ -25,7 +25,6 @@ export const Agents = (prop) => {
   useEffect(() => {
     setTabKey(activeScreenId || "Tdrvier");
   }, [activeScreenId]);
-  console.log("activeScreenId", activeScreenId);
   const handleModalClose = () => {
     setModalShow(false);
   };
@@ -41,13 +40,11 @@ export const Agents = (prop) => {
   const handleClick = (e, Details) => {
     e.preventDefault();
     const { name } = e.target;
-    console.log("Verify Driver", name, Details);
     switch (name) {
       case verificationKeys.verifyDriver:
         setModalShow(true);
         setVerifyKey(name);
         setSelectedDriver(Details);
-        console.log("verify", Details);
         break;
       default:
         setDriverEdit(Details);
@@ -77,7 +74,6 @@ export const Agents = (prop) => {
   };
 
   const verifyDocument = (id, type) => {
-    console.log("verifyDocument", id, type);
     approve(id, type).then((res) => {
       toast.success("Document Verified Successfully!");
       setSelectedDriver(null);

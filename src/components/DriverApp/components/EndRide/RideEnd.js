@@ -24,7 +24,6 @@ function RideEnd() {
     location,
     distance,
   } = JSON.parse(getCookie(LocalKey.saveActiveRide)) || null;
-  console.log({ rideSummary, distance });
 
   useEffect(() => {
     if (!rideSummary) {

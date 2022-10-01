@@ -54,7 +54,7 @@ export const Login = (props) => {
                     <h2>
                       Welcome to
                       <br />
-                      the Taxi Driver App
+                      the Neo Rides
                     </h2>
                   </div>
                 </div>

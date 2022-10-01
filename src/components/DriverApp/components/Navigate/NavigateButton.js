@@ -30,7 +30,6 @@ function NavigateButton({ location, trip }) {
     },
     isActive ? 4000 : null
   );
-  console.log({ ride, counter });
 
   useEffect(() => {
     if (!isActive) {
