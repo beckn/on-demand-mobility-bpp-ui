@@ -14,7 +14,6 @@ import Address from "../Address/Address";
 import { round } from "../../utils/utils";
 
 function RideStarted({ trip, location }) {
-  console.log({ trip, location });
   const [smShow, setSmShow] = useState({ status: false, data: undefined });
   const [rideDetail, setRideDetail] = useState(false);
   const handleStartRide = async () => {
@@ -26,7 +25,6 @@ function RideStarted({ trip, location }) {
     //setSmShow({ status: !smShow.status, data: res.Trip });
     isTripEnded && window.location.reload();
   };
-  console.log({ smShow });
   const status = smShow.data ? smShow.data.DisplayStatus : "Not Confirmed";
   const isTripEnded = trip.DisplayStatus === "Ended" ? true : false;
 
@@ -47,9 +45,13 @@ function RideStarted({ trip, location }) {
           </div>
           <div>
             <div className="titlle-text" id="example-modal-sizes-title-sm">
-              {!isTripEnded
-                ? <span>You are on your way towards <br/> the drop locations</span>
-                : "You have reached the destination."}
+              {!isTripEnded ? (
+                <span>
+                  You are on your way towards <br /> the drop locations
+                </span>
+              ) : (
+                "You have reached the destination."
+              )}
             </div>
           </div>
           {!isTripEnded && (

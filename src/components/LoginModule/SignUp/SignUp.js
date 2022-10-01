@@ -95,7 +95,7 @@ export const SignInPassword = () => {
                 <div className="row mt-3 w-100 justify-content-center">
                   <div className="col-12 col-lg-6">
                     <h1 className="mb-4">
-                      Welcome <br /> to the Taxi Driver App
+                      Welcome <br /> to the Neo Rides
                     </h1>
                   </div>
                 </div>

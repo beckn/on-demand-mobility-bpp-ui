@@ -42,7 +42,6 @@ function CustomMap({ latitude, longitude, mapType = "start", locations = [] }) {
     lat: latitude || 12.903561,
     lng: longitude || 77.5939631,
   };
-  console.log({ locations });
   useEffect(() => {}, [directions]);
   useEffect(() => {
     if (isLoaded && locations.length > 0) {

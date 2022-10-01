@@ -53,7 +53,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
           loginDetails && setDriverLoginId(loginDetails.Id);
         }
       } catch (err) {
-        console.log(" I am the error", err);
         toast.error("Something Went wrong");
         setValue(false);
       }
@@ -68,7 +67,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
 
   const handleReject = useCallback(async (id) => {
     const res = await rejectRide(id);
-    console.log({ res });
     setRideStatus({ accept: false, reject: true });
   }, []);
 
@@ -80,7 +78,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
       timerRef = setInterval(async () => {
         // do stuff here
         counter = counter + 1;
-        console.log({ counter });
         if (counter === 20) {
           clearInterval(timerRef);
           toast.error("No trips found in this location");
@@ -93,7 +90,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
         if (rideData.length === 1) {
           setTrip(rideData[0]);
           setLocations(getOriginAndDestination(rideData[0]));
-          console.log({ rideData });
           setRideModalShow(!rideModalShow);
           clearInterval(timerRef);
         } else {
@@ -110,7 +106,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     };
   }, [driverLoginId, value]);
 
-  console.log({ driverAddress, pickupAddress });
   return (
     <div className="">
       <div>
