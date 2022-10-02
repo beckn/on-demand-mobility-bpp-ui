@@ -127,3 +127,7 @@ background-color: #34C759;
     text-overflow: ellipsis;
     max-width: 45ch;
 }
+
+.hidden {
+  visibility:hidden
+}

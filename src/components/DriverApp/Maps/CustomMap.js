@@ -15,7 +15,7 @@ const defaultStyle = {
   bottom: "45px",
 };
 const customStyle = {
-  top: "100px",
+  top: "50px",
   width: "100%",
   height: "20vh",
 };

@@ -80,10 +80,10 @@ function NavigateButton({ trip, location }) {
                     <LocationIcon fill="#80BC48" />
                   </div>
                   <div className="sub-P">{location.driverAddress}</div>
-                  <div>
-                    <span className="min-P">5 min away</span>
+                  {/* <div>
+                    <span className="min-P hidden">5 min away</span>
                     <span className="kms-P">2.5kms</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
