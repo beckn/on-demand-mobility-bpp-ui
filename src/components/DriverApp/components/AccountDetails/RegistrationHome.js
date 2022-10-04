@@ -321,6 +321,7 @@ function RegistrationSubmit() {
                   type="file"
                   name="PanFile"
                   id="PanFile"
+                  disabled={PanNumber==""}
                   onChange={(e) => getUpload(e, DocumentType.Pan)}
                 />
               </span>
@@ -340,8 +341,17 @@ function RegistrationSubmit() {
 
         <span className="mt-1 mb-0 small">
           {
-            User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)
+            PanNumber &&
+            /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(PanNumber)    ? 
+            User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Pan)
               ?.VerificationStatus
+            :(
+              !PanNumber?"":
+              <span className="color-red">
+                please enter valid Pan Number
+              </span>
+            ) 
           }
         </span>
 
@@ -361,6 +371,7 @@ function RegistrationSubmit() {
                   type="file"
                   name="LicenseFile"
                   id="LicenseFile"
+                  disabled={LicenseNumber==""}
                   onChange={(e) => getUpload(e, DocumentType.Licence)}
                 />
               </span>
@@ -379,9 +390,17 @@ function RegistrationSubmit() {
         </div>
         <span className="mt-1 mb-0 small">
           {
-            User?.DriverDocuments?.find(
-              (x) => x.Document === DocumentType.Licence
-            )?.VerificationStatus
+              LicenseNumber &&
+              /^[A-Za-z][0-9/\W/]{2,20}$/i.test(LicenseNumber)    ? 
+              User?.DriverDocuments?.find(
+                (x) => x.Document === DocumentType.Licence
+              )?.VerificationStatus
+              :(
+                !LicenseNumber?"":
+                <span className="color-red">
+                  please enter valid License Number
+                </span>
+              ) 
           }
         </span>
         <div className="top-padding2">
