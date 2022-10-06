@@ -36,7 +36,7 @@ function RideStarted({ trip, location }) {
             className="rectangle-bar"
             onClick={() => setRideDetail(!rideDetail)}
           >
-            <button class="recbar">
+            <button className="recbar">
               <img src={Rectanglebar} alt="Rectangle bar" />
             </button>
           </div>
@@ -103,7 +103,7 @@ function RideStartedExpand({ rideDetail, setRideDetail, location, trip }) {
       {rideDetail ? (
         <div className="bottomModal-R">
           <div className="rectangle-bar-R" onClick={() => setRideDetail(false)}>
-            <button class="recbar-R">
+            <button className="recbar-R">
               <img src={Rectanglebar} alt="Rectangle bar" />
             </button>
           </div>

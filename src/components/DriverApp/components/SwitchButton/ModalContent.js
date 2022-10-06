@@ -64,14 +64,14 @@ export const RideRequest = ({
           <button
             type="button"
             onClick={() => onAccept(trip?.Id)}
-            class="w-100 btn btn-primary btn-lg btn-block mt-3 accept-button"
+            className="w-100 btn btn-primary btn-lg btn-block mt-3 accept-button"
           >
             Accept
           </button>
           <button
             onClick={() => onReject(trip?.Id)}
             type="button"
-            class="btn decline-button"
+            className="btn decline-button"
           >
             Decline
           </button>
