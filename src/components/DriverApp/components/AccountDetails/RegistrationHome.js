@@ -166,7 +166,7 @@ function RegistrationHome({ Flag, User }) {
           <span className="bold-text">Date Of Birth :</span>
           <span className="top-padding4 align-left">
             <input
-              placeholder="Enter Your Date Of Birth(YYYY/MM/DD)"
+              placeholder="Enter Your Date Of Birth(YYYY-MM-DD)"
               type="text"
               value={dob}
               disabled={isVerified}
@@ -176,7 +176,7 @@ function RegistrationHome({ Flag, User }) {
           </span>
           {dob.length > 8 && !isValid && (
             <span className="color-red">
-              Please enter valid date in (YYYY/MM/DD) format
+              Please enter valid date in (YYYY-MM-DD) format
             </span>
           )}
         </div>
