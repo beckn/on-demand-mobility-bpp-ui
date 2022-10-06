@@ -193,6 +193,9 @@ function RegistrationSubmit() {
   const [eKycPassword, setEKycPassword] = useState("");
   const [PanNumber, setPanNumber] = useState("");
   const [LicenseNumber, setLicenseNumber] = useState("");
+  const [eKycPasswordFile, setEKycPasswordFile] = useState("");
+  const [PanNumberFile, setPanNumberFile] = useState("");
+  const [LicenseNumberFile, setLicenseNumberFile] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     init();
@@ -246,7 +249,7 @@ function RegistrationSubmit() {
   };
 
   function SubmitButton() {
-    if (PanNumber && LicenseNumber) {
+    if (PanNumber && LicenseNumber && eKycPassword && eKycPasswordFile && LicenseNumberFile && PanNumberFile) {
       return (
         <button
           onClick={() => setShowModal(true)}
@@ -284,7 +287,10 @@ function RegistrationSubmit() {
                   type="file"
                   id="AadharFile"
                   name="AadharFile"
-                  onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+                  onChange={(e) =>{ 
+                    setEKycPasswordFile(e.target.value);
+                    getUpload(e, DocumentType.Aadhar);
+                  }}
                 />
               </span>
             </OverlayTrigger>
@@ -322,7 +328,10 @@ function RegistrationSubmit() {
                   name="PanFile"
                   id="PanFile"
                   disabled={PanNumber==""}
-                  onChange={(e) => getUpload(e, DocumentType.Pan)}
+                  onChange={(e) =>{
+                    setPanNumberFile(e.target.value);
+                    getUpload(e, DocumentType.Pan);
+                  }}
                 />
               </span>
             </OverlayTrigger>
@@ -372,7 +381,10 @@ function RegistrationSubmit() {
                   name="LicenseFile"
                   id="LicenseFile"
                   disabled={LicenseNumber==""}
-                  onChange={(e) => getUpload(e, DocumentType.Licence)}
+                  onChange={(e) => {
+                    setLicenseNumberFile(e.target.value);
+                    getUpload(e, DocumentType.Licence);
+                  }}
                 />
               </span>
             </OverlayTrigger>
