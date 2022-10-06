@@ -13,10 +13,9 @@ import DriverAppFooter from "../NavFooter/NavFooter";
 import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { LocalKey, DocumentType, AppRoutes } from "../../../../core/constant";
 import { uploadFile } from "../../../Account/Account.Services";
-import { userLogout } from "../../../LoginModule/Login.services";
-import { registerLocale } from "react-datepicker";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { getAge } from "../SwitchButton/utils";
 
 export default function Registration() {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
@@ -73,9 +72,9 @@ function RegistrationHome({ Flag, User }) {
       (res) => {}
     );
   };
-
+  const isValid = getAge(dob);
   const NextButton = () => {
-    if (name && mobileno && email && dob) {
+    if (name && mobileno && email && isValid) {
       return (
         <button
           type="button"
@@ -167,7 +166,7 @@ function RegistrationHome({ Flag, User }) {
           <span className="bold-text">Date Of Birth :</span>
           <span className="top-padding4 align-left">
             <input
-              placeholder="Enter Your Date Of Birth(DD/MM/YYYY)"
+              placeholder="Enter Your Date Of Birth(YYYY/MM/DD)"
               type="text"
               value={dob}
               disabled={isVerified}
@@ -175,6 +174,11 @@ function RegistrationHome({ Flag, User }) {
               className="top-padding4"
             />
           </span>
+          {dob.length > 8 && !isValid && (
+            <span className="color-red">
+              Please enter valid date in (YYYY/MM/DD) format
+            </span>
+          )}
         </div>
 
         {!isVerified && (
@@ -249,7 +253,14 @@ function RegistrationSubmit() {
   };
 
   function SubmitButton() {
-    if (PanNumber && LicenseNumber && eKycPassword && eKycPasswordFile && LicenseNumberFile && PanNumberFile) {
+    if (
+      PanNumber &&
+      LicenseNumber &&
+      eKycPassword &&
+      eKycPasswordFile &&
+      LicenseNumberFile &&
+      PanNumberFile
+    ) {
       return (
         <button
           onClick={() => setShowModal(true)}
@@ -287,7 +298,7 @@ function RegistrationSubmit() {
                   type="file"
                   id="AadharFile"
                   name="AadharFile"
-                  onChange={(e) =>{ 
+                  onChange={(e) => {
                     setEKycPasswordFile(e.target.value);
                     getUpload(e, DocumentType.Aadhar);
                   }}
@@ -327,8 +338,13 @@ function RegistrationSubmit() {
                   type="file"
                   name="PanFile"
                   id="PanFile"
-                  disabled={PanNumber==""}
-                  onChange={(e) =>{
+                  disabled={
+                    PanNumber == "" ||
+                    User?.DriverDocuments?.find(
+                      (x) => x.Document === DocumentType.Pan
+                    )
+                  }
+                  onChange={(e) => {
                     setPanNumberFile(e.target.value);
                     getUpload(e, DocumentType.Pan);
                   }}
@@ -349,19 +365,14 @@ function RegistrationSubmit() {
         </div>
 
         <span className="mt-1 mb-0 small">
-          {
-            PanNumber &&
-            /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(PanNumber)    ? 
-            User?.DriverDocuments?.find(
-              (x) => x.Document === DocumentType.Pan)
+          {PanNumber ? (
+            User?.DriverDocuments?.find((x) => x.Document === DocumentType.Pan)
               ?.VerificationStatus
-            :(
-              !PanNumber?"":
-              <span className="color-red">
-                please enter valid Pan Number
-              </span>
-            ) 
-          }
+          ) : !PanNumber ? (
+            ""
+          ) : (
+            <span className="color-red">please enter valid Pan Number</span>
+          )}
         </span>
 
         <div className="top-padding">
@@ -380,7 +391,12 @@ function RegistrationSubmit() {
                   type="file"
                   name="LicenseFile"
                   id="LicenseFile"
-                  disabled={LicenseNumber==""}
+                  disabled={
+                    LicenseNumber == "" ||
+                    User?.DriverDocuments?.find(
+                      (x) => x.Document === DocumentType.Licence
+                    )
+                  }
                   onChange={(e) => {
                     setLicenseNumberFile(e.target.value);
                     getUpload(e, DocumentType.Licence);
@@ -400,20 +416,19 @@ function RegistrationSubmit() {
             />
           </div>
         </div>
+        {/* && /^[A-Za-z][0-9/\W/]{2,20}$/i.test(LicenseNumber) 
+        && /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(PanNumber)
+        */}
         <span className="mt-1 mb-0 small">
-          {
-              LicenseNumber &&
-              /^[A-Za-z][0-9/\W/]{2,20}$/i.test(LicenseNumber)    ? 
-              User?.DriverDocuments?.find(
-                (x) => x.Document === DocumentType.Licence
-              )?.VerificationStatus
-              :(
-                !LicenseNumber?"":
-                <span className="color-red">
-                  please enter valid License Number
-                </span>
-              ) 
-          }
+          {LicenseNumber ? (
+            User?.DriverDocuments?.find(
+              (x) => x.Document === DocumentType.Licence
+            )?.VerificationStatus
+          ) : !LicenseNumber ? (
+            ""
+          ) : (
+            <span className="color-red">please enter valid License Number</span>
+          )}
         </span>
         <div className="top-padding2">
           <SubmitButton />

@@ -7,67 +7,62 @@ import { CallLogIcon } from "../../../../shared/icons/CallLog";
 import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { LocationIcon } from "../../../../shared/icons/Location";
 import { ReadyStartData } from "../DriveData";
-import Rectanglebar from '../Navigate/Rectangle-bar.png';
+import Rectanglebar from "../Navigate/Rectangle-bar.png";
 
 function ReadyStart(props) {
   const [smShow, setSmShow] = useState(false);
-  
+
   return (
     <>
-      {
-        smShow ?
+      {smShow ? (
         <div className="bottomModal-R">
-           <div className="rectangle-bar-R" onClick={() => setSmShow(!smShow)}>
-              <button class="recbar-R">
-                <img
-                  src={Rectanglebar}
-                  alt="Rectangle bar"
-                />
-              </button>                  
-           </div>
-           <div className="nevigate-body-R">
+          <div className="rectangle-bar-R" onClick={() => setSmShow(!smShow)}>
+            <button className="recbar-R">
+              <img src={Rectanglebar} alt="Rectangle bar" />
+            </button>
+          </div>
+          <div className="nevigate-body-R">
+            <div>
               <div>
-                <div>
-                  <div className="titlle-R" id="example-modal-sizes-title-sm">
-                    {ReadyStartData.title}
-                  </div>
-                  <div className="carLog-R">
-                    <CarLogIcon />
-                  </div>
-                  <div className="callLog-R">
-                    <CallLogIcon />
-                  </div>
-                  <h6 className="h6-R">{ReadyStartData.Subtitle}</h6>
+                <div className="titlle-R" id="example-modal-sizes-title-sm">
+                  {ReadyStartData.title}
                 </div>
-
-                <div>
-                  <hr className="hr-R" />
+                <div className="carLog-R">
+                  <CarLogIcon />
                 </div>
-                
-                <div className="loc-R">
-                  <span className="SourceAddress-R">
-                    <LocationIcon />
-                    <p className="sub-R">{ReadyStartData.Location}</p>
-                  </span>
-                  <span className="MapPin-R">
-                    <MapPin color="#D22323" className="map-R" />
-                    <p className="dest-R">{ReadyStartData.Address}</p>
-                  </span>
+                <div className="callLog-R">
+                  <CallLogIcon />
                 </div>
-                
-                <hr className="hrs-R" />
-                <h6 className="hd-R">{ReadyStartData.TotalRide} :</h6>
-                <h6 className="rs-R">{ReadyStartData.Amount}</h6>
-                <p className="ps-R">{ReadyStartData.Colletion}</p>
-                <hr className="Cancelridehr-R" />
-                <h6 className="ride-R">{ReadyStartData.Ride}</h6>
+                <h6 className="h6-R">{ReadyStartData.Subtitle}</h6>
               </div>
-           </div>
-        </div> :
-        <div>
 
+              <div>
+                <hr className="hr-R" />
+              </div>
+
+              <div className="loc-R">
+                <span className="SourceAddress-R">
+                  <LocationIcon />
+                  <p className="sub-R">{ReadyStartData.Location}</p>
+                </span>
+                <span className="MapPin-R">
+                  <MapPin color="#D22323" className="map-R" />
+                  <p className="dest-R">{ReadyStartData.Address}</p>
+                </span>
+              </div>
+
+              <hr className="hrs-R" />
+              <h6 className="hd-R">{ReadyStartData.TotalRide} :</h6>
+              <h6 className="rs-R">{ReadyStartData.Amount}</h6>
+              <p className="ps-R">{ReadyStartData.Colletion}</p>
+              <hr className="Cancelridehr-R" />
+              <h6 className="ride-R">{ReadyStartData.Ride}</h6>
+            </div>
+          </div>
         </div>
-      }
+      ) : (
+        <div></div>
+      )}
       <Button onClick={() => setSmShow(!smShow)} className="me-2 fixed-bottom">
         Start Ride
       </Button>
@@ -109,4 +104,4 @@ function ReadyStart(props) {
   );
 }
 
-export default ReadyStart
+export default ReadyStart;
