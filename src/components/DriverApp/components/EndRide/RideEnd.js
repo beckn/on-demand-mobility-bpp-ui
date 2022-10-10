@@ -36,7 +36,7 @@ function RideEnd() {
       <div className="m-3">
         <h1 className="titleP">{EndRideData.title}</h1>
         <p className="subP">{EndRideData.Subtitle}</p>
-        <h2 className="Rp">Rs. {round(rideSummary.SellingPrice) || 0}</h2>
+        <h2 className="Rp">EUR {round(rideSummary.SellingPrice) || 0}</h2>
         <hr className="hrp" />
         <div className="d-flex mt-5 justify-content-between px-3">
           <h6>{formatDate(rideSummary.CreatedAt)}</h6>

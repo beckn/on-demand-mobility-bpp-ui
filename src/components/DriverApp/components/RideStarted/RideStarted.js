@@ -134,7 +134,7 @@ function RideStartedExpand({ rideDetail, setRideDetail, location, trip }) {
               <hr className="hrs-RS" />
               <h6 className="hd-RS">{ReadyStartData.TotalRide} :</h6>
               <h6 className="rs-RS">
-                Rs. {round(trip.SellingPrice || ReadyStartData.Amount)}
+                EUR {round(trip.SellingPrice || ReadyStartData.Amount)}
               </h6>
               <p className="ps-RS">{ReadyStartData.Colletion}</p>
               <hr className="Cancelridehr-RS" />
