@@ -19,11 +19,7 @@ function DriverAppHeader({ title }) {
       window.location.href = AppRoutes.admin;
     });
   };
-  const renderlogoutTooltip = (props) => (
-    <Tooltip {...props}>
-      Logout
-    </Tooltip>
-  );
+  const renderlogoutTooltip = (props) => <Tooltip {...props}>Logout</Tooltip>;
   return (
     <>
       <div className="top-bar">
@@ -34,18 +30,18 @@ function DriverAppHeader({ title }) {
             </button>
           )}
         </span>
-        <span class="header-push text-white">{title}</span>
+        <span className="header-push text-white">{title}</span>
         <OverlayTrigger placement="left" overlay={renderlogoutTooltip}>
-        <span class="header-push" title="logout">
-          {title === "Account" && (
-            <button className="back-button" onClick={logout}>
-              <span>
-                {" "}
-                <LogOut />
-              </span>
-            </button>
-          )}
-        </span>
+          <span className="header-push" title="logout">
+            {title === "Account" && (
+              <button className="back-button" onClick={logout}>
+                <span>
+                  {" "}
+                  <LogOut />
+                </span>
+              </button>
+            )}
+          </span>
         </OverlayTrigger>
       </div>
     </>

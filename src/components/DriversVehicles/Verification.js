@@ -145,7 +145,7 @@ export const Verification = (props) => {
                           {x.Verified === "Y" ? (
                             "Verified"
                           ) : (
-                            <div class="d-flex justify-content-around">
+                            <div className="d-flex justify-content-around">
                               <button
                                 className="btn btn-primary btn-sm"
                                 disabled={!isValid[x.Id]}
