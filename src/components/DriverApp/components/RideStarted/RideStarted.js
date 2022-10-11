@@ -13,6 +13,8 @@ import RideEnd from "../EndRide/RideEnd";
 import Address from "../Address/Address";
 import { round } from "../../utils/utils";
 
+import { currency } from "../SwitchButton/utils";
+
 function RideStarted({ trip, location }) {
   const [smShow, setSmShow] = useState({ status: false, data: undefined });
   const [rideDetail, setRideDetail] = useState(false);
@@ -134,7 +136,7 @@ function RideStartedExpand({ rideDetail, setRideDetail, location, trip }) {
               <hr className="hrs-RS" />
               <h6 className="hd-RS">{ReadyStartData.TotalRide} :</h6>
               <h6 className="rs-RS">
-                EUR {round(trip.SellingPrice || ReadyStartData.Amount)}
+                {currency} {round(trip.SellingPrice || ReadyStartData.Amount)}
               </h6>
               <p className="ps-RS">{ReadyStartData.Colletion}</p>
               <hr className="Cancelridehr-RS" />

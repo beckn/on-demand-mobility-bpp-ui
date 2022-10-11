@@ -22,3 +22,9 @@ export function getAge(dateString) {
   }
   return age > 18 ? true : false;
 }
+
+const currencyMapping = {
+  Rupees: "₹",
+  EURO: "€",
+};
+export const currency = currencyMapping.EURO;

@@ -72,6 +72,7 @@ export const getAddress = function getAddress(address) {
 
 export const setApiKey = (key) => {
   setCookie(LocalKey.saveApi, JSON.stringify(key), "/");
+  window.localStorage.setItem(LocalKey.saveApi, JSON.stringify(key), "/");
 };
 
 export const setUser = (user) => {

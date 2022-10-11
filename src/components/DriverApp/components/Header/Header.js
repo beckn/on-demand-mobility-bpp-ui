@@ -14,6 +14,7 @@ function DriverAppHeader({ title }) {
     userLogout("logout").then((res) => {
       console.log("User Logout", res);
       removeCookie(LocalKey.saveApi);
+      window.localStorage.removeItem(LocalKey.saveApi);
       removeCookie(LocalKey.saveUser);
       // navigate(AppRoutes.admin);
       window.location.href = AppRoutes.admin;
