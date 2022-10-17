@@ -1,4 +1,4 @@
-name: Staging deployment of taxi driver app
+name: Staging deployment of taxi admin app
 on:
   push:
     branches:
