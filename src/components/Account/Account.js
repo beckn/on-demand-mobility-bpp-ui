@@ -74,7 +74,9 @@ const PersonalDetailsForm = ({
   isNewUser,
   setNewUser,
   roleType,
+  isPasswordField,
 }) => {
+  console.log({ isPasswordField });
   const [isUserEdit, setIsUserEdit] = useState(IsStore);
   const {
     handleSubmit,
@@ -103,11 +105,15 @@ const PersonalDetailsForm = ({
       Name: data.Name,
       LongName: data.FirstName.concat(" ", data.LastName),
       PhoneNumber: data.PhoneNumber,
+      //Password: data.Password1,
+      //Password2: data.Password1,
     };
 
     const UserSave = "users/save";
     const userData = {
-      Users: [{ ...user }],
+      Users: isPasswordField
+        ? [{ ...user, Password: data.Password1, Password2: data.Password1 }]
+        : [{ ...user }],
     };
 
     userSave(UserSave, userData, UserFields, IsStore, roleType).then((res) => {
@@ -162,7 +168,7 @@ const PersonalDetailsForm = ({
 
         <hr className="mt-0 mb-3" />
         <div className="row w-100 justify-content-left">
-          <div className="col-6 mb-3">
+          <div className="col-4 mb-3">
             <input
               type="text"
               {...register("FirstName")}
@@ -178,7 +184,28 @@ const PersonalDetailsForm = ({
             />
             <ErrorMessage fieldError={errors?.FirstName} />
           </div>
-          <div className="col-6 mb-3">
+          {isPasswordField && (
+            <div className="col-4 mb-3">
+              <input
+                type="text"
+                name="Password1"
+                id="Password1"
+                {...register("Password1", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                    message: "Please Enter Valid Password Format",
+                  },
+                })}
+                className={`form-control ${
+                  errors?.PhoneNumber ? "is-invalid" : ""
+                }`}
+                placeholder=" Password*"
+              />
+              <ErrorMessage fieldError={errors?.Password1} />
+            </div>
+          )}
+          <div className="col-4 mb-3">
             <input
               type="text"
               {...register("LastName")}
@@ -195,6 +222,7 @@ const PersonalDetailsForm = ({
             <ErrorMessage fieldError={errors?.LastName} />
           </div>
         </div>
+
         <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
             <input
@@ -609,7 +637,8 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
 };
 
 export const Account = (prop) => {
-  const { formType } = prop;
+  console.log({ prop });
+  const { formType, isPasswordField } = prop;
   const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
   const User = prop.User
     ? JSON.parse(getCookie(LocalKey.saveUser))
@@ -725,6 +754,7 @@ export const Account = (prop) => {
           isNewUser={prop.NewUser}
           setNewUser={setNewUser}
           roleType={formType}
+          isPasswordField={isPasswordField}
         />
 
         <AddressInfoForm
