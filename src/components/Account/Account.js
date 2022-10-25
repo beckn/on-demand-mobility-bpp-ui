@@ -184,27 +184,6 @@ const PersonalDetailsForm = ({
             />
             <ErrorMessage fieldError={errors?.FirstName} />
           </div>
-          {isPasswordField && (
-            <div className="col-4 mb-3">
-              <input
-                type="text"
-                name="Password1"
-                id="Password1"
-                {...register("Password1", {
-                  required: "Password is required",
-                  pattern: {
-                    value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
-                    message: "Please Enter Valid Password Format",
-                  },
-                })}
-                className={`form-control ${
-                  errors?.PhoneNumber ? "is-invalid" : ""
-                }`}
-                placeholder=" Password*"
-              />
-              <ErrorMessage fieldError={errors?.Password1} />
-            </div>
-          )}
           <div className="col-4 mb-3">
             <input
               type="text"
@@ -221,9 +200,6 @@ const PersonalDetailsForm = ({
             />
             <ErrorMessage fieldError={errors?.LastName} />
           </div>
-        </div>
-
-        <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
             <input
               type="text"
@@ -238,6 +214,9 @@ const PersonalDetailsForm = ({
             />
             <ErrorMessage fieldError={errors?.PhoneNumber} />
           </div>
+        </div>
+
+        <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
             <input
               type="text"
@@ -280,6 +259,27 @@ const PersonalDetailsForm = ({
 
             <ErrorMessage fieldError={errors?.DateOfBirth} />
           </div>
+          {isPasswordField && (
+            <div className="col-4 mb-3">
+              <input
+                type="text"
+                name="Password1"
+                id="Password1"
+                {...register("Password1", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                    message: "Please Enter Valid Password Format",
+                  },
+                })}
+                className={`form-control ${
+                  errors?.PhoneNumber ? "is-invalid" : ""
+                }`}
+                placeholder=" Password*"
+              />
+              <ErrorMessage fieldError={errors?.Password1} />
+            </div>
+          )}
         </div>
       </form>
     </>

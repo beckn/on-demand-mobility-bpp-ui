@@ -17,6 +17,7 @@ import { uploadFile } from "../../Account/Account.Services";
 import {
   getDeploymentPurposes,
   saveVehicle,
+  linkDriverVehicle,
 } from "../DriversVehicles.Services";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getVehicleInfoSchema } from "./AddVehicle.schema";
@@ -30,11 +31,12 @@ const VehicleInfoForm = ({
   setNewVehicleInfo,
   onUpdateVehicle,
   contextData,
+  driverList,
 }) => {
   const [isDisabled, setIsDisabled] = useState(
     !isEmpty(newVehicleInfo) || !vehicleEdit
   );
-
+  console.log({ driverList, vehicleInfo, vehicleEdit });
   const {
     handleSubmit,
     register,
@@ -69,7 +71,7 @@ const VehicleInfoForm = ({
   ]);
 
   const onSubmit = (data) => {
-    console.log("submitting");
+    console.log("submitting", data);
 
     let addVehicleInfo = {
       Vehicle: {
@@ -81,12 +83,15 @@ const VehicleInfoForm = ({
       },
     };
 
-    if (newVehicleInfo && vehicleEdit) {
+    if (newVehicleInfo?.Id && vehicleEdit) {
       addVehicleInfo.Vehicle.Id = newVehicleInfo.Id;
     }
+    console.log({ addVehicleInfo });
 
     saveVehicle(addVehicleInfo).then((res) => {
       setNewVehicleInfo(res.data.Vehicles[0]);
+      data?.DriverId &&
+        linkDriverVehicle(data.DriverId, res.data.Vehicles[0].Id);
       onUpdateVehicle();
     });
   };
@@ -132,7 +137,7 @@ const VehicleInfoForm = ({
       </div>
       <hr />
       <div className="row">
-        <div className="col-6 mb-3">
+        <div className="col-4 mb-3">
           <input
             type="text"
             className={classNames({
@@ -146,7 +151,7 @@ const VehicleInfoForm = ({
           />
           <ErrorMessage fieldError={errors?.VehicleNumber} />
         </div>
-        <div className="col-6 mb-3">
+        <div className="col-4 mb-3">
           <input
             type="text"
             className={classNames({
@@ -160,22 +165,41 @@ const VehicleInfoForm = ({
           />
           <ErrorMessage fieldError={errors?.Make} />
         </div>
+        <div className="col-4 mb-3">
+          <input
+            type="text"
+            className={classNames({
+              "form-control": true,
+              error: errors?.NameOfModel,
+            })}
+            {...register("NameOfModel")}
+            disabled={isDisabled}
+            id="NameOfModel"
+            placeholder="Enter Vehicle Model"
+          />
+          <ErrorMessage fieldError={errors?.NameOfModel} />
+        </div>
       </div>
       <div className="row">
         <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
-            <input
-              type="text"
+            <select
+              {...register("DriverId")}
+              disabled={newVehicleInfo || vehicleEdit.Approved === "N"}
+              id="DriverId"
               className={classNames({
-                "form-control": true,
-                error: errors?.NameOfModel,
+                "form-select": true,
+                error: errors?.VehicleType,
               })}
-              {...register("NameOfModel")}
-              disabled={isDisabled}
-              id="NameOfModel"
-              placeholder="Enter Vehicle Model"
-            />
-            <ErrorMessage fieldError={errors?.NameOfModel} />
+            >
+              <option value="">Link Driver</option>
+              {driverList?.map((t, i) => (
+                <option key={i} value={t.Id}>
+                  {t.LongName}
+                </option>
+              ))}
+            </select>
+            <ErrorMessage fieldError={errors?.DriverId} />
           </div>
           <div className="col-4 mb-3">
             <select
@@ -295,18 +319,22 @@ export const AddVehicle = (props) => {
           props.vehicleEdit.VehicleDocuments?.find(
             (x) => x.Document === DocumentType.RC
           )?.ValidFrom || "",
-        ValidTo: props.vehicleEdit.VehicleDocuments?.find(
-          (x) => x.Document === DocumentType.RC
-        )?.ValidTo || "",
-        RcNumber: props.vehicleEdit.VehicleDocuments?.find(
-          (x) => x.Document === DocumentType.RC
-        )?.DocumentNumber || "",
-        InsuranceNumber: props.vehicleEdit.VehicleDocuments?.find(
-          (x) => x.Document === DocumentType.INSURANCE
-        )?.DocumentNumber || "",
-        FitnessNumber: props.vehicleEdit.VehicleDocuments?.find(
-          (x) => x.Document === DocumentType.FITNESS
-        )?.DocumentNumber || "",
+        ValidTo:
+          props.vehicleEdit.VehicleDocuments?.find(
+            (x) => x.Document === DocumentType.RC
+          )?.ValidTo || "",
+        RcNumber:
+          props.vehicleEdit.VehicleDocuments?.find(
+            (x) => x.Document === DocumentType.RC
+          )?.DocumentNumber || "",
+        InsuranceNumber:
+          props.vehicleEdit.VehicleDocuments?.find(
+            (x) => x.Document === DocumentType.INSURANCE
+          )?.DocumentNumber || "",
+        FitnessNumber:
+          props.vehicleEdit.VehicleDocuments?.find(
+            (x) => x.Document === DocumentType.FITNESS
+          )?.DocumentNumber || "",
       };
     });
   }, [props.vehicleEdit]);
@@ -356,6 +384,7 @@ export const AddVehicle = (props) => {
         setNewVehicleInfo={setNewVehicleInfo}
         onUpdateVehicle={props.onUpdateVehicle}
         contextData={contextData}
+        driverList={props.driverList}
       />
 
       {!isEmpty(newVehicleInfo) && (
@@ -392,17 +421,23 @@ export const AddVehicle = (props) => {
                   )} */}
                   {!isEmpty(newVehicleInfo) && (
                     <p className="mt-1 mb-3 small ps-2">
-                      {newVehicleInfo.VehicleDocuments?.find(
-                        (x) => x.Document === DocumentType.RC
-                      )?.VerificationStatus}
+                      {
+                        newVehicleInfo.VehicleDocuments?.find(
+                          (x) => x.Document === DocumentType.RC
+                        )?.VerificationStatus
+                      }
                     </p>
                   )}
                 </div>
-                <div className={`col-1 align-self-center ${
-                          newVehicleInfo.VehicleDocuments?.find(
-                            (x) => x.Document === DocumentType.RC
-                          )?.VerificationStatus ? "mb-5" : "mb-3"
-                        }`} >
+                <div
+                  className={`col-1 align-self-center ${
+                    newVehicleInfo.VehicleDocuments?.find(
+                      (x) => x.Document === DocumentType.RC
+                    )?.VerificationStatus
+                      ? "mb-5"
+                      : "mb-3"
+                  }`}
+                >
                   <input
                     type="file"
                     name="RcDoc.FILE"
@@ -449,7 +484,6 @@ export const AddVehicle = (props) => {
                       setDocumentValue(date, "RcDoc.VALID_TO")
                     }
                   />
-                
                 </div>
               </div>
             </div>
@@ -477,17 +511,23 @@ export const AddVehicle = (props) => {
                 )} */}
                 {!isEmpty(newVehicleInfo) && (
                   <p className="mt-1 mb-3 small ps-2">
-                    {newVehicleInfo.VehicleDocuments?.find(
-                      (x) => x.Document === DocumentType.INSURANCE
-                    )?.VerificationStatus}
+                    {
+                      newVehicleInfo.VehicleDocuments?.find(
+                        (x) => x.Document === DocumentType.INSURANCE
+                      )?.VerificationStatus
+                    }
                   </p>
                 )}
               </div>
-              <div className={`col-1 align-self-center ${
-                          newVehicleInfo.VehicleDocuments?.find(
-                            (x) => x.Document === DocumentType.INSURANCE
-                          )?.VerificationStatus ? "mb-5" : "mb-4"
-                        }`}  >
+              <div
+                className={`col-1 align-self-center ${
+                  newVehicleInfo.VehicleDocuments?.find(
+                    (x) => x.Document === DocumentType.INSURANCE
+                  )?.VerificationStatus
+                    ? "mb-5"
+                    : "mb-4"
+                }`}
+              >
                 <input
                   type="file"
                   name="InsDoc.FILE"
@@ -522,17 +562,23 @@ export const AddVehicle = (props) => {
                 )} */}
                 {!isEmpty(newVehicleInfo) && (
                   <p className="mt-1 mb-3 small ps-2">
-                    {newVehicleInfo.VehicleDocuments?.find(
-                      (x) => x.Document === DocumentType.FITNESS
-                    )?.VerificationStatus}
+                    {
+                      newVehicleInfo.VehicleDocuments?.find(
+                        (x) => x.Document === DocumentType.FITNESS
+                      )?.VerificationStatus
+                    }
                   </p>
-                )} 
+                )}
               </div>
-              <div className={`col-1 align-self-center ${
-                          newVehicleInfo.VehicleDocuments?.find(
-                            (x) => x.Document === DocumentType.FITNESS
-                          )?.VerificationStatus ? "mb-5" : "mb-4"
-                        }`} >
+              <div
+                className={`col-1 align-self-center ${
+                  newVehicleInfo.VehicleDocuments?.find(
+                    (x) => x.Document === DocumentType.FITNESS
+                  )?.VerificationStatus
+                    ? "mb-5"
+                    : "mb-4"
+                }`}
+              >
                 <input
                   type="file"
                   name="FitDoc.FILE"

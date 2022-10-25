@@ -51,7 +51,7 @@ export const DriversVehicles = (prop) => {
   const handleClick = (e, Details) => {
     e.preventDefault();
     const { name } = e.target;
-    console.log("Verify Driver", name);
+    console.log("Verify Driver", name, Details);
     switch (name) {
       case verificationKeys.verifyDriver:
         setModalShow(true);
@@ -318,6 +318,9 @@ export const DriversVehicles = (prop) => {
                     vehicleEdit={vehicleEdit || {}}
                     onChange={(e, k) => toggleAddVehicle(e, k)}
                     onUpdateVehicle={() => setVehiclesList()}
+                    driverList={driverList?.ColumnsData.filter(
+                      (driver) => driver.Approved === "Y"
+                    )}
                   />
                 </>
               )}

@@ -20,9 +20,27 @@ export const getAutoCompleteVehicle = (type) => {
   return getRequestData(path);
 };
 
-export const saveVehicle = (data) => {
+export const saveVehicle = (data, driverData) => {
   let path = "vehicles/save/";
   return postRequestData(path, data);
+};
+
+export const linkDriverVehicle = async (UserId, vehicleId) => {
+  let path = "authorized_drivers/save";
+
+  //const trips = getTrips();
+  const payload = {
+    AuthorizedDriver: {
+      Vehicle: {
+        Id: vehicleId,
+      },
+      Driver: {
+        Id: UserId,
+      },
+    },
+  };
+  const res = await postRequestData(path, payload).then((res) => res.data);
+  return res;
 };
 
 export const getDeploymentPurposes = () => {
