@@ -184,7 +184,6 @@ const PersonalDetailsForm = ({
             />
             <ErrorMessage fieldError={errors?.FirstName} />
           </div>
-
           <div className="col-4 mb-3">
             <input
               type="text"
