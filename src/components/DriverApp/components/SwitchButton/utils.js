@@ -27,4 +27,4 @@ const currencyMapping = {
   Rupees: "₹",
   EURO: "€",
 };
-export const currency = currencyMapping.EURO;
+export const currency = currencyMapping.Rupees;
