@@ -17,18 +17,14 @@
   top: 12px;
 }
 .Rp {
-  display: flex;
-  position: relative;
   color: #34c759;
   font-weight: 600;
   font-size: 32px;
   line-height: 22px;
-  left: 10px;
-  top: 15px;
 }
 .hrp {
   display: flex;
-  position: relative;
+  /* position: relative; */
   top: 25px;
 }
 .date {
