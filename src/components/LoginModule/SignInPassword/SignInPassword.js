@@ -90,14 +90,14 @@ export const Login = (props) => {
                             Forgot Password
                           </Link>
                         </div>
-                        <div className="col text-end">
+                        {/* <div className="col text-end">
                           <Link
                             to={AppRoutes.signInOtp}
                             className="link-primary"
                           >
                             Sign in with Mobile
                           </Link>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="row btn-lg btn-block">
                         <button
