@@ -108,7 +108,7 @@ export const Login = (props) => {
                           Sign In
                         </button>
                       </div>
-                      <div>
+                      {/* <div>
                         <Link
                           to={AppRoutes.admin}
                           role="button"
@@ -116,7 +116,7 @@ export const Login = (props) => {
                         >
                           Cancel
                         </Link>
-                      </div>
+                      </div> */}
                       <div className="row mt-5">
                         <div className="col-12 col-lg-6 ">
                           New User?{" "}
