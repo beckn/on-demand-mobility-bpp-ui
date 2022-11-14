@@ -8,7 +8,9 @@ export { AuthGuard };
 function AuthGuard({ children }) {
   if (!getCookie(LocalKey.saveApi)) {
     // not logged in so redirect to login page with the return url
-    return <Navigate to="/login" state={{ from: history.location }} />;
+    return (
+      <Navigate to="/sign-in-password" state={{ from: history.location }} />
+    );
   }
 
   // authorized so return child components

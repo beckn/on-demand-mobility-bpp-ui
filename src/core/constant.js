@@ -1,5 +1,5 @@
 export const AppRoutes = {
-  admin: "/login",
+  admin: "/sign-in-password",
   signUp: "/sign-up",
   signInOtp: "/sign-in-phone",
   signInPassword: "/sign-in-password",
