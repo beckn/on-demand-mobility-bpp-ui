@@ -10,13 +10,14 @@ export const LeftSection = (props) => {
 };
 
 const Container = styled.div`
+ @media (min-width: 768px) and (max-width: 2099.98px){
   height: 100%;
   position: relative;
   border-top-right-radius: 200px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(24px);
-
+ 
   .round-1 {
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(24px);
@@ -81,4 +82,5 @@ const Container = styled.div`
       right: 29%;
     }
   }
+}
 `;

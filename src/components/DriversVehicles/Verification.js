@@ -60,11 +60,9 @@ export const Verification = (props) => {
                   {props.verifyDocuments?.VehicleNumber} |{" "}
                   <span className="small text-muted">
                     Date of Registration:{" "}
-                    {
-                      props.verifyDocuments?.VehicleDocuments?.find(
-                        (x) => x.Document === DocumentType.RC
-                      ).ValidFrom
-                    }
+                    {props.verifyDocuments?.VehicleDocuments?.find(
+                      (x) => x.Document === DocumentType.RC
+                    )?.ValidFrom || ""}
                   </span>
                 </h5>
                 <hr />
@@ -79,13 +77,13 @@ export const Verification = (props) => {
                     props.verifyDocuments?.Tags
                   )}
                 </div>
-                <div>
+                {/* <div>
                   <b>Fuel Type:</b>{" "}
                   {getKeyValueFromString(
                     "FuelType",
                     props.verifyDocuments?.Tags
                   )}
-                </div>
+                </div> */}
                 <div>
                   <b>Vehicle Type:</b>{" "}
                   {getKeyValueFromString(

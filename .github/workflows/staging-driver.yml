@@ -1,0 +1,27 @@
+name: Staging deployment of taxi driver app
+on:
+  push:
+    branches:
+    - feature-driver
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploying changes
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DRIVERHOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          cd taxi-reference-bpp/
+          git checkout feature-driver
+          git pull
+          yarn
+          yarn build
+          pm2 kill
+          sleep 10
+          pm2 serve build 5000 --spa

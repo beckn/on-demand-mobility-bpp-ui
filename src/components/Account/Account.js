@@ -1,5 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // import PropTypes from "prop-types";
+import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 import classNames from "classnames";
 import isEmpty from "lodash/isEmpty";
 import { useEffect, useState } from "react";
@@ -35,6 +38,19 @@ const getItemValue = (item, code) => {
   return `${item[code]}`;
 };
 
+const renderImageTooltip = (props) => (
+  <Tooltip {...props}>
+    Please fill required Information and Date of Birth and then Upload File In
+    JPG or PNG Format{" "}
+  </Tooltip>
+);
+
+const renderZipTooltip = (props) => (
+  <Tooltip {...props}>
+    Please fill required Information and then Upload File In Zip Format
+  </Tooltip>
+);
+
 const renderItem = (item, isHighlighted, styles, code) => {
   return (
     <div
@@ -58,7 +74,9 @@ const PersonalDetailsForm = ({
   isNewUser,
   setNewUser,
   roleType,
+  isPasswordField,
 }) => {
+  console.log({ isPasswordField });
   const [isUserEdit, setIsUserEdit] = useState(IsStore);
   const {
     handleSubmit,
@@ -87,11 +105,15 @@ const PersonalDetailsForm = ({
       Name: data.Name,
       LongName: data.FirstName.concat(" ", data.LastName),
       PhoneNumber: data.PhoneNumber,
+      //Password: data.Password1,
+      //Password2: data.Password1,
     };
 
     const UserSave = "users/save";
     const userData = {
-      Users: [{ ...user }],
+      Users: isPasswordField
+        ? [{ ...user, Password: data.Password1, Password2: data.Password1 }]
+        : [{ ...user }],
     };
 
     userSave(UserSave, userData, UserFields, IsStore, roleType).then((res) => {
@@ -146,7 +168,7 @@ const PersonalDetailsForm = ({
 
         <hr className="mt-0 mb-3" />
         <div className="row w-100 justify-content-left">
-          <div className="col-6 mb-3">
+          <div className="col-4 mb-3">
             <input
               type="text"
               {...register("FirstName")}
@@ -157,10 +179,12 @@ const PersonalDetailsForm = ({
                 error: errors?.FirstName,
               })}
               placeholder="First Name"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="don't use special character and but must not start with a space"
             />
             <ErrorMessage fieldError={errors?.FirstName} />
           </div>
-          <div className="col-6 mb-3">
+          <div className="col-4 mb-3">
             <input
               type="text"
               {...register("LastName")}
@@ -171,11 +195,11 @@ const PersonalDetailsForm = ({
                 error: errors?.LastName,
               })}
               placeholder="Last Name"
+              pattern="^[a-zA-Z][\sa-zA-Z]*"
+              title="don't use special character and but must not start with a space"
             />
             <ErrorMessage fieldError={errors?.LastName} />
           </div>
-        </div>
-        <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
             <input
               type="text"
@@ -190,6 +214,9 @@ const PersonalDetailsForm = ({
             />
             <ErrorMessage fieldError={errors?.PhoneNumber} />
           </div>
+        </div>
+
+        <div className="row w-100 justify-content-left">
           <div className="col-4 mb-3">
             <input
               type="text"
@@ -201,6 +228,8 @@ const PersonalDetailsForm = ({
                 error: errors?.Name,
               })}
               placeholder="Email"
+              pattern='^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$'
+              title="Please Enter valid Email Address"
             />
             <ErrorMessage fieldError={errors?.Name} />
           </div>
@@ -230,6 +259,27 @@ const PersonalDetailsForm = ({
 
             <ErrorMessage fieldError={errors?.DateOfBirth} />
           </div>
+          {isPasswordField && (
+            <div className="col-4 mb-3">
+              <input
+                type="text"
+                name="Password1"
+                id="Password1"
+                {...register("Password1", {
+                  required: "Password is required",
+                  pattern: {
+                    value: /^(?!.* )(?=.*[A-Za-z0-9]).{3,15}$/,
+                    message: "Please Enter Valid Password Format",
+                  },
+                })}
+                className={`form-control ${
+                  errors?.PhoneNumber ? "is-invalid" : ""
+                }`}
+                placeholder=" Password*"
+              />
+              <ErrorMessage fieldError={errors?.Password1} />
+            </div>
+          )}
         </div>
       </form>
     </>
@@ -400,7 +450,7 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
               <button
                 className="btn btn-primary btn-sm"
                 type="submit"
-                disabled={!isValid || !isDirty}
+                // disabled={!isValid || !isDirty}
               >
                 Save
               </button>
@@ -418,6 +468,8 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
             disabled={isAddressEdit}
             className="form-control"
             placeholder="Apartment, unit, suite, or floor #"
+            pattern="()\s+((?:[\w+\s*-])+)[\,]\s+([a-zA-Z]+)\s+([0-9a-zA-Z]+)"
+            title="Invalid Charatar"
           />
 
           <ErrorMessage fieldError={errors?.AddressLine1} />
@@ -585,7 +637,8 @@ const AddressInfoForm = ({ User, IsStore, isNewUser, NewUser, setNewUser }) => {
 };
 
 export const Account = (prop) => {
-  const { formType } = prop;
+  console.log({ prop });
+  const { formType, isPasswordField } = prop;
   const [NewUser, setNewUser] = useState(prop?.EditUser ? prop?.EditUser : "");
   const User = prop.User
     ? JSON.parse(getCookie(LocalKey.saveUser))
@@ -701,6 +754,7 @@ export const Account = (prop) => {
           isNewUser={prop.NewUser}
           setNewUser={setNewUser}
           roleType={formType}
+          isPasswordField={isPasswordField}
         />
 
         <AddressInfoForm
@@ -728,6 +782,9 @@ export const Account = (prop) => {
                       type="text"
                       name="LicenseNumber"
                       id="LicenseNumber"
+                      // eslint-disable-next-line no-octal-escape
+                      pattern="^\d{1,6}\040([A-Z]{1}[a-z]{1,}\040[A-Z]{1}"
+                      title="Invalid PAN No."
                       defaultValue={LicenseNumber}
                       disabled={User?.DriverDocuments?.find(
                         (x) => x.Document === DocumentType.Licence
@@ -747,18 +804,24 @@ export const Account = (prop) => {
                   {!User?.DriverDocuments?.find(
                     (x) => x.Document === "Licence"
                   ) && (
-                    <div className="col-1  mb-3">
-                      <input
-                        type="file"
-                        name="LicenseFile"
-                        id="LicenseFile"
-                        className="form-control d-none"
-                        onChange={(e) => getUpload(e, DocumentType.Licence)}
-                      />
-                      <label htmlFor="LicenseFile" role={"button"}>
-                        <Upload />
-                      </label>
-                    </div>
+                    <OverlayTrigger
+                      placement="top"
+                      overlay={renderImageTooltip}
+                    >
+                      <div className="col-1  mb-3">
+                        <input
+                          type="file"
+                          name="LicenseFile"
+                          id="LicenseFile"
+                          disabled={LicenseNumber == ""}
+                          className="form-control d-none"
+                          onChange={(e) => getUpload(e, DocumentType.Licence)}
+                        />
+                        <label htmlFor="LicenseFile" role={"button"}>
+                          <Upload />
+                        </label>
+                      </div>
+                    </OverlayTrigger>
                   )}
                 </>
               )}
@@ -767,6 +830,8 @@ export const Account = (prop) => {
                   type="text"
                   name="PanNumber"
                   id="PanNumber"
+                  pattern="/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/"
+                  title="Invalid PAN No."
                   defaultValue={PanNumber}
                   disabled={User?.DriverDocuments?.find(
                     (x) => x.Document === DocumentType.Pan
@@ -784,18 +849,21 @@ export const Account = (prop) => {
                 </p>
               </div>
               {!User?.DriverDocuments?.find((x) => x.Document === "Pan") && (
-                <div className="col-1  mb-3">
-                  <input
-                    type="file"
-                    name="PanFile"
-                    id="PanFile"
-                    className="form-control d-none"
-                    onChange={(e) => getUpload(e, DocumentType.Pan)}
-                  />
-                  <label htmlFor="PanFile" role={"button"}>
-                    <Upload />
-                  </label>
-                </div>
+                <OverlayTrigger placement="top" overlay={renderImageTooltip}>
+                  <div className="col-1  mb-3">
+                    <input
+                      type="file"
+                      name="PanFile"
+                      id="PanFile"
+                      className="form-control d-none"
+                      disabled={PanNumber == ""}
+                      onChange={(e) => getUpload(e, DocumentType.Pan)}
+                    />
+                    <label htmlFor="PanFile" role={"button"}>
+                      <Upload />
+                    </label>
+                  </div>
+                </OverlayTrigger>
               )}
               <div className="col-3  mb-3">
                 {!User?.DriverDocuments?.find(
@@ -809,6 +877,8 @@ export const Account = (prop) => {
                     onChange={(e) => setEKycPassword(e.target.value)}
                     className="form-control"
                     placeholder="E-Kyc Aadhar File Password"
+                    pattern="^[0-9]{8}$"
+                    title="Invalid Ekyc Password format"
                   />
                 ) : (
                   <>
@@ -827,6 +897,8 @@ export const Account = (prop) => {
                       onChange={(e) => setEKycPassword(e.target.value)}
                       className="form-control"
                       placeholder="E-Kyc Aadhar File Password"
+                      pattern="^[0-9]{8}$"
+                      title="Invalid Ekyc Password format"
                     />
                     <p className="mt-1 mb-0 small ps-2">
                       {
@@ -841,18 +913,21 @@ export const Account = (prop) => {
               {!User?.DriverDocuments?.find(
                 (x) => x.Document === DocumentType.Aadhar
               ) && (
-                <div className="col-1 mb-3">
-                  <input
-                    type="file"
-                    name="AadharFile"
-                    id="AadharFile"
-                    onChange={(e) => getUpload(e, DocumentType.Aadhar)}
-                    className="form-control d-none"
-                  />
-                  <label htmlFor="AadharFile" role={"button"}>
-                    <Upload />
-                  </label>
-                </div>
+                <OverlayTrigger placement="top" overlay={renderZipTooltip}>
+                  <div className="col-1 mb-3">
+                    <input
+                      type="file"
+                      name="AadharFile"
+                      id="AadharFile"
+                      disabled={eKycPassword == null}
+                      onChange={(e) => getUpload(e, DocumentType.Aadhar)}
+                      className="form-control d-none"
+                    />
+                    <label htmlFor="AadharFile" role={"button"}>
+                      <Upload />
+                    </label>
+                  </div>
+                </OverlayTrigger>
               )}
             </div>
             {prop.NewUser && (

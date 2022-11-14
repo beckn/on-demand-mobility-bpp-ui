@@ -9,6 +9,7 @@ export const getVehicleInfoSchema = () => {
       NameOfModel: yup.string().required(),
       VehicleType: yup.string().required(),
       FuelType: yup.string().required(),
+      //DriverId: yup.string().required(),
     })
     .required();
 };

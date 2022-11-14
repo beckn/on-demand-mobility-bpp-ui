@@ -28,6 +28,7 @@ export const AddDriver = (prop) => {
               EditUser={prop?.EditUser}
               onChange={(e, k) => dispatchEvent(e, k)}
               formType={prop.formType}
+              isPasswordField={true}
             />
           </div>
         </div>
