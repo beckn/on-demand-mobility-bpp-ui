@@ -5,7 +5,7 @@ import { usePosition } from "./hooks/usePosition";
 import CustomMap from "./Maps/CustomMap";
 import SwitchButton from "./components/SwitchButton/SwitchButton";
 import NavigateButton from "./components/Navigate/NavigateButton";
-import { getCookie, removeCookie } from "../../core/CookiesHandler";
+import { getCookie, setCookie, removeCookie } from "../../core/CookiesHandler";
 import { LocalKey, DocumentType, AppRoutes } from "../../core/constant";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -21,6 +21,7 @@ function DriverDashboard() {
     document.title = `Driver App`;
   };
   useEffect(() => {
+    setCookie(LocalKey.saveActiveRide, JSON.stringify({}), "/");
     init();
     if (!isVerified) {
       navigate(AppRoutes.accountRegistration);

@@ -45,15 +45,15 @@ function RideEnd() {
           {currency} {round(rideSummary.SellingPrice) || 0}
         </h2> */}
         <div className="d-flex mt-3 justify-content-between px-2 Rp">
-          <h2>{rideSummary.Passenger.Name || ""}</h2>
+          <h2>{rideSummary?.Passenger?.Name || ""}</h2>
           <h2>
-            {currency} {round(rideSummary.SellingPrice) || 0}
+            {currency} {round(rideSummary?.SellingPrice) || 0}
           </h2>
         </div>
 
         <hr className="hrp" />
         <div className="d-flex mt-5 justify-content-between px-3">
-          <h6>{formatDate(rideSummary.CreatedAt)}</h6>
+          <h6>{formatDate(rideSummary?.CreatedAt)}</h6>
           <h6>
             Distance : <b>{round(distance) || 0} Kms</b>
           </h6>
@@ -67,14 +67,14 @@ function RideEnd() {
             className="d-flex mt-3 align-left gap-4 text-address"
           >
             <MapPin fill="#80BC48" />
-            {location.driverAddress}
+            {location?.driverAddress}
           </span>
           <span
             title="destination point"
             className="d-flex mt-3 gap-4 text-address"
           >
             <MapPin fill="#D22323" />
-            {location.pickupAddress}
+            {location?.pickupAddress}
           </span>
         </div>
         <CustomMap mapType="end" latitude={latitude} longitude={longitude} />
