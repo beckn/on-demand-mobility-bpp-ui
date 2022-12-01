@@ -61,8 +61,11 @@ function App() {
         <ErrorBoundary>
           <Suspense>
             <Routes>
-              <Route path="/" element={<Login />}></Route>
-              <Route path={AppRoutes.admin} element={<Login />}></Route>
+              <Route path="/" element={<SignInPassword />}></Route>
+              <Route
+                path={AppRoutes.admin}
+                element={<SignInPassword />}
+              ></Route>
               <Route path={AppRoutes.signUp} element={<SignUp />}></Route>
               <Route
                 path={AppRoutes.signInPassword}
