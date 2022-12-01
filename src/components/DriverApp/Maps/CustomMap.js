@@ -95,7 +95,7 @@ function CustomMap({ latitude, longitude, mapType = "start", locations = [] }) {
           >
             {/* Child components, such as markers, info windows, etc. */}
             <Marker position={position} />
-            {directions && (
+            {locations.length > 0 && directions && (
               <DirectionsRenderer
                 directions={directions}
                 options={{

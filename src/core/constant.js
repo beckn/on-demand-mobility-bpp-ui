@@ -15,6 +15,7 @@ export const LocalKey = {
   saveUser: "saveUser",
   spinnerKey: "taxiSpinner",
   saveActiveRide: "saveActiveRide",
+  saveDriverStatus: "saveStatus",
 };
 
 export const NoHeader = [

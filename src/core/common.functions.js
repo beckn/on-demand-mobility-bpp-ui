@@ -77,6 +77,7 @@ export const setApiKey = (key) => {
 
 export const setUser = (user) => {
   setCookie(LocalKey.saveUser, JSON.stringify(user), "/");
+  setActiveRide({});
 };
 
 export const setActiveRide = (ride) => {

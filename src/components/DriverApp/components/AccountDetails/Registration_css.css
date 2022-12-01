@@ -5,9 +5,10 @@
 .Registration-body{
     padding-right: 4%;
     padding-left: 4%;
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
     top: 88px;
+    margin-bottom: 70px;
 }
 
 .Registrationsubmit{

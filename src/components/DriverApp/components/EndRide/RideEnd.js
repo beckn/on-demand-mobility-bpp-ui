@@ -11,6 +11,7 @@ import { getCookie, removeCookie } from "../../../../core/CookiesHandler";
 import { round } from "../../utils/utils";
 import { usePosition } from "../../hooks/usePosition";
 import { currency } from "../SwitchButton/utils";
+import { setActiveRide } from "../../../../core/common.functions";
 
 const formatDate = (date) => {
   return date.split(" ")[0] || "NA";
@@ -31,6 +32,9 @@ function RideEnd() {
       removeCookie(LocalKey.saveActiveRide);
       navigate(AppRoutes.driverDashboard);
     }
+    return () => {
+      setActiveRide({});
+    };
   }, []);
   return (
     <>

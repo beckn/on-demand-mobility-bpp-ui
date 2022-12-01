@@ -27,6 +27,8 @@ const { Title } = Modal;
 
 const SwitchButton = ({ latitude, longitude, setLocations }) => {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
+  // const { res: rideSummary, location: savedLocation } =
+  //   JSON.parse(getCookie(LocalKey.saveActiveRide)) || null;
   const [value, setValue] = useState(false);
   const [alertModalShow, setAlertModal] = useState(false);
   const [modalShow, setModalShow] = useState(true);
@@ -40,21 +42,34 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     accept: false,
     reject: false,
   });
+
+  const getOnline = async () => {
+    const loginDetails = await getDriverOnline(User.Id);
+    loginDetails && setDriverLoginId(loginDetails.Id);
+  };
+
+  const toggleSwitch = (val) => {
+    setValue(val);
+    localStorage.setItem(
+      LocalKey.saveDriverStatus,
+      JSON.stringify({ status: val, id: driverLoginId })
+    );
+  };
   const handleSwitch = async () => {
     if (latitude == null || longitude == null) {
       //alert("please enable your location")
+      toggleSwitch(false);
       setAlertModal(!alertModalShow);
     } else {
-      setValue(!value);
+      toggleSwitch(!value);
       value && setModalShow(!modalShow);
       try {
         if (!value) {
-          const loginDetails = await getDriverOnline(User.Id);
-          loginDetails && setDriverLoginId(loginDetails.Id);
+          getOnline();
         }
       } catch (err) {
         toast.error("Something Went wrong");
-        setValue(false);
+        toggleSwitch(false);
       }
     }
   };
@@ -68,6 +83,9 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
   const handleReject = useCallback(async (id) => {
     const res = await rejectRide(id);
     setRideStatus({ accept: false, reject: true });
+    setRideModalShow(false);
+    toggleSwitch(false);
+    setLocations([]);
   }, []);
 
   useEffect(() => {
@@ -106,6 +124,15 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     };
   }, [driverLoginId, value]);
 
+  useEffect(() => {
+    const items =
+      JSON.parse(localStorage.getItem(LocalKey.saveDriverStatus)) || null;
+    if (items?.status && latitude) {
+      getOnline();
+      setValue(true);
+    }
+  }, [latitude]);
+
   return (
     <div className="">
       <div>
@@ -114,13 +141,15 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
       </div>
       {<CustomSwitch isOn={value} handleToggle={handleSwitch} />}
 
-      <CustomModal show={modalShow} onHide={() => setModalShow(false)}>
-        <OfflineModalContent />
-      </CustomModal>
-      {rideModalShow && (
+      {!value && (
+        <CustomModal show={modalShow} onHide={() => setModalShow(false)}>
+          <OfflineModalContent />
+        </CustomModal>
+      )}
+      {rideModalShow && value && (
         <CustomModal
           show={rideModalShow}
-          onHide={() => setRideModalShow(false)}
+          //onHide={() => setRideModalShow(false)}
         >
           <RideRequest
             onAccept={handleAccept}
