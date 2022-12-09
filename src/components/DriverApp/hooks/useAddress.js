@@ -5,7 +5,7 @@ import {
 } from "../components/SwitchButton/Driver.Services";
 import Geocode from "react-geocode";
 import { getAddress } from "../../../core/common.functions";
-Geocode.setApiKey("AIzaSyBCau3ch7SSkscqQUl2El4ux9Au1Ur9jFo");
+Geocode.setApiKey("AIzaSyDj_jBuujsEk8mkIva0xG6_H73oJEytXEA");
 Geocode.setLocationType("ROOFTOP");
 //to get address from lat and lng
 const coordinateToAddress = async ({ latitude, longitude }) => {
