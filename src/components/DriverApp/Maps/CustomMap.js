@@ -25,8 +25,9 @@ function CustomMap({ latitude, longitude, mapType = "start", locations = [] }) {
   const [originPosition, destinationPosition] = locations;
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDj_jBuujsEk8mkIva0xG6_H73oJEytXEA",
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
   });
+
   console.log({ originPosition, destinationPosition, locations });
   const [map, setMap] = React.useState(null);
 
