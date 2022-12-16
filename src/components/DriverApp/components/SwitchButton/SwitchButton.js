@@ -45,6 +45,9 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
 
   const getOnline = async () => {
     const loginDetails = await getDriverOnline(User.Id);
+    toast.info("Looking for ride", {
+      autoClose: 2000,
+    });
     loginDetails && setDriverLoginId(loginDetails.Id);
   };
 
@@ -99,6 +102,10 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
         if (counter === 20) {
           clearInterval(timerRef);
           toast.error("No trips found in this location");
+          localStorage.setItem(
+            LocalKey.saveDriverStatus,
+            JSON.stringify({ status: false, id: "" })
+          );
           setValue(false);
         }
         rideData = await getTrips(driverLoginId, {
@@ -112,9 +119,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
           clearInterval(timerRef);
         } else {
           //toast.error("Oops..!  No Trips Found in your area");
-          toast.info("Looking for ride", {
-            autoClose: 2000,
-          });
         }
       }, 4000);
     }
