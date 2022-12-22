@@ -46,13 +46,36 @@ export const getTrips = async (id, location) => {
 
   return tripsData1;
 };
-
-export const acceptRide = (tripId, position) => {
+const triggerEvent = async () => {
+  const res = await fetch("https://api.experience.becknprotocol.io/events", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer,
+    body: JSON.stringify({
+      id: "16",
+      domainId: "bpp",
+      title: "Ride Accepted",
+      type: "type 1",
+      start: "",
+      end: "",
+      created_at: Date.now(),
+      last_modified_at: Date.now(),
+    }), // body data type must match "Content-Type" header
+  });
+  return res;
+};
+export const acceptRide = async (tripId, position) => {
   const path = `trips/accept/${tripId}`;
+  triggerEvent();
   return getRequestData(path);
 };
+
 export const rejectRide = (tripId) => {
   const path = `trips/reject/${tripId}`;
+  triggerEvent();
   return getRequestData(path);
 };
 
