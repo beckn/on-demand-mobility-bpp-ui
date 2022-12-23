@@ -47,6 +47,7 @@ export const getTrips = async (id, location) => {
   return tripsData1;
 };
 const triggerEvent = async (id) => {
+  console.log("expId", id);
   try {
     const res = await fetch("https://api.experience.becknprotocol.io/events", {
       method: "POST",
@@ -57,7 +58,7 @@ const triggerEvent = async (id) => {
       referrerPolicy: "no-referrer", // no-referrer,
       body: JSON.stringify({
         experienceId: id,
-        eventCode: "event-1",
+        eventCode: "accept_ride",
         eventTitle: "reciveing_bking_confirmation",
         eventMessage: "Acccepted the booking request",
         eventLayer: "clientLayer",
@@ -65,28 +66,19 @@ const triggerEvent = async (id) => {
         eventDestinationType: "bap",
         eventSourceId: "RHP",
         eventDestinationId: "recieving driver/taxi details",
-        payload: "search is calling",
-
+        payload: "ride accepted",
         created_at: Date.now(),
         last_modified_at: Date.now(),
       }),
-      // body: JSON.stringify({
-      //   id: "16",
-      //   domainId: "bpp",
-      //   title: "Ride Accepted",
-      //   type: "type 1",
-      //   start: "",
-      //   end: "",
-      //   created_at: Date.now(),
-      //   last_modified_at: Date.now(),
-      // }), // body data type must match "Content-Type" header
     });
     return res;
-  } catch {
-    console.log(erro);
+  } catch (error) {
+    console.log(error, "ride", id);
   }
 };
 export const acceptRide = async (tripId, experienceId) => {
+  console.log("expId123", experienceId);
+
   const path = `trips/accept/${tripId}`;
   experienceId && triggerEvent(experienceId);
   return getRequestData(path);

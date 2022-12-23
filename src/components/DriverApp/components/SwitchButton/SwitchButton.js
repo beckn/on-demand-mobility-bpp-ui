@@ -27,7 +27,8 @@ const { Title } = Modal;
 
 //get experience id
 const getExperienceId = (experience_id) => {
-  if (experience_id && experience_id.includes(".exp")) {
+  if (experience_id && experience_id.includes(".expId")) {
+    console.log({ experience_id });
     return experience_id.split(".")[0];
   } else {
     return undefined;
@@ -51,7 +52,8 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     accept: false,
     reject: false,
   });
-  const experienceId = getExperienceId(ride?.TransactionId);
+  const experienceId = getExperienceId(trip?.TransactionId);
+  console.log("idddddd-----", experienceId);
   const getOnline = async () => {
     const loginDetails = await getDriverOnline(User.Id);
     toast.info("Looking for ride", {
