@@ -25,6 +25,15 @@ import { useAddress } from "../../hooks/useAddress";
 import { getOriginAndDestination } from "./utils";
 const { Title } = Modal;
 
+//get experience id
+const getExperienceId = (experience_id) => {
+  if (experience_id && experience_id.includes(".exp")) {
+    return experience_id.split(".")[0];
+  } else {
+    return undefined;
+  }
+};
+
 const SwitchButton = ({ latitude, longitude, setLocations }) => {
   const User = JSON.parse(getCookie(LocalKey.saveUser)) || null;
   // const { res: rideSummary, location: savedLocation } =
@@ -42,7 +51,7 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     accept: false,
     reject: false,
   });
-
+  const experienceId = getExperienceId(ride?.TransactionId);
   const getOnline = async () => {
     const loginDetails = await getDriverOnline(User.Id);
     toast.info("Looking for ride", {
@@ -79,12 +88,12 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
 
   const handleAccept = useCallback(async (id) => {
     setRideModalShow(false);
-    const res = await acceptRide(id);
+    const res = await acceptRide(id, experienceId);
     setRideStatus({ accept: true, reject: false });
   }, []);
 
   const handleReject = useCallback(async (id) => {
-    const res = await rejectRide(id);
+    const res = await rejectRide(id, experienceId);
     setRideStatus({ accept: false, reject: true });
     setRideModalShow(false);
     toggleSwitch(false);

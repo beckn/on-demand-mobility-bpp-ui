@@ -46,36 +46,55 @@ export const getTrips = async (id, location) => {
 
   return tripsData1;
 };
-const triggerEvent = async () => {
-  const res = await fetch("https://api.experience.becknprotocol.io/events", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer,
-    body: JSON.stringify({
-      id: "16",
-      domainId: "bpp",
-      title: "Ride Accepted",
-      type: "type 1",
-      start: "",
-      end: "",
-      created_at: Date.now(),
-      last_modified_at: Date.now(),
-    }), // body data type must match "Content-Type" header
-  });
-  return res;
+const triggerEvent = async (id) => {
+  try {
+    const res = await fetch("https://api.experience.becknprotocol.io/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow", // manual, *follow, error
+      referrerPolicy: "no-referrer", // no-referrer,
+      body: JSON.stringify({
+        experienceId: id,
+        eventCode: "event-1",
+        eventTitle: "reciveing_bking_confirmation",
+        eventMessage: "Acccepted the booking request",
+        eventLayer: "clientLayer",
+        eventSourceType: "bpp",
+        eventDestinationType: "bap",
+        eventSourceId: "RHP",
+        eventDestinationId: "recieving driver/taxi details",
+        payload: "search is calling",
+
+        created_at: Date.now(),
+        last_modified_at: Date.now(),
+      }),
+      // body: JSON.stringify({
+      //   id: "16",
+      //   domainId: "bpp",
+      //   title: "Ride Accepted",
+      //   type: "type 1",
+      //   start: "",
+      //   end: "",
+      //   created_at: Date.now(),
+      //   last_modified_at: Date.now(),
+      // }), // body data type must match "Content-Type" header
+    });
+    return res;
+  } catch {
+    console.log(erro);
+  }
 };
-export const acceptRide = async (tripId, position) => {
+export const acceptRide = async (tripId, experienceId) => {
   const path = `trips/accept/${tripId}`;
-  triggerEvent();
+  experienceId && triggerEvent(experienceId);
   return getRequestData(path);
 };
 
-export const rejectRide = (tripId) => {
+export const rejectRide = (tripId, experienceId) => {
   const path = `trips/reject/${tripId}`;
-  triggerEvent();
+  experienceId && triggerEvent(experienceId);
   return getRequestData(path);
 };
 
