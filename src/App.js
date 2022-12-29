@@ -1,6 +1,6 @@
 import { Spinner } from "@simply007org/react-spinners";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import DriverAppFooter from "./components/DriverApp/components/NavFooter/NavFooter";
@@ -33,7 +33,35 @@ let isLogin = !NoHeader.includes(window.location.pathname);
 const RideEnd = React.lazy(() =>
   import("./components/DriverApp/components/EndRide/RideEnd")
 );
+
+const raw = "";
+
+const requestOptions = {
+  method: "GET",
+  redirect: "follow",
+};
+
+const getExperienceCenterId = async () => {
+  const url = window.location.href;
+  let expId = url.split("?")[1];
+  // if (!expId) {
+  //   expId = await fetch(
+  //     "https://api.eventcollector.becknprotocol.io/v2/event/experience",
+  //     requestOptions
+  //   )
+  //     .then((response) => response.text())
+  //     .then((result) => result.split(":")[1].trim())
+  //     .catch((error) => console.log("error", error));
+  // }
+  console.log("app", expId);
+  if (expId) {
+    localStorage.setItem("expId", expId);
+  }
+};
 function App() {
+  useEffect(() => {
+    getExperienceCenterId();
+  }, []);
   return (
     <>
       <ToastContainer position="top-center" hideProgressBar="false" />

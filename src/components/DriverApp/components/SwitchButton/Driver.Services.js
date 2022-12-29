@@ -3,6 +3,7 @@ import {
   postRequestData,
   updateLocation,
 } from "../../../../core/apiClient";
+import { eventCode } from "./utils";
 import { TripIdFields } from "../../../../core/fieldsSet";
 import { getCookie } from "../../../../core/CookiesHandler";
 import { setActiveRide } from "../../../../core/common.functions";
@@ -46,47 +47,50 @@ export const getTrips = async (id, location) => {
 
   return tripsData1;
 };
-const triggerEvent = async (id) => {
-  console.log("expId", id);
-  try {
-    const res = await fetch("https://api.experience.becknprotocol.io/events", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer", // no-referrer,
-      body: JSON.stringify({
-        experienceId: id,
-        eventCode: "accept_ride",
-        eventTitle: "reciveing_bking_confirmation",
-        eventMessage: "Acccepted the booking request",
-        eventLayer: "clientLayer",
-        eventSourceType: "bpp",
-        eventDestinationType: "bap",
-        eventSourceId: "RHP",
-        eventDestinationId: "recieving driver/taxi details",
-        payload: "ride accepted",
-        created_at: Date.now(),
-        last_modified_at: Date.now(),
-      }),
+export const triggerEvent = async (event_code) => {
+  const experience_id = localStorage.getItem("expId");
+  if (experience_id) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const body = JSON.stringify({
+      experienceId: experience_id,
+      eventCode: event_code,
+      eventAction: event_code,
+      eventSourceId: "3",
+      eventDestinationId: "2",
+      payload: "bpp action",
+      eventStart_ts: Date.now(),
     });
-    return res;
-  } catch (error) {
-    console.log(error, "ride", id);
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body,
+      redirect: "follow",
+    };
+    try {
+      const res = fetch(
+        "https://api.eventcollector.becknprotocol.io/v2/event",
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => console.log("expId", result))
+        .catch((error) => console.log("error", error));
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    return undefined;
   }
 };
-export const acceptRide = async (tripId, experienceId) => {
-  console.log("expId123", experienceId);
-
+export const acceptRide = (tripId, experienceId) => {
   const path = `trips/accept/${tripId}`;
-  experienceId && triggerEvent(experienceId);
   return getRequestData(path);
 };
 
 export const rejectRide = (tripId, experienceId) => {
   const path = `trips/reject/${tripId}`;
-  experienceId && triggerEvent(experienceId);
   return getRequestData(path);
 };
 

@@ -8,12 +8,16 @@ import { CallLogIcon } from "../../../../shared/icons/CallLog";
 import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { MapPin } from "react-feather";
 import { LocationIcon } from "../../../../shared/icons/Location";
-import { startRide, endRide } from "../SwitchButton/Driver.Services";
+import {
+  startRide,
+  endRide,
+  triggerEvent,
+} from "../SwitchButton/Driver.Services";
 import RideEnd from "../EndRide/RideEnd";
 import Address from "../Address/Address";
 import { round } from "../../utils/utils";
 
-import { currency } from "../SwitchButton/utils";
+import { currency, eventCode } from "../SwitchButton/utils";
 
 function RideStarted({ trip, location }) {
   const [smShow, setSmShow] = useState({ status: false, data: undefined });
@@ -21,9 +25,14 @@ function RideStarted({ trip, location }) {
   const handleStartRide = async () => {
     const res = await startRide(trip.Id).then((response) => response.data);
     setSmShow({ status: !smShow.status, data: res.Trip });
+    triggerEvent(eventCode.startRide);
   };
   const handleEndRide = async () => {
-    !isTripEnded && (await endRide(trip.Id).then((response) => response.data));
+    !isTripEnded &&
+      (await endRide(trip.Id).then((response) => {
+        triggerEvent(eventCode.endRide);
+        return response;
+      }));
     //setSmShow({ status: !smShow.status, data: res.Trip });
     isTripEnded && window.location.reload();
   };

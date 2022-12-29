@@ -8,6 +8,7 @@ import { LeftSection } from "../../../shared/graphics/LeftSection";
 import { DarkLayout } from "../../../shared/layout/DarkLayout";
 import "../Login.scss";
 import { userAction } from "../Login.services";
+import { triggerEvent } from "../../DriverApp/components/SwitchButton/Driver.Services";
 
 export const Login = (props) => {
   const [Name, setName] = useState("");
@@ -33,6 +34,7 @@ export const Login = (props) => {
     };
     userAction(path, data).then((res) => {
       window.location.href = AppRoutes.driverDashboard;
+      triggerEvent("mbth_login");
     });
   };
 

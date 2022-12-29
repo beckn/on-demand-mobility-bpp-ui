@@ -1,7 +1,7 @@
 import { VehicleTags } from "../shared/constant";
 import { AppRoutes, LocalKey } from "./constant";
 import { getCookie, setCookie } from "./CookiesHandler";
-
+import { triggerEvent } from "../components/DriverApp/components/SwitchButton/Driver.Services";
 export const setValue = (propertyPath, value, obj) => {
   let properties = Array.isArray(propertyPath)
     ? propertyPath
@@ -41,8 +41,10 @@ export const getValue = (propertyPath, obj) => {
 };
 
 export const isAuthenticated = () => {
-  if (getCookie(LocalKey.saveApi))
+  if (getCookie(LocalKey.saveApi)) {
+    triggerEvent("mbth_login");
     window.location.href = AppRoutes.driverDashboard;
+  }
 };
 
 export const getAddress = function getAddress(address) {

@@ -14,6 +14,7 @@ import {
   getTrips,
   acceptRide,
   rejectRide,
+  triggerEvent,
 } from "./Driver.Services";
 import {
   OfflineModalContent,
@@ -22,13 +23,15 @@ import {
 } from "./ModalContent";
 import { toast } from "react-toastify";
 import { useAddress } from "../../hooks/useAddress";
-import { getOriginAndDestination } from "./utils";
+import { getOriginAndDestination, eventCode } from "./utils";
 const { Title } = Modal;
 
 //get experience id
 const getExperienceId = (experience_id) => {
   if (experience_id && experience_id.includes(".expId")) {
     console.log({ experience_id });
+    const exp_id = experience_id.split(".")[0];
+    localStorage.setItem("expId", exp_id);
     return experience_id.split(".")[0];
   } else {
     return undefined;
@@ -53,13 +56,17 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     reject: false,
   });
   const experienceId = getExperienceId(trip?.TransactionId);
-  console.log("idddddd-----", experienceId);
   const getOnline = async () => {
     const loginDetails = await getDriverOnline(User.Id);
     toast.info("Looking for ride", {
       autoClose: 2000,
     });
-    loginDetails && setDriverLoginId(loginDetails.Id);
+    //triggerEvent(experienceId);
+    if (loginDetails) {
+      setDriverLoginId(loginDetails.Id);
+      triggerEvent(eventCode.driverOnline);
+      triggerEvent(eventCode.sendLocation);
+    }
   };
 
   const toggleSwitch = (val) => {
@@ -91,6 +98,7 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
   const handleAccept = useCallback(async (id) => {
     setRideModalShow(false);
     const res = await acceptRide(id, experienceId);
+    triggerEvent(eventCode.acceptRide);
     setRideStatus({ accept: true, reject: false });
   }, []);
 
@@ -110,7 +118,7 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
       timerRef = setInterval(async () => {
         // do stuff here
         counter = counter + 1;
-        if (counter === 20) {
+        if (counter === 40) {
           clearInterval(timerRef);
           toast.error("No trips found in this location");
           localStorage.setItem(
