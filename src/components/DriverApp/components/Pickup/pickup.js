@@ -8,12 +8,16 @@ import { CarLogIcon } from "../../../../shared/icons/CarLog";
 import { LocationIcon } from "../../../../shared/icons/Location";
 import "./pickup.css";
 import Rectanglebar from "../Navigate/Rectangle-bar.png";
+import { triggerEvent } from "../SwitchButton/Driver.Services";
+import { eventCode } from "../SwitchButton/utils";
 
 function NavigateButton({ trip, location }) {
   const [next, setNext] = useState(false);
 
   const handleNavigate = async () => {
     setNext(true);
+    triggerEvent(eventCode.sendLocation);
+
     //const res = await startRide(trip.Id).then((response) => response.data);
   };
   return (

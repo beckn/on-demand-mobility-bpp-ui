@@ -65,7 +65,6 @@ const SwitchButton = ({ latitude, longitude, setLocations }) => {
     if (loginDetails) {
       setDriverLoginId(loginDetails.Id);
       triggerEvent(eventCode.driverOnline);
-      triggerEvent(eventCode.sendLocation);
     }
   };
 
