@@ -9,6 +9,7 @@ const logout = () => {
     console.log("User Logout", res);
     removeCookie(LocalKey.saveApi);
     removeCookie(LocalKey.saveUser);
+    localStorage.removeItem("expId");
     window.location.href = AppRoutes.admin;
   });
 };

@@ -57,10 +57,11 @@ export const triggerEvent = async (event_code) => {
       experienceId: experience_id,
       eventCode: event_code,
       eventAction: event_code,
-      eventSourceId: "3",
-      eventDestinationId: "2",
+      eventSourceId:
+        "becknify.humbhionline.in.mobility.BPP/beckn_open/app1-succinct-in",
+      eventDestinationId: "mobilityreferencebap.becknprotocol.io",
       payload: "bpp action",
-      eventStart_ts: Date.now(),
+      eventStart_ts: new Date().toISOString(),
     });
 
     const requestOptions = {

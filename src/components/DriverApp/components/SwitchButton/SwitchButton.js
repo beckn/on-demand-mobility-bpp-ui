@@ -28,11 +28,11 @@ const { Title } = Modal;
 
 //get experience id
 const getExperienceId = (experience_id) => {
-  if (experience_id && experience_id.includes(".expId")) {
+  if (experience_id) {
     console.log({ experience_id });
-    const exp_id = experience_id.split(".")[0];
+    const exp_id = experience_id.split(".")[1];
     localStorage.setItem("expId", exp_id);
-    return experience_id.split(".")[0];
+    return experience_id.split(".")[1];
   } else {
     return undefined;
   }
