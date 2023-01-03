@@ -65,7 +65,6 @@ export const triggerEvent = async (event_code) => {
   if (experience_id) {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
     const body = JSON.stringify({
       experienceId: experience_id,
       eventCode: event_code,
@@ -95,7 +94,7 @@ export const triggerEvent = async (event_code) => {
         console.log(error);
       }
     };
-    setTimeout(delayedCall, 2000);
+    setTimeout(delayedCall, 1000);
   } else {
     return undefined;
   }
