@@ -58,7 +58,7 @@ export const Login = (props) => {
                     <h2>
                       Welcome to
                       <br />
-                      the Taxi Hub
+                      the Luxe Cabs
                     </h2>
                   </div>
                 </div>
