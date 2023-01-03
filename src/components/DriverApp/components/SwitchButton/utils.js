@@ -30,10 +30,10 @@ const currencyMapping = {
 export const currency = currencyMapping.Rupees;
 
 export const eventCode = {
-  login: "mbth_login",
-  driverOnline: "mbth_avbl_online",
-  acceptRide: "mbth_accept_ride",
-  sendLocation: "mbth_crrnt_loc",
-  startRide: "mbth_strt_ride",
-  endRide: "mbth_end_ride",
+  login: "mblc_login",
+  driverOnline: "mblc_avbl_online",
+  acceptRide: "mblc_accept_ride",
+  sendLocation: "mblc_crrnt_loc",
+  startRide: "mblc_strt_ride",
+  endRide: "mblc_end_ride",
 };

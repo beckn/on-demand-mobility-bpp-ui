@@ -42,7 +42,7 @@ export const getValue = (propertyPath, obj) => {
 
 export const isAuthenticated = (navigate) => {
   if (getCookie(LocalKey.saveApi)) {
-    triggerEvent("mbth_login");
+    triggerEvent("mblc_login");
     //window.location.href = AppRoutes.driverDashboard;
     navigate(AppRoutes.driverDashboard);
   }

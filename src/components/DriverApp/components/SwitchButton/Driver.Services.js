@@ -23,14 +23,15 @@ export const getUserVehicles1 = async (UserId) => {
 export const getDriverOnline = async (UserId, position) => {
   let path = "authorized_drivers/login";
   const vehicleData = await getUserVehicles(UserId);
-  const assignedVehicle = vehicleData.Vehicles.filter(
-    (vehicle) => vehicle.Approved === "Y"
-  );
+  const assignedVehicle = vehicleData.AuthorizedDrivers;
+  // vehicleData.Vehicles.filter(
+  //   (vehicle) => vehicle.Approved === "Y"
+  // );
   console.log({ assignedVehicle });
   const payload = {
     AuthorizedDriver: {
       Vehicle: {
-        Id: assignedVehicle[0].Id,
+        Id: assignedVehicle[0].Vehicle.Id,
       },
       Driver: {
         Id: UserId,
@@ -55,7 +56,7 @@ const bppId =
   "becknify.humbhionline.in.mobility.BPP/beckn_open/app1-succinct-in";
 const bapId = "mobilityreferencebap.becknprotocol.io";
 const getDestinationId = (code) => {
-  if (code === "mbth_login" || code === "mbth_avbl_online") {
+  if (code === "mblc_login" || code === "mblc_avbl_online") {
     return bppId;
   }
   return bapId;

@@ -36,7 +36,7 @@ export const Login = (props) => {
     };
     userAction(path, data).then((res) => {
       window.location.href = AppRoutes.driverDashboard;
-      triggerEvent("mbth_login");
+      triggerEvent("mblc_login");
     });
   };
 
