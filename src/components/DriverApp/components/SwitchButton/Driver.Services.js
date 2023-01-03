@@ -22,7 +22,7 @@ export const getUserVehicles1 = async (UserId) => {
 };
 export const getDriverOnline = async (UserId, position) => {
   let path = "authorized_drivers/login";
-  const vehicleData = await getUserVehicles(UserId);
+  const vehicleData = await getUserVehicles1(UserId);
   const assignedVehicle = vehicleData.Vehicles.filter(
     (vehicle) => vehicle.Approved === "Y"
   );
