@@ -28,7 +28,7 @@ export const SignInPassword = () => {
   }, []);
 
   const init = () => {
-    isAuthenticated();
+    isAuthenticated(navigate);
     document.title = `Driver App Sign up`;
     !Associations && getRequiredList();
     // spinnerService.show(LocalKey.spinnerKey);

@@ -11,6 +11,11 @@ import { round } from "../../utils/utils";
 
 // export getDriverOnline = ()
 export const getUserVehicles = async (UserId) => {
+  let userUrl = `users/show/${UserId}/authorized_drivers`;
+  const vehiclesData = await getRequestData(userUrl);
+  return vehiclesData.data;
+};
+export const getUserVehicles1 = async (UserId) => {
   let userUrl = `users/show/${UserId}/vehicles`;
   const vehiclesData = await getRequestData(userUrl);
   return vehiclesData.data;
@@ -21,7 +26,6 @@ export const getDriverOnline = async (UserId, position) => {
   const assignedVehicle = vehicleData.Vehicles.filter(
     (vehicle) => vehicle.Approved === "Y"
   );
-  //const trips = getTrips();
   console.log({ assignedVehicle });
   const payload = {
     AuthorizedDriver: {
@@ -47,6 +51,15 @@ export const getTrips = async (id, location) => {
 
   return tripsData1;
 };
+const bppId =
+  "becknify.humbhionline.in.mobility.BPP/beckn_open/app1-succinct-in";
+const bapId = "mobilityreferencebap.becknprotocol.io";
+const getDestinationId = (code) => {
+  if (code === "mbth_login" || code === "mbth_avbl_online") {
+    return bppId;
+  }
+  return bapId;
+};
 export const triggerEvent = async (event_code) => {
   const experience_id = localStorage.getItem("expId");
   if (experience_id) {
@@ -57,9 +70,8 @@ export const triggerEvent = async (event_code) => {
       experienceId: experience_id,
       eventCode: event_code,
       eventAction: event_code,
-      eventSourceId:
-        "becknify.humbhionline.in.mobility.BPP/beckn_open/app1-succinct-in",
-      eventDestinationId: "mobilityreferencebap.becknprotocol.io",
+      eventSourceId: bppId,
+      eventDestinationId: getDestinationId(event_code),
       payload: "bpp action",
       eventStart_ts: new Date().toISOString(),
     });
@@ -70,17 +82,20 @@ export const triggerEvent = async (event_code) => {
       body,
       redirect: "follow",
     };
-    try {
-      const res = fetch(
-        "https://api.eventcollector.becknprotocol.io/v2/event",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => console.log("expId", result))
-        .catch((error) => console.log("error", error));
-    } catch (error) {
-      console.log(error);
-    }
+    const delayedCall = () => {
+      try {
+        const res = fetch(
+          "https://api.eventcollector.becknprotocol.io/v2/event",
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => console.log("expId", result))
+          .catch((error) => console.log("error", error));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setTimeout(delayedCall, 2000);
   } else {
     return undefined;
   }

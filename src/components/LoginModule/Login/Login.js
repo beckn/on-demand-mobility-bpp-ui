@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { Col, Container, Row } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
@@ -11,10 +11,11 @@ import { DarkLayout } from "../../../shared/layout/DarkLayout";
 import { LeftSection } from "../../../shared/graphics/LeftSection";
 
 export const Login = (props) => {
+  const navigate = useNavigate();
   const [App, setApp] = useState(0);
 
   useEffect(() => {
-    isAuthenticated();
+    isAuthenticated(navigate);
     document.title = `Driver App`;
     let appTitle =
       (window.location.pathname === "/" && "Driver") ||

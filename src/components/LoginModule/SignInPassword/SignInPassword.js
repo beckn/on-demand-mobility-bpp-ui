@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Col, Container, Row } from "react-bootstrap";
 import { isAuthenticated } from "../../../core/common.functions";
 import { AppRoutes } from "../../../core/constant";
@@ -11,11 +11,13 @@ import { userAction } from "../Login.services";
 import { triggerEvent } from "../../DriverApp/components/SwitchButton/Driver.Services";
 
 export const Login = (props) => {
+  const navigate = useNavigate();
+
   const [Name, setName] = useState("");
   const [Password, setPassword] = useState("");
 
   useEffect(() => {
-    isAuthenticated();
+    isAuthenticated(navigate);
     document.title = `taxi BPP`;
     // console.log(props);
     // spinnerService.show("mySpinner");

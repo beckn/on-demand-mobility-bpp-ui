@@ -40,10 +40,11 @@ export const getValue = (propertyPath, obj) => {
   }
 };
 
-export const isAuthenticated = () => {
+export const isAuthenticated = (navigate) => {
   if (getCookie(LocalKey.saveApi)) {
     triggerEvent("mbth_login");
-    window.location.href = AppRoutes.driverDashboard;
+    //window.location.href = AppRoutes.driverDashboard;
+    navigate(AppRoutes.driverDashboard);
   }
 };
 
