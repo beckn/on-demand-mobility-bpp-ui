@@ -2,7 +2,7 @@ name: Staging deployment of taxi driver app
 on:
   push:
     branches:
-    - feature-driver
+    - luxe-cabh
 
 jobs:
   build:
@@ -17,9 +17,11 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd taxi-reference-bpp/
+          cd on-demand-mobility-bpp-ui/
+          git stash
           git checkout feature-driver
           git pull
+          git log -1
           yarn
           yarn build
           pm2 kill
