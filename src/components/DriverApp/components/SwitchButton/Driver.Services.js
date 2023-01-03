@@ -53,7 +53,7 @@ export const getTrips = async (id, location) => {
   return tripsData1;
 };
 const bppId =
-  "becknify.humbhionline.in.mobility.BPP/beckn_open/app1-succinct-in";
+  "becknify.humbhionline.in.mobility-staging.BPP/beckn_open/app1-succinct-in";
 const bapId = "mobilityreferencebap.becknprotocol.io";
 const getDestinationId = (code) => {
   if (code === "mblc_login" || code === "mblc_avbl_online") {
@@ -96,7 +96,7 @@ export const triggerEvent = async (event_code) => {
         console.log(error);
       }
     };
-    setTimeout(delayedCall, 2000);
+    setTimeout(delayedCall, 1000);
   } else {
     return undefined;
   }
