@@ -1,8 +1,8 @@
-name: Staging deployment of taxi driver app
+name: Production deployment of taxi driver app
 on:
   push:
     branches:
-    - luxe-cabh
+    - feature-driver
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
     - name: deploying changes
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.DRIVERHOST }}
+        host: ${{ secrets.PRODDRIVERHOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
