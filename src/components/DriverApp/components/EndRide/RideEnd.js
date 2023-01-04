@@ -14,7 +14,7 @@ import { currency } from "../SwitchButton/utils";
 import { setActiveRide } from "../../../../core/common.functions";
 
 const formatDate = (date) => {
-  return date.split(" ")[0] || "NA";
+  return date?.split(" ")[0] || "NA";
 };
 function RideEnd() {
   const navigate = useNavigate();

@@ -48,6 +48,9 @@ export const getTrips = async (id, location) => {
   const tripsData1 = await getRequestData(newPath, TripIdFields, location).then(
     (res) => res.data.Trips
   );
+  if (tripsData1 && tripsData1?.length > 0) {
+    localStorage.setItem("destId", tripsData1[0].BapId);
+  }
 
   return tripsData1;
 };
@@ -58,7 +61,9 @@ const getDestinationId = (code) => {
   if (code === "mbth_login" || code === "mbth_avbl_online") {
     return bppId;
   }
-  return bapId;
+  const destId = localStorage.getItem("destId") || undefined;
+  console.log("destId", destId);
+  return destId || bapId;
 };
 export const triggerEvent = async (event_code) => {
   const experience_id = localStorage.getItem("expId");
